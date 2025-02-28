@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    font-family: 'Noto Serif', serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F5F5F5; 
+    font-size: 16px;
+}
+
+/* Encabezado */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #011f30; 
+    border-bottom: 2px solid #013857; 
+    position: relative;
+}
+
+header h1 {
+    font-size: 35px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+header .acceder {
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: 1px solid #ffffff; 
+    border-radius: 5px;
+    background-color: #013857; 
+    cursor: pointer;
+    color: #ffffff; 
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+header .acceder:hover {
+    background-color: #ffffff; 
+    color: #013857; 
+}
+
+/* Pie de página */
+footer {
+    background-color: #013857; 
+    color: #ffffff; 
+    padding: 20px 40px;
+}
+
+.footer__contenedor {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; 
+    gap: 20px;
+}
+
+.footer__redes {
+    text-align: center;
+}
+
+.footer__redes p {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footer__redes a {
+    margin: 0 10px;
+}
+
+.footer__redes a img {
+    width: 25px; 
+    height: 25px;
+    object-fit: contain; 
+    filter: brightness(0) invert(1);
+    transition: transform 0.3s ease, filter 0.3s ease; 
+}
+
+.footer__redes a img:hover {
+    transform: scale(1.1); 
+    filter: brightness(1) invert(0.8);
+}
+
+.footer__informacion {
+    text-align: center;
+    font-size: 14px;
+    color: #dddddd; 
+}
+
+.footer__informacion p {
+    margin: 0; 
+    line-height: 1.5; 
+}
