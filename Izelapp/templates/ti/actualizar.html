@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Actualizar Cuenta IT{% endblock %}
+
+{% block content %}
+<h2>Actualizar Cuenta IT</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ formulario.as_p }}
+    <button type="submit">Actualizar Cuenta IT</button>
+</form>
+
+{% if messages %}
+    <div>
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
+  <link rel="stylesheet" href="{% static 'css/usuario/lista.css' %}">
+  <link rel="stylesheet" href="{% static 'css/usuario/insertar.css' %}">
+
   <h2>Lista de Usuarios</h2>
+  
   <table>
     <thead>
       <tr>
@@ -25,6 +30,12 @@
       {% endfor %}
     </tbody>
   </table>
+  
   <br>
-  <a href="{% url 'registrar_usuario' %}">Registrar nuevo usuario</a>
+  
+  <div class="contenedor-boton">
+    <a href="{% url 'registrar_usuario' %}">
+      <button>Registrar nuevo usuario</button>
+    </a>
+  </div>
 {% endblock %}

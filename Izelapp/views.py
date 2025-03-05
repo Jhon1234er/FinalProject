@@ -37,7 +37,7 @@ def eliminar_usuario(request, id):
     usuario = get_object_or_404(Usuario, id=id)
     usuario.delete()
     messages.success(request, 'Usuario eliminado exitosamente.')
-    return redirect('listar_usuario')
+    return redirect('listar_usuarios')
 
 # Vista para login
 def login_usuario(request):
@@ -58,11 +58,11 @@ def login_usuario(request):
             
             # Verificar si el usuario tiene algún perfil (médico, cliente, usuario común)
             if hasattr(usuario, 'medico'):  # Si el usuario tiene relación con médico
-                return redirect('medico:perfil')  # Redirigir al perfil del médico
+                return render('medico:perfil')  # Redirigir al perfil del médico
             elif hasattr(usuario, 'cliente'):  # Si el usuario tiene relación con cliente
-                return redirect('cliente:perfil')  # Redirigir al perfil del cliente
+                return render('cliente:perfil')  # Redirigir al perfil del cliente
             else:
-                return redirect('usuario:perfil_usuario')  # Redirigir al perfil de usuario común
+                return render(request,'usuario/perfil.html',{'tipo_usuario':'Bienvenido usuario'})  # Redirigir al perfil de usuario común
         else:
             # Si las credenciales son incorrectas
             return render(request, 'usuario/login.html', {'mensaje_error': 'Credenciales incorrectas, intente de nuevo.'})
@@ -87,7 +87,7 @@ def actualizar_usuario(request, id):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Usuario actualizado exitosamente.')
-            return redirect('listar_usuario')
+            return redirect('listar_usuarios')
         else:
             messages.error(request, 'Por favor, revisa los campos del formulario.')
     else:
@@ -422,7 +422,7 @@ def crear_empleado(request):
             messages.error(request, 'Por favor, llena todos los campos.')
     else:
         formulario = EmpleadoForm()
-    return render(request, 'empleado/crear.html', {'formulario': formulario})
+    return render(request, 'empleado/insertar.html', {'formulario': formulario})
 
 def lista_empleado(request):
     empleados = Empleado.objects.all()
@@ -435,7 +435,7 @@ def actualizar_empleado(request, id):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Empleado actualizado exitosamente.')
-            return redirect('lista_empleado')
+            return redirect('listar_empleado')
         else:
             messages.error(request, 'Por favor, revisa los campos.')
     else:
@@ -446,7 +446,7 @@ def eliminar_empleado(request, id):
     empleado = get_object_or_404(Empleado, id=id)
     empleado.delete()
     messages.success(request, 'Empleado eliminado exitosamente.')
-    return redirect('lista_empleado')
+    return redirect('listar_empleado')
 
 #endregion
 
@@ -462,7 +462,7 @@ def crear_administrador(request):
             messages.error(request, 'Por favor, llena todos los campos.')
     else:
         formulario = AdministradorForm()
-    return render(request, 'administrador/crear.html', {'formulario': formulario})
+    return render(request, 'administrador/insertar.html', {'formulario': formulario})
 
 def lista_administrador(request):
     administradores = Administrador.objects.all()
@@ -475,7 +475,7 @@ def actualizar_administrador(request, id):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Administrador actualizado exitosamente.')
-            return redirect('lista_administrador')
+            return redirect('listar_administrador')
         else:
             messages.error(request, 'Por favor, revisa los campos.')
     else:
@@ -486,7 +486,7 @@ def eliminar_administrador(request, id):
     administrador = get_object_or_404(Administrador, id=id)
     administrador.delete()
     messages.success(request, 'Administrador eliminado exitosamente.')
-    return redirect('lista_administrador')
+    return redirect('listar_administrador')
 
 #endregion
 
@@ -497,16 +497,17 @@ def crear_it(request):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'IT creado exitosamente.')
-            return redirect('crear_it')
+            return redirect('registrar_it')
         else:
             messages.error(request, 'Por favor, llena todos los campos.')
     else:
         formulario = ITForm()
-    return render(request, 'it/crear.html', {'formulario': formulario})
+
+    return render(request, 'ti/insertar.html', {'formulario': formulario})
 
 def lista_it(request):
     its = IT.objects.all()
-    return render(request, 'it/lista.html', {'its': its})
+    return render(request, 'ti/lista.html', {'its': its})
 
 def actualizar_it(request, id):
     it = get_object_or_404(IT, id=id)
@@ -515,19 +516,19 @@ def actualizar_it(request, id):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'IT actualizado exitosamente.')
-            return redirect('lista_it')
+            return redirect('listar_it')
         else:
             messages.error(request, 'Por favor, revisa los campos.')
     else:
         formulario = ITForm(instance=it)
-    return render(request, 'it/actualizar.html', {'formulario': formulario})
+
+    return render(request, 'ti/actualizar.html', {'formulario': formulario})
 
 def eliminar_it(request, id):
     it = get_object_or_404(IT, id=id)
     it.delete()
     messages.success(request, 'IT eliminado exitosamente.')
-    return redirect('lista_it')
-
+    return redirect('listar_it')
 
 #endregion
 
@@ -543,7 +544,7 @@ def crear_medico(request):
             messages.error(request, 'Por favor, llena todos los campos.')
     else:
         formulario = MedicosForm()
-    return render(request, 'medico/crear.html', {'formulario': formulario})
+    return render(request, 'medico/insertar.html', {'formulario': formulario})
 
 def lista_medico(request):
     medicos = Medico.objects.all()
@@ -556,7 +557,7 @@ def actualizar_medico(request, id):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Médico actualizado exitosamente.')
-            return redirect('lista_medico')
+            return redirect('listar_medico')
         else:
             messages.error(request, 'Por favor, revisa los campos.')
     else:
@@ -567,7 +568,7 @@ def eliminar_medico(request, id):
     medico = get_object_or_404(Medico, id=id)
     medico.delete()
     messages.success(request, 'Médico eliminado exitosamente.')
-    return redirect('lista_medico')
+    return redirect('listar_medico')
 
 
 #endregion

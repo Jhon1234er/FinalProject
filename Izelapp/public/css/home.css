@@ -1,109 +1,17 @@
-/* Estilo general para la página de inicio */
 body {
-    font-family: 'Noto Serif', serif;
     margin: 0;
     padding: 0;
-    background-color: #F5F5F5;
-    font-size: 16px;
-}
-
-/* Contenedor principal de la página */
-.contenedor {
+    background-color:floralwhite;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 20px;
-    background-color: #FFFFFF; 
 }
 
-.contenedor .contenedor-caja {
-    width: 300px;
-    height: 300px;
-    margin-bottom: 20px;
-    border: 2px solid #ddd; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #fff; 
-    color: #333; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-}
-
-/* Estilo para los botones */
-.contenedor .boton {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.contenedor .boton button {
-    padding: 10px 30px;
-    font-size: 16px;
-    border: 1px solid #ddd; 
-    background-color: #A8D8B9;
-    color: #333; 
-    cursor: pointer;
-    border-radius: 5px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.contenedor .boton button:hover {
-    background-color: #6AC1B8; 
-}
-
-/* Fondo para el pie de página en la página de inicio */
-footer {
-    background-color: #013857; 
-    color: #ffffff; 
-    padding: 20px 40px;
-}
-
-.footer__contenedor {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap; 
-    gap: 20px;
-}
-
-.footer__redes {
+h3{
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     text-align: center;
 }
-
-.footer__redes p {
-    font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.footer__redes a {
-    margin: 0 10px;
-}
-
-.footer__redes a img {
-    width: 25px; 
-    height: 25px;
-    object-fit: contain; 
-    filter: brightness(0) invert(1);
-    transition: transform 0.3s ease, filter 0.3s ease; 
-}
-
-.footer__redes a img:hover {
-    transform: scale(1.1); 
-    filter: brightness(1) invert(0.8);
-}
-
-.footer__informacion {
+p{
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     text-align: center;
-    font-size: 14px;
-    color: #dddddd; 
-}
-
-.footer__informacion p {
-    margin: 0; 
-    line-height: 1.5; 
 }

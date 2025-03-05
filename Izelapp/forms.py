@@ -1,5 +1,7 @@
 from django import forms
-from .models import *
+from Izelapp.models import *
+from django.utils import timezone
+
 
 # **Usuario Form**
 class UsuarioForm(forms.ModelForm):
@@ -117,16 +119,47 @@ class AdministradorForm(forms.ModelForm):
             'contrato': forms.ClearableFileInput(),
         }
 
+
 # **IT Form**
+
+from django import forms
+from django.utils import timezone
+from .models import IT, Usuario  # Asegúrate de importar los modelos correctos
+
 class ITForm(forms.ModelForm):
     class Meta:
         model = IT
-        exclude = ['cuenta_creada']  # Excluye el campo de la creación automática
-        fields = ['cuenta_creada', 'cuenta_activa', 'permisos', 'acciones']
-        widgets = {
-            'permisos': forms.Textarea(attrs={'rows': 4}),
-            'acciones': forms.Textarea(attrs={'rows': 4}),
-        }
+        fields = ['usuario']
+    
+    # Campos adicionales para activar staff o superusuario
+    is_staff = forms.BooleanField(required=False, label="Es Staff")
+    is_superuser = forms.BooleanField(required=False, label="Es Superusuario")
+    
+    # Campo adicional para la fecha de nacimiento
+    fecha_nacimiento = forms.DateField(
+        required=False, 
+        label="Fecha de Nacimiento",
+        widget=forms.DateInput(attrs={'type': 'date'})  # Esto usará un input de tipo fecha en el formulario
+    )
+    
+    def save(self, commit=True):
+        it_instance = super().save(commit=False)
+        usuario = it_instance.usuario
+
+        # Actualizamos los permisos de usuario (is_staff, is_superuser)
+        usuario.is_staff = self.cleaned_data['is_staff']
+        usuario.is_superuser = self.cleaned_data['is_superuser']
+
+        # Si el campo de fecha de nacimiento fue proporcionado, lo actualizamos
+        if self.cleaned_data['fecha_nacimiento']:
+            usuario.fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        
+        if commit:
+            usuario.save()  # Guardamos los cambios en el usuario
+            it_instance.save()  # Guardamos el modelo IT
+
+        return it_instance
+    
 
 # **Medicos Form**
 class MedicosForm(forms.ModelForm):

@@ -5,30 +5,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Bienvenido a Gestion CIDE web app{% endblock %}</title>
+    <title>{% block title %}Bienvenido a Izel{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
 
     <header>
         <nav>
-            <ul>
+            <ul class="nav-list">
                 {% if request.user.is_authenticated %}
+                    <!-- Verifica si el usuario es 'Medico', 'Paciente' o un usuario común -->
                     {% if request.user.medico %}
                         <li><a href="#">Consultar historias clínicas</a></li>
                         <li><a href="{% url 'perfil_medico' %}">Ver mi perfil médico</a></li>
-                    {% elif request.user.cliente %}
-                        <li><a href="#">Ver mi perfil de cliente</a></li>
+                    {% elif request.user.paciente %}
+                        <li><a href="#">Ver mi perfil</a></li>
                         <li><a href="#">Solicitar cita médica</a></li>
+                    {% elif request.user.is_staff %}
+                        <!-- Para usuarios Staff (IT), mostrar enlaces de administración -->
+                        <li><a href="{% url 'registrar_it' %}">Crear Cuenta IT</a></li>
+                        <li><a href="{% url 'listar_it' %}">Listar IT</a></li>
+                        <li><a href="{% url 'registrar_empleado' %}">Crear Empleado</a></li>
+                        <li><a href="{% url 'listar_empleado' %}">Listar Empleados</a></li>
+                        <li><a href="{% url 'registrar_administrador' %}">Crear Administrador</a></li>
+                        <li><a href="{% url 'listar_administrador' %}">Listar Administradores</a></li>
+                        <li><a href="{% url 'registrar_medico' %}">Crear Médico</a></li>
+                        <li><a href="{% url 'listar_medico' %}">Listar Médicos</a></li>
                     {% else %}
+                        <!-- Si es un usuario común, solo muestra la opción de ver sus datos -->
                         <li><a href="{% url 'detallar_usuario' %}">Ver mis datos de usuario</a></li>
                     {% endif %}
                     <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
                 {% else %}
+                    <!-- Si no está autenticado, muestra opciones de inicio y registro -->
                     <li><a href="{% url 'home' %}">Inicio</a></li>
-                    <li><a href="{% url 'registrar_usuario' %}">Registrarme</a></li>
                     <li><a href="{% url 'listar_usuarios' %}">Listar usuarios</a></li>
-                    <li><a href="{% url 'login' %}">Iniciar sesión</a></li>
+                    <li><a class="login-btn" href="{% url 'login' %}">Iniciar sesión</a></li>                  
                 {% endif %}
             </ul>
         </nav>
@@ -41,7 +53,7 @@
     </main>
 
     <footer>
-        <p>2024 - CIDE APP - Sistema de Gestión Servicios de Salud - Derechos reservados</p>
+        <p class="footer">2025 - IZEL APP - Derechos reservados</p>
     </footer>
 
 </body>

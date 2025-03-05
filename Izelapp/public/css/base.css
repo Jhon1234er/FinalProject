@@ -1,98 +1,103 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
+    /* Estilos generales */
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #F5F5F5;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
 
-body {
-    font-family: 'Noto Serif', serif;
-    margin: 0;
-    padding: 0;
-    background-color: #F5F5F5; 
-    font-size: 16px;
-}
+    /* Encabezado y navegación */
+    header {
+        display: flex;
+        justify-content: space-between; /* Para distribuir los elementos */
+        align-items: center;
+        background-color: #011f30; /* Azul oscuro */
+        color: #ffffff;
+        padding: 30px 15px;
+        font-size: 18px;
+        font-family: 'Open Sans', sans-serif;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: relative; /* Esto es para facilitar la alineación */
+    }
 
-/* Encabezado */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    background-color: #011f30; 
-    border-bottom: 2px solid #013857; 
-    position: relative;
-}
+    /* Contenedor de navegación */
+    nav {
+        display: flex;
+        flex-grow: 1;  /* Permite que el nav ocupe el espacio disponible */
+        justify-content: center; /* Alinea los elementos li en el centro */
+    }
 
-header h1 {
-    font-size: 35px;
-    font-weight: bold;
-    color: #ffffff;
-}
+    /* Lista de navegación */
+    nav ul {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: 30px; /* Añadir separación entre los elementos */
+        list-style: none;
+    }
 
-header .acceder {
-    position: absolute;
-    top: 40px;
-    right: 20px;
-    padding: 10px 20px;
-    font-size: 14px;
-    border: 1px solid #ffffff; 
-    border-radius: 5px;
-    background-color: #013857; 
-    cursor: pointer;
-    color: #ffffff; 
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
+    /* Asegura que los elementos <li> se alineen bien */
+    nav ul li {
+        font-weight: bold;
+    }
 
-header .acceder:hover {
-    background-color: #ffffff; 
-    color: #013857; 
-}
+    /* Estilo de los enlaces */
+    nav ul li a {
+        color: #ffffff; /* Blanco */
+        text-decoration: none;
+        font-size: 16px;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
 
-/* Pie de página */
-footer {
-    background-color: #013857; 
-    color: #ffffff; 
-    padding: 20px 40px;
-}
+    nav ul li a:hover {
+        color: #A8D8B9; /* Verde menta */
+        transform: scale(1.1);
+    }
 
-.footer__contenedor {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap; 
-    gap: 20px;
-}
+    /* Estilo para el botón de "Iniciar sesión" */
+    .login-btn {
+        background-color: #A8D8B9;  /* Verde menta */
+        color: #333;  /* Gris oscuro */
+        padding: 12px 30px;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        font-size: 18px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        margin-left: auto;  /* Esto lo alinea a la derecha */
+    }
 
-.footer__redes {
-    text-align: center;
-}
+    .login-btn:hover {
+        background-color: #6AC1B8;  /* Verde menta más intenso */
+        color: #ffffff;
+    }
 
-.footer__redes p {
-    font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 10px;
-}
+    /* Pie de página */
+    .footer {
+        background: #013857; /* Azul oscuro */
+        color: #ffffff;
+        padding: 20px 40px;
+        text-align: center;
+        margin-top: auto;
+        font-size: 14px;
+        font-family: 'Open Sans', sans-serif;
+    }
 
-.footer__redes a {
-    margin: 0 10px;
-}
+    .footer a {
+        color: #ffffff;
+        text-decoration: none;
+    }
 
-.footer__redes a img {
-    width: 25px; 
-    height: 25px;
-    object-fit: contain; 
-    filter: brightness(0) invert(1);
-    transition: transform 0.3s ease, filter 0.3s ease; 
-}
+    .footer a:hover {
+        color: #A8D8B9; /* Verde menta */
+    }
 
-.footer__redes a img:hover {
-    transform: scale(1.1); 
-    filter: brightness(1) invert(0.8);
-}
-
-.footer__informacion {
-    text-align: center;
-    font-size: 14px;
-    color: #dddddd; 
-}
-
-.footer__informacion p {
-    margin: 0; 
-    line-height: 1.5; 
-}
+    /* Ajustes de accesibilidad */
+    a:focus, a:hover {
+        outline: none;
+        text-decoration: underline;
+    }

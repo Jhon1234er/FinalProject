@@ -1,11 +1,34 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Registro de Usuario
+{% endblock %}
 
 {% block content %}
+  <link rel="stylesheet" href="{% static 'css/usuario/insertar.css' %}">
+
   <h2>Registrar Usuario</h2>
+  {% if messages %}
+    {% for message in messages %}
+      <p>{{ message }}</p>
+    {% endfor %}
+  {% endif %}
+  
   <form method="POST">
     {% csrf_token %}
-    {{ formulario.as_p }}
+    
+    <!-- Ajuste para todos los campos del formulario -->
+    {% for field in formulario %}
+      <div class="form-row">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}
+          <span class="help-text">{{ field.help_text }}</span>
+        {% endif %}
+      </div>
+    {% endfor %}
+
     <button type="submit">Registrar</button>
   </form>
-  <br>
 {% endblock %}

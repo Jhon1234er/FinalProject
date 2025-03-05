@@ -2,12 +2,12 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
 
-# region **Usuario Base**
+# region Usuario Base
 class Usuario(AbstractUser):
     OPCIONES_TIPODOC = [
-        ('C.C', 'c.c'),
-        ('T.I', 't.i'),
-        ('C.E', 'c.e')
+        ('C.C', 'C.C'),
+        ('T.I', 'T.I'),
+        ('C.E', 'T.I'), 
     ]
     tipo_doc = models.CharField(max_length=20, choices=OPCIONES_TIPODOC)
     num_doc = models.CharField(max_length=10, unique=True)  
@@ -19,19 +19,18 @@ class Usuario(AbstractUser):
     genero = models.CharField(max_length=20, choices=OPCIONES_GENERO)
     rh = models.CharField(max_length=3)
     telefono = PhoneNumberField(null=True, blank=True)  # PhoneNumberField
-    fecha_nacimiento = models.DateField(null=False)
+    fecha_nacimiento = models.DateField(null=True, blank=True)
     tipo_poblacion = models.CharField(max_length=50)
     ocupacion = models.CharField(max_length=20)
     eps = models.CharField(max_length=20)
 
-    # Añadir los related_name para evitar el conflicto con el  User de Django
-    groups = models.ManyToManyField('auth.Group', related_name='usuario_set', blank=True)
-    user_permissions = models.ManyToManyField('auth.Permission', related_name='usuario_set', blank=True)
+    def __str__(self):
+        return self.username
 
 #endregion
 
 
-# region ** Paciente**
+# region  Paciente
 class Paciente(Usuario):
     OPCIONES_REGIMEN = [
         ('subcidiado', 'SUBCIDIADO'),
@@ -43,7 +42,7 @@ class Paciente(Usuario):
 #endregion
 
 
-#region ** Consulta**
+#region  Consulta
 class Consulta(models.Model):
     tratamiento = models.TextField(max_length=200)
     diagnostico = models.TextField(max_length=200)
@@ -53,7 +52,7 @@ class Consulta(models.Model):
 #endregion
 
 
-#region ** PerfilPaciente**
+#region  PerfilPaciente
 class PerfilPaciente(models.Model):
     tratamiento = models.TextField(max_length=200, null=True)
     opcion_vida_sexual = [
@@ -71,7 +70,7 @@ class PerfilPaciente(models.Model):
 #endregion
 
 
-#region ** Antecedente**
+#region  Antecedente
 class Antecedente(models.Model):
     descripcion = models.TextField(max_length=200, null=True)
     tipo_antecedente = models.TextField(max_length=200, null=False)
@@ -79,7 +78,7 @@ class Antecedente(models.Model):
 #endregion
 
 
-#region ** Vacuna**
+#region  Vacuna
 class Vacuna(models.Model):
     nombre_vacuna = models.CharField(max_length=150, null=False)
     fecha_aplicacion = models.DateField(null=False)
@@ -88,7 +87,7 @@ class Vacuna(models.Model):
 #endregion
 
 
-#region ** DatoQuirurgico**
+#region  DatoQuirurgico
 class DatoQuirurgico(models.Model):
     tipo_cirugia = models.CharField(max_length=150, null=False)
     fecha_cirugia = models.DateField(null=False)
@@ -97,7 +96,7 @@ class DatoQuirurgico(models.Model):
 #endregion
 
 
-#region ** HistoriaClinicas**
+#region  HistoriaClinicas
 class HistoriaClinica(models.Model):
     ultima_atencion = models.DateField()  # Esto lo gestionará Django automáticamente
     tratamiento = models.TextField()
@@ -107,7 +106,7 @@ class HistoriaClinica(models.Model):
 #endregion
 
 
-#region ** DatoAntropometrico**
+#region  DatoAntropometrico
 class DatoAntropometrico(models.Model):
     altura_decimal = models.DecimalField(max_digits=20, decimal_places=2)
     peso = models.DecimalField(max_digits=20, decimal_places=2)
@@ -125,6 +124,8 @@ class Empleado(Usuario):
     ]
     tipo_empleado = models.CharField(max_length=20, null=False, choices=opciones_tipo_empleado)
     
+    def __str__(self):
+        return self.tipo_empleado
         
 #endregion
 
@@ -141,66 +142,30 @@ class Administrador(Empleado):
         empleado.contrato = contrato
         empleado.save()
         return empleado
+    
+    def __str__(self):
+        return self.hoja_vida
+#endregion
+
+#region  Medicos
+class Medico(Empleado):
+    especialidad = models.CharField(max_length=50, null=False)
+    numero_licencia = models.CharField(max_length=10, null=False, unique=True)
+    citas_atender = models.IntegerField(default=0)
+  
+    def __str__(self):
+        return self.especialidad
 #endregion
 
 
 #region ** IT**
 class IT(Empleado):
-    cuenta_creada = models.DateField(auto_now_add=True)
-    cuenta_activa = models.BooleanField(default=True)
-    permisos = models.JSONField(default=dict)
-    acciones = models.TextField(null=True, blank=True)
+    usuario=models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
-    def crear_cuenta(self, empleado, permisos_iniciales=None):
-        if permisos_iniciales is None:
-            permisos_iniciales = {"consultas": "leer", "pacientes": "leer"}
-        it_account = IT.objects.create(empleado=empleado, permisos=permisos_iniciales)
-        it_account.cuenta_activa = True
-        it_account.save()
-        self.registrar_accion(f"Cuenta creada para {empleado.username}")
-        return f"Cuenta para {empleado.username} creada con permisos iniciales."
-
-    def desactivar_cuenta(self, empleado):
-        try:
-            it_account = IT.objects.get(empleado=empleado)
-            it_account.cuenta_activa = False
-            it_account.save()
-            self.registrar_accion(f"Cuenta desactivada para {empleado.username}")
-            return f"Cuenta desactivada para {empleado.username}."
-        except IT.DoesNotExist:
-            return f"El empleado {empleado.username} no tiene cuenta IT."
-
-    def modificar_permisos(self, empleado, permisos_nuevos):
-        try:
-            it_account = IT.objects.get(empleado=empleado)
-            it_account.permisos = permisos_nuevos
-            it_account.save()
-            self.registrar_accion(f"Permisos modificados para {empleado.username}")
-            return f"Permisos de {empleado.username} actualizados."
-        except IT.DoesNotExist:
-            return f"El empleado {empleado.username} no tiene cuenta IT."
-
-    def registrar_accion(self, accion):
-        if self.acciones:
-            self.acciones += f"\n{accion} - {self.cuenta_creada}"
-        else:
-            self.acciones = f"{accion} - {self.cuenta_creada}"
-        self.save()
-
-    def __str__(self):
-        return f"IT: {self.empleado.username}"
 #endregion
 
 
-#region ** Medicos**
-class Medico(Empleado):
-    especialidad = models.CharField(max_length=50, null=False)
-    numero_licencia = models.CharField(max_length=10, null=False, unique=True)
-    citas_atender = models.IntegerField(default=0)  # Nuevo campo que indica el número de citas que el medico decidira atender
-#endregion
-
-
-#region ** HorarioMedico**
+#region  HorarioMedico
 class HorarioMedico(models.Model):
     OPCIONES_DIAS_SEMANA = [
         ('lunes', 'Lunes'),
@@ -218,7 +183,7 @@ class HorarioMedico(models.Model):
 #endregion
 
 
-#region ** Citas**
+#region  Citas
 class Cita(models.Model):
     fecha_cita = models.DateField(null=False)
     hora_cita = models.TimeField(null=False)
@@ -233,7 +198,7 @@ class Cita(models.Model):
 #endregion
 
 
-#region ** CertificadoIncapacidad**
+#region  CertificadoIncapacidad
 class CertificadoIncapacidad(models.Model):
     dias_incapacidad = models.CharField(max_length=2)
     motivo_incapacidad = models.CharField(max_length=255)
@@ -242,7 +207,7 @@ class CertificadoIncapacidad(models.Model):
 #endregion
 
 
-#region ** RecetasMedicas**
+#region  RecetasMedicas
 class RecetaMedica(models.Model):
     medicamento = models.CharField(max_length=100)
     concentracion = models.CharField(max_length=100)
@@ -259,7 +224,7 @@ class RecetaMedica(models.Model):
 #endregion
 
 
-#region ** OrdenesMedicas**
+#region  OrdenesMedicas
 class OrdeneMedica(models.Model):
     especialidad_referido = models.CharField(max_length=255, blank=False)
     motivo = models.CharField(max_length=255)

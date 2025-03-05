@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Lista de Médicos</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Especialidad</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for medico in medicos %}
+        <tr>
+          <td>{{ medico.especialidad }}</td>
+          <td>
+            <a href="{% url 'actualizar_medico' medico.id %}">Editar</a>
+            <a href="{% url 'eliminar_medico' medico.id %}" onclick="return confirm('¿Estás seguro de eliminar este médico?');">Eliminar</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="2">No hay médicos registrados.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p><a href="{% url 'registrar_medico' %}">Crear un nuevo médico</a></p>
+{% endblock %}

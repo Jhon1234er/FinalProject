@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Registro de Paciente
+{% endblock %}
+
+{% block content %}
+  <h2>Registrar Paciente</h2>
+  {% if messages %}
+    {% for message in messages %}
+      <p>{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+  <form method="POST">
+    {% csrf_token %}
+    {{ formulario.as_p }}
+    <button type="submit">Registrar</button>
+  </form>
+{% endblock %}
