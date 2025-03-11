@@ -6,6 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Bienvenido a Izel{% endblock %}</title>
+    <!-- IMPLEMENTACION DE SELECT2 - CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
@@ -52,6 +55,18 @@
     <footer>
         <p class="footer">2025 - IZEL APP - Derechos reservados</p>
     </footer>
+    <!-- IMPLEMENTACION DE JS DE SELECT2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <!-- Habilitar Select2 para los campos select -->
+    <script>
+        $(document).ready(function() {
+            // Activar Select2 en los campos select
+            $('select').select2({
+                placeholder: "Selecciona una opción",
+                allowClear: true
+            });
+        });
+    </script>
 
 </body>
 </html>

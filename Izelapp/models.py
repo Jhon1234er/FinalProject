@@ -1,13 +1,24 @@
 from django.db import models
+import os
+import logging
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
+
+# Destinar una carpeta en el sistema de archivos para subir documentos
+def user_directory_path(instance, filename):
+    return f"usuario/{instance.id}_{filename}"
+
+
+# Configuración del logger
+logger = logging.getLogger(__name__)
+
 
 # region Usuario Base
 class Usuario(AbstractUser):
     OPCIONES_TIPODOC = [
-        ('C.C', 'C.C'),
-        ('T.I', 'T.I'),
-        ('C.E', 'T.I'), 
+        ('CC', 'Cédula de Ciudadanía'),
+        ('TI', 'Tarjeta de identidad'),
+        ('CE', 'Cédula de Extranjería')
     ]
     tipo_doc = models.CharField(max_length=20, choices=OPCIONES_TIPODOC)
     num_doc = models.CharField(max_length=10, unique=True)  
@@ -16,6 +27,7 @@ class Usuario(AbstractUser):
         ('femenino', 'FEMENINO'),
         ('prefiero no decirlo', 'PREFIERO NO DECIRLO')
     ]
+    email = models.EmailField(unique=True, blank=False)
     genero = models.CharField(max_length=20, choices=OPCIONES_GENERO)
     rh = models.CharField(max_length=3)
     telefono = PhoneNumberField(null=True, blank=True)  # PhoneNumberField
@@ -23,9 +35,28 @@ class Usuario(AbstractUser):
     tipo_poblacion = models.CharField(max_length=50)
     ocupacion = models.CharField(max_length=20)
     eps = models.CharField(max_length=20)
+    imagen = models.ImageField(upload_to=user_directory_path, blank=True, null=True, verbose_name='Imagen')
 
     def __str__(self):
         return self.username
+    
+    # Eliminar la imagen del servidor si el usuario se borra
+    def delete(self,*args,**kwargs):
+        if self.imagen and self.imagen.name:
+            self.eliminar_imagen()
+        super().delete(*args,**kwargs)
+
+    def eliminar_imagen(self):
+        try:
+            # Se comprueba si hay una imagen y si hay ruta de acceso a ella en MEDIA_ROOT
+            if self.imagen and self.imagen.name and os.path.isfile(self.imagen.path):
+                os.remove(self.imagen.path)
+                logger.info(f"Imagen eliminada correctamente: {self.imagen.path}")
+            else:
+                logger.warning(f"La imagen no existe o no tiene un nombre válido: {self.imagen.path}")
+        except Exception as e:
+            logger.error(f"Error al eliminar la imagen {self.imagen.path}: {e}")
+
 
 #endregion
 

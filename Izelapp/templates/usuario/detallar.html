@@ -3,9 +3,12 @@
 {% block content %}
   <h2>Detalles del Usuario</h2>
   <table>
-    <tr><th>Username:</th><td>{{ usuario.username }}</td></tr>
+    <tr><th>Nombre de usuario:</th><td>{{ usuario.username }}</td></tr>
+    <tr><th>Nombre:</th><td>{{ usuario.first_name }}</td></tr>
+    <tr><th>Apellido:</th><td>{{ usuario.last_name }}</td></tr>
     <tr><th>Tipo de Documento:</th><td>{{ usuario.tipo_doc }}</td></tr>
     <tr><th>Número de Documento:</th><td>{{ usuario.num_doc }}</td></tr>
+    <tr><th>Correo:</th><td>{{ usuario.email }}</td></tr>
     <tr><th>Género:</th><td>{{ usuario.genero }}</td></tr>
     <tr><th>RH:</th><td>{{ usuario.rh }}</td></tr>
     <tr><th>Teléfono:</th><td>{{ usuario.telefono }}</td></tr>

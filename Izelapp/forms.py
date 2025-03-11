@@ -1,18 +1,43 @@
 from django import forms
 from Izelapp.models import *
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+import os
 
 
 # **Usuario Form**
 class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        fields = ['username', 'password', 'tipo_doc', 'num_doc', 'genero', 'rh', 'telefono', 'fecha_nacimiento', 'tipo_poblacion', 'ocupacion', 'eps']
+        fields = ['username', 'password','first_name','last_name','tipo_doc', 'num_doc','email', 'genero', 'rh', 'telefono', 'fecha_nacimiento', 'tipo_poblacion', 'ocupacion', 'eps']
         widgets = {
             'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
             'telefono': forms.TextInput(attrs={'placeholder': 'Ingrese su número de teléfono'}),
             'password': forms.PasswordInput(),
+            'email': forms.EmailInput(attrs={'placeholder': 'Ingrese su correo electrónico'}),
+
         }
+    
+    # Renombrar los campos
+    tipo_doc = forms.CharField(label='Tipo de documento')
+    num_doc = forms.CharField(label='Número de documento')
+    fecha_nacimiento=forms.CharField(label='Fecha de nacimiento')
+    tipo_poblacion=forms.CharField(label='Tipo de poblacion')
+    username = forms.CharField(label='Nombre de Usuario')
+    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
+    first_name = forms.CharField(label='Primer Nombre')
+    last_name = forms.CharField(label='Apellido')
+    email = forms.CharField(label='Correo')
+    
+    def validar_imagen(self):
+        imagen= self.cleaned_data.get(imagen)
+        if imagen:
+            extension = os.path.splitext(imagen.name)[1].lower()
+            if extension not in ['jpg','png','jpeg']:
+                raise ValidationError('No se aceptan imagenes en este formato, debe anexarla en formato PNG/JPG/JPEG')
+            if imagen.size > 102400:
+                raise ValidationError('El tamaño de su imagen exede el limite asigano que es 100 KB')
+        return imagen
 
 # **Paciente Form**
 class PacienteForm(forms.ModelForm):
@@ -129,12 +154,6 @@ class ITForm(forms.ModelForm):
     # Campos adicionales para activar staff o superusuario
     is_staff = forms.BooleanField(required=False, label="Es Staff")
     is_superuser = forms.BooleanField(required=False, label="Es Superusuario")
-    
-    fecha_nacimiento = forms.DateField(
-        required=False, 
-        label="Fecha de Nacimiento",
-        widget=forms.DateInput(attrs={'type': 'date'}) 
-    )
     
     def save(self, commit=True):
         it_instance = super().save(commit=False)
