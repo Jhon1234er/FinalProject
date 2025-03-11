@@ -23,13 +23,10 @@
                         <li><a href="#">Solicitar cita médica</a></li>
                     {% elif request.user.is_staff %}
                         <!-- Para usuarios Staff (IT), mostrar enlaces de administración -->
-                        <li><a href="{% url 'registrar_it' %}">Crear Cuenta IT</a></li>
-                        <li><a href="{% url 'listar_it' %}">Listar IT</a></li>
                         <li><a href="{% url 'registrar_empleado' %}">Crear Empleado</a></li>
+                        <li><a href="{% url 'listar_it' %}">Listar IT</a></li>
                         <li><a href="{% url 'listar_empleado' %}">Listar Empleados</a></li>
-                        <li><a href="{% url 'registrar_administrador' %}">Crear Administrador</a></li>
                         <li><a href="{% url 'listar_administrador' %}">Listar Administradores</a></li>
-                        <li><a href="{% url 'registrar_medico' %}">Crear Médico</a></li>
                         <li><a href="{% url 'listar_medico' %}">Listar Médicos</a></li>
                     {% else %}
                         <!-- Si es un usuario común, solo muestra la opción de ver sus datos -->

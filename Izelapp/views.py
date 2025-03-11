@@ -412,17 +412,59 @@ def lista_orden_medica(request):
 
 #region **Empleados**
 def crear_empleado(request):
+    usuarios = Usuario.objects.all()  # Obtener todos los usuarios
+    formulario_empleado = EmpleadoForm()
+    formulario_administrador = AdministradorForm()
+    formulario_it = ITForm()
+    formulario_medico = MedicosForm()
+
     if request.method == 'POST':
-        formulario = EmpleadoForm(request.POST)
-        if formulario.is_valid():
-            formulario.save()
-            messages.success(request, 'Empleado creado exitosamente.')
-            return redirect('crear_empleado')
+        tipo_empleado = request.POST.get('tipo_empleado')
+        
+        if tipo_empleado == 'empleado':
+            formulario = EmpleadoForm(request.POST)
+            if formulario.is_valid():
+                empleado = formulario.save(commit=False)
+                usuario_id = request.POST.get('usuario')
+                usuario = Usuario.objects.get(id=usuario_id)
+                empleado.usuario = usuario
+                empleado.save()
+                return redirect('listar_empleado')
+        elif tipo_empleado == 'administrador':
+            formulario = AdministradorForm(request.POST)
+            if formulario.is_valid():
+                administrador = formulario.save(commit=False)
+                usuario_id = request.POST.get('usuario')
+                usuario = Usuario.objects.get(id=usuario_id)
+                administrador.usuario = usuario
+                administrador.save()
+                return redirect('listar_administrador')
+        elif tipo_empleado == 'it':
+            formulario = ITForm(request.POST)
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, 'IT creado exitosamente.')
+                return redirect('listar_it')
+        elif tipo_empleado == 'medico':
+            formulario = MedicosForm(request.POST)
+            if formulario.is_valid():
+                medico = formulario.save(commit=False)
+                usuario_id = request.POST.get('usuario')
+                usuario = Usuario.objects.get(id=usuario_id)
+                medico.usuario = usuario
+                medico.save()
+                return redirect('listar_medico')
         else:
-            messages.error(request, 'Por favor, llena todos los campos.')
-    else:
-        formulario = EmpleadoForm()
-    return render(request, 'empleado/insertar.html', {'formulario': formulario})
+            messages.error(request, 'Por favor, selecciona un tipo de empleado válido.')
+
+    return render(request, 'empleado/insertar.html', {
+        'formulario_empleado': formulario_empleado,
+        'formulario_administrador': formulario_administrador,
+        'formulario_it': formulario_it,
+        'formulario_medico': formulario_medico,
+        'usuarios': usuarios
+    })
+
 
 def lista_empleado(request):
     empleados = Empleado.objects.all()
@@ -452,17 +494,24 @@ def eliminar_empleado(request, id):
 
 #region ** Administrador **
 def crear_administrador(request):
+    usuarios = Usuario.objects.all()  # Obtener todos los usuarios
     if request.method == 'POST':
         formulario = AdministradorForm(request.POST)
         if formulario.is_valid():
-            formulario.save()
-            messages.success(request, 'Administrador creado exitosamente.')
-            return redirect('crear_administrador')
-        else:
-            messages.error(request, 'Por favor, llena todos los campos.')
+            administrador = formulario.save(commit=False)
+            # Asignar el usuario seleccionado al nuevo administrador
+            usuario_id = request.POST.get('usuario')
+            usuario = Usuario.objects.get(id=usuario_id)
+            administrador.usuario = usuario
+            administrador.save()
+            return redirect('listar_administrador')  # Redirigir a la lista de administradores
     else:
         formulario = AdministradorForm()
-    return render(request, 'administrador/insertar.html', {'formulario': formulario})
+
+    return render(request, 'administrador/insertar.html', {
+        'formulario': formulario,
+        'usuarios': usuarios
+    })
 
 def lista_administrador(request):
     administradores = Administrador.objects.all()
@@ -534,17 +583,24 @@ def eliminar_it(request, id):
 
 #region ** Medicos **
 def crear_medico(request):
+    usuarios = Usuario.objects.all()  # Obtener todos los usuarios
     if request.method == 'POST':
         formulario = MedicosForm(request.POST)
         if formulario.is_valid():
-            formulario.save()
-            messages.success(request, 'Médico creado exitosamente.')
-            return redirect('crear_medico')
-        else:
-            messages.error(request, 'Por favor, llena todos los campos.')
+            medico = formulario.save(commit=False)
+            # Asignar el usuario seleccionado al nuevo médico
+            usuario_id = request.POST.get('usuario')
+            usuario = Usuario.objects.get(id=usuario_id)
+            medico.usuario = usuario
+            medico.save()
+            return redirect('listar_medico')  # Redirigir a la lista de médicos
     else:
         formulario = MedicosForm()
-    return render(request, 'medico/insertar.html', {'formulario': formulario})
+
+    return render(request, 'medico/insertar.html', {
+        'formulario': formulario,
+        'usuarios': usuarios
+    })
 
 def lista_medico(request):
     medicos = Medico.objects.all()
