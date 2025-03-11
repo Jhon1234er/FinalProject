@@ -121,11 +121,6 @@ class AdministradorForm(forms.ModelForm):
 
 
 # **IT Form**
-
-from django import forms
-from django.utils import timezone
-from .models import IT, Usuario  # Asegúrate de importar los modelos correctos
-
 class ITForm(forms.ModelForm):
     class Meta:
         model = IT
@@ -135,11 +130,10 @@ class ITForm(forms.ModelForm):
     is_staff = forms.BooleanField(required=False, label="Es Staff")
     is_superuser = forms.BooleanField(required=False, label="Es Superusuario")
     
-    # Campo adicional para la fecha de nacimiento
     fecha_nacimiento = forms.DateField(
         required=False, 
         label="Fecha de Nacimiento",
-        widget=forms.DateInput(attrs={'type': 'date'})  # Esto usará un input de tipo fecha en el formulario
+        widget=forms.DateInput(attrs={'type': 'date'}) 
     )
     
     def save(self, commit=True):
@@ -150,7 +144,6 @@ class ITForm(forms.ModelForm):
         usuario.is_staff = self.cleaned_data['is_staff']
         usuario.is_superuser = self.cleaned_data['is_superuser']
 
-        # Si el campo de fecha de nacimiento fue proporcionado, lo actualizamos
         if self.cleaned_data['fecha_nacimiento']:
             usuario.fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
         

@@ -123,6 +123,7 @@ class Empleado(Usuario):
         ('administrador', 'Administrador')
     ]
     tipo_empleado = models.CharField(max_length=20, null=False, choices=opciones_tipo_empleado)
+    usuario=models.ForeignKey(Usuario, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.tipo_empleado
@@ -135,6 +136,7 @@ class Administrador(Empleado):
     fecha_contratacion = models.DateField(null=False)   
     # Gestión de archivos
     hoja_vida = models.FileField(upload_to='hojas_vida/', null=True, blank=True)  # Almacena las hojas de vida
+    usuario=models.ForeignKey(Usuario, on_delete=models.CASCADE)
     contrato = models.FileField(upload_to='contratos/', null=True, blank=True)  # Almacena los contratos
     # Método para agregar documentos de empleados
     def agregar_documentos(self, empleado, hoja_vida, contrato):
@@ -152,6 +154,7 @@ class Medico(Empleado):
     especialidad = models.CharField(max_length=50, null=False)
     numero_licencia = models.CharField(max_length=10, null=False, unique=True)
     citas_atender = models.IntegerField(default=0)
+    usuario=models.ForeignKey(Usuario, on_delete=models.CASCADE)
   
     def __str__(self):
         return self.especialidad
