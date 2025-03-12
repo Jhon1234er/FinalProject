@@ -22,14 +22,23 @@ class Usuario(AbstractUser):
     ]
     tipo_doc = models.CharField(max_length=20, choices=OPCIONES_TIPODOC)
     num_doc = models.CharField(max_length=10, unique=True)  
+    email = models.EmailField(unique=True, blank=False)
     OPCIONES_GENERO = [
         ('masculino', 'MASCULINO'),
         ('femenino', 'FEMENINO'),
         ('prefiero no decirlo', 'PREFIERO NO DECIRLO')
     ]
-    email = models.EmailField(unique=True, blank=False)
     genero = models.CharField(max_length=20, choices=OPCIONES_GENERO)
-    rh = models.CharField(max_length=3)
+    OPCIONES_RH=[('A+','A+'),
+                ('A-','A-'),
+                ('B+','B+'),
+                ('B-','B-'),
+                ('AB+','AB+'),
+                ('AB-','AB-'),
+                ('O+','O+'),
+                ('O-','O-')
+    ]
+    rh = models.CharField(max_length=3,choices=OPCIONES_RH)
     telefono = PhoneNumberField(null=True, blank=True)  # PhoneNumberField
     fecha_nacimiento = models.DateField(null=True, blank=True)
     tipo_poblacion = models.CharField(max_length=50)

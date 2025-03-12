@@ -6,9 +6,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Bienvenido a Izel{% endblock %}</title>
-    <!-- IMPLEMENTACION DE SELECT2 - CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 
+    <!-- jQuery Library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap CSS for styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Select2 CSS for enhanced select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- jQuery UI CSS for datepicker -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- intl-tel-input CSS for international telephone input -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+    <!-- Custom base CSS -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
@@ -17,27 +26,28 @@
         <nav>
             <ul class="nav-list">
                 {% if request.user.is_authenticated %}
-                    <!-- Verifica si el usuario es 'Medico', 'Paciente' o un usuario común -->
                     {% if request.user.medico %}
+                        <!-- Navigation for authenticated users with 'medico' role -->
                         <li><a href="#">Consultar historias clínicas</a></li>
                         <li><a href="{% url 'perfil_medico' %}">Ver mi perfil médico</a></li>
                     {% elif request.user.paciente %}
+                        <!-- Navigation for authenticated users with 'paciente' role -->
                         <li><a href="#">Ver mi perfil</a></li>
                         <li><a href="#">Solicitar cita médica</a></li>
                     {% elif request.user.is_staff %}
-                        <!-- Para usuarios Staff (IT), mostrar enlaces de administración -->
+                        <!-- Navigation for authenticated users with 'is_staff' role -->
                         <li><a href="{% url 'registrar_empleado' %}">Crear Empleado</a></li>
                         <li><a href="{% url 'listar_it' %}">Listar IT</a></li>
                         <li><a href="{% url 'listar_empleado' %}">Listar Empleados</a></li>
                         <li><a href="{% url 'listar_administrador' %}">Listar Administradores</a></li>
                         <li><a href="{% url 'listar_medico' %}">Listar Médicos</a></li>
                     {% else %}
-                        <!-- Si es un usuario común, solo muestra la opción de ver sus datos -->
+                        <!-- Navigation for authenticated common users -->
                         <li><a href="{% url 'detallar_usuario' %}">Ver mis datos de usuario</a></li>
                     {% endif %}
                     <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
                 {% else %}
-                    <!-- Si no está autenticado, muestra opciones de inicio y registro -->
+                    <!-- Navigation for non-authenticated users -->
                     <li><a href="{% url 'home' %}">Inicio</a></li>
                     <li><a href="{% url 'listar_usuarios' %}">Listar usuarios</a></li>
                     <li><a class="login-btn" href="{% url 'login' %}">Iniciar sesión</a></li>                  
@@ -48,25 +58,67 @@
 
     <main>
         {% block content %}
-        <!-- Aquí se insertará el contenido de las páginas específicas -->
+        <!-- Content from child templates will be inserted here -->
         {% endblock %}
     </main>
 
     <footer>
         <p class="footer">2025 - IZEL APP - Derechos reservados</p>
     </footer>
-    <!-- IMPLEMENTACION DE JS DE SELECT2 -->
+
+    <!-- Select2 JavaScript for enhanced select boxes -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-    <!-- Habilitar Select2 para los campos select -->
+    <!-- jQuery UI JavaScript for datepicker -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- jQuery UI Datepicker localization for Spanish -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui/1.12.1/i18n/datepicker-es.min.js"></script>
+    <!-- intl-tel-input JavaScript for international telephone input -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
     <script>
         $(document).ready(function() {
-            // Activar Select2 en los campos select
-            $('select').select2({
+            // Inicializar Select2 en los elementos select con la clase 'select2'
+            $('.select2').select2({
                 placeholder: "Selecciona una opción",
                 allowClear: true
             });
+
+            // Inicializar jQuery UI Datepicker en los elementos input con la clase 'datepicker'
+            $('.datepicker').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "1900:2100",
+                regional: "es"
+            });
+
+            // Inicializar intl-tel-input en el campo de teléfono con el ID 'id_telefono'
+            var input = document.querySelector("#id_telefono");  // Asegúrate de que el ID coincida
+            var iti = intlTelInput(input, {
+                initialCountry: "auto",
+                geoIpLookup: function(callback) {
+                    fetch('https://ipinfo.io/json')
+                        .then(function(resp) { return resp.json(); })
+                        .then(function(resp) { callback(resp.country); });
+                },
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js" // Solo para formateo de números y validaciones
+            });
+
+            // Al enviar el formulario, se guarda el número de teléfono completo en un campo oculto
+            $('form').on('submit', function() {
+                if (iti.isValidNumber()) {
+                    var hiddenInput = document.createElement("input");
+                    hiddenInput.setAttribute("type", "hidden");
+                    hiddenInput.setAttribute("name", "telefono");
+                    hiddenInput.setAttribute("value", iti.getNumber());
+                    this.appendChild(hiddenInput);
+                } else {
+                    alert("Por favor, ingrese un número de teléfono válido.");
+                    return false;  // Evita que el formulario se envíe si el número no es válido
+                }
+            });
         });
     </script>
-
+    
 </body>
 </html>

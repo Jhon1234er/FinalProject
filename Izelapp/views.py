@@ -24,6 +24,7 @@ def registrar_usuario(request):
             messages.success(request, 'Usuario creado exitosamente.')
             return redirect('registrar_usuario')
         else:
+            print(formulario.errors)  # Muestra los errores del formulario en la consola
             messages.error(request, 'Hay algunos errores en el registro. Vuelva a intentar...')
     else:
         formulario = UsuarioForm()

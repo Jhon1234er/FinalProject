@@ -9,25 +9,32 @@ import os
 class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        fields = ['username', 'password','first_name','last_name','tipo_doc', 'num_doc','email', 'genero', 'rh', 'telefono', 'fecha_nacimiento', 'tipo_poblacion', 'ocupacion', 'eps']
+        fields = ['username', 'password', 'first_name', 'last_name', 'tipo_doc', 'num_doc', 'email', 'genero', 'rh', 'telefono', 'fecha_nacimiento', 'tipo_poblacion', 'ocupacion', 'eps']
         widgets = {
-            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
-            'telefono': forms.TextInput(attrs={'placeholder': 'Ingrese su número de teléfono'}),
-            'password': forms.PasswordInput(),
+            'fecha_nacimiento': forms.DateInput(attrs={'class': 'datepicker', 'type': 'text'}),  # Añadir clase datepicker
+            'telefono': forms.TextInput(attrs={'placeholder': 'Ingrese su número de teléfono', 'id': 'id_telefono'}),            'password': forms.PasswordInput(),
             'email': forms.EmailInput(attrs={'placeholder': 'Ingrese su correo electrónico'}),
-
+            'tipo_doc': forms.Select(attrs={'class': 'select2'}),
+            'genero': forms.Select(attrs={'class': 'select2'}),
+            'rh':forms.Select(attrs={'class':'select2'})
         }
-    
-    # Renombrar los campos
-    tipo_doc = forms.CharField(label='Tipo de documento')
+
+    tipo_doc = forms.ChoiceField(label='Tipo de documento', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_TIPODOC, widget=forms.Select(attrs={'class': 'select2'}))
+    genero = forms.ChoiceField(label='Género', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_GENERO, widget=forms.Select(attrs={'class': 'select2'}))
+    rh=forms.ChoiceField(label='RH',choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_RH, widget=forms.Select(attrs={'class': 'select2'}))
     num_doc = forms.CharField(label='Número de documento')
-    fecha_nacimiento=forms.CharField(label='Fecha de nacimiento')
-    tipo_poblacion=forms.CharField(label='Tipo de poblacion')
+    tipo_poblacion = forms.CharField(label='Tipo de población')
     username = forms.CharField(label='Nombre de Usuario')
     password = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
     first_name = forms.CharField(label='Primer Nombre')
     last_name = forms.CharField(label='Apellido')
     email = forms.CharField(label='Correo')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.Select):
+                field.widget.attrs.update({'class': 'select2'})
     
     def validar_imagen(self):
         imagen= self.cleaned_data.get(imagen)
