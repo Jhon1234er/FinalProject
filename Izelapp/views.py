@@ -40,6 +40,28 @@ def eliminar_usuario(request, id):
     messages.success(request, 'Usuario eliminado exitosamente.')
     return redirect('listar_usuarios')
 
+def insertar_imagen_usuario(request):
+    if request.method == 'POST':
+        formulario = ImagenUserForm (request.POST, request.FILES, instance=request.user)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request,'Imagen agregada exitosamente')
+            return redirect('detallar_usuario')
+        else:
+            messages.error(request, 'Imagen no admitida, intente de nuevo')
+    else:
+        formulario = ImagenUserForm(instance=request.user)
+    return render(request, 'usuario/insertar_imagen.html',{'formulario':'formulario'})
+def eliminar_imagen_usuario(request):
+    usuario = request.user
+    if usuario.imagen:
+        usuario.imagen.delete()
+        usuario.imagen = None
+        usuario.save()
+        messages.success(request, 'Imagen eliminada exitosamente')
+    else:
+        messages.error(request, 'No hay imagen para eliminar')
+    return redirect('detallar_usuario')
 # Vista para login
 def login_usuario(request):
     if request.method == 'POST':
@@ -406,7 +428,7 @@ def crear_orden_medica(request):
     return render(request, 'orden_medica/crear.html', {'formulario': formulario})
 
 def lista_orden_medica(request):
-    ordenes = OrdeneMedica.objects.all()
+    ordenes = OrdenMedica.objects.all()
     return render(request, 'orden_medica/lista.html', {'ordenes': ordenes})
 
 #endregion

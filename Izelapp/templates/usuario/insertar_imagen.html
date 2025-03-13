@@ -1,0 +1,64 @@
+<!-- insertar_imagen.html -->
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/usuario/insertar_imagen.css' %}">
+
+<div class="container-modal" id="containerModal">
+    <div class="content-modal">
+        <h2>Edición de imagen</h2>
+        
+        <!-- Mostrar la imagen actual -->
+        {% if usuario.imagen %}
+            <img src="{{ usuario.imagen.url }}" alt="Imagen {{ usuario.first_name }}" width="100">
+        {% else %}
+            <img src="{% static 'img/user_default.png' %}" alt="Imagen de usuario" width="100">
+        {% endif %}
+        
+        <!-- Formulario para editar la imagen -->
+        <form method="POST" enctype="multipart/form-data" action="{% url 'insertar_imagen_usuario' %}">
+            {% csrf_token %}
+            {{ formulario.as_p }}
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </form>
+        
+        <!-- Botón para eliminar la imagen -->
+        <form method="POST" action="{% url 'eliminar_imagen_usuario' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Eliminar imagen</button>
+        </form>
+        
+        <div class="btn-cerrar">
+            <button id="closeModalBtn" class="btn btn-secondary">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Obtener el modal
+    var modal = document.getElementById("containerModal");
+
+    // Obtener el botón que abre el modal
+    var btn = document.getElementById("openModalBtn");
+
+    // Obtener el botón que cierra el modal
+    var closeBtn = document.getElementById("closeModalBtn");
+
+    // Cuando el usuario hace clic en el botón, abre el modal
+    btn.onclick = function() {
+        modal.style.display = "flex";
+    }
+
+    // Cuando el usuario hace clic en el botón de cerrar, cierra el modal
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Cuando el usuario hace clic fuera del modal, cierra el modal
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+{% endblock %}

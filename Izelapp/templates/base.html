@@ -46,6 +46,13 @@
                         <li><a href="{% url 'detallar_usuario' %}">Ver mis datos de usuario</a></li>
                     {% endif %}
                     <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
+                    <td>
+                        {% if user.imagen %}
+                            <img src="{{ user.imagen.url }}" alt="Imagen { user.first_name }" width="30">
+                        {% else %}
+                        <img src="{% static 'img/user_default.png' %}" alt="Imagen de usuario" width="50">
+                        {% endif %}
+                    </td>
                 {% else %}
                     <!-- Navigation for non-authenticated users -->
                     <li><a href="{% url 'home' %}">Inicio</a></li>
@@ -93,7 +100,7 @@
             });
 
             // Inicializar intl-tel-input en el campo de teléfono con el ID 'id_telefono'
-            var input = document.querySelector("#id_telefono");  // Asegúrate de que el ID coincida
+            var input = document.querySelector("#id_telefono");  
             var iti = intlTelInput(input, {
                 initialCountry: "auto",
                 geoIpLookup: function(callback) {

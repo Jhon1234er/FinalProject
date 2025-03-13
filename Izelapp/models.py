@@ -265,7 +265,7 @@ class RecetaMedica(models.Model):
 
 
 #region  OrdenesMedicas
-class OrdeneMedica(models.Model):
+class OrdenMedica(models.Model):
     especialidad_referido = models.CharField(max_length=255, blank=False)
     motivo = models.CharField(max_length=255)
     fecha_ordenado = models.DateField(auto_now=True)

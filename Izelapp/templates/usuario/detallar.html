@@ -1,8 +1,15 @@
-<!-- usuario/detallar.html -->
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
   <h2>Detalles del Usuario</h2>
   <table>
+    <td>
+      {% if user.imagen %}
+          <img src="{{ user.imagen.url }}" alt="Imagen { user.first_name }" width="30">
+      {% else %}
+      <img src="{% static 'img/user_default.png' %}" alt="Imagen de usuario" width="50">
+      {% endif %}
+      <button id="openModalBtn" class="btn">Editar imagen</button>    <br></td>
     <tr><th>Nombre de usuario:</th><td>{{ usuario.username }}</td></tr>
     <tr><th>Nombre:</th><td>{{ usuario.first_name }}</td></tr>
     <tr><th>Apellido:</th><td>{{ usuario.last_name }}</td></tr>
@@ -19,4 +26,5 @@
   </table>
   <br>
   <a href="{% url 'listar_usuarios' %}">Volver a la lista de usuarios</a>
+{% include 'usuario/insertar_imagen.html' %}
 {% endblock %}

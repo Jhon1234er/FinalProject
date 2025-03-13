@@ -12,7 +12,8 @@ class UsuarioForm(forms.ModelForm):
         fields = ['username', 'password', 'first_name', 'last_name', 'tipo_doc', 'num_doc', 'email', 'genero', 'rh', 'telefono', 'fecha_nacimiento', 'tipo_poblacion', 'ocupacion', 'eps']
         widgets = {
             'fecha_nacimiento': forms.DateInput(attrs={'class': 'datepicker', 'type': 'text'}),  # Añadir clase datepicker
-            'telefono': forms.TextInput(attrs={'placeholder': 'Ingrese su número de teléfono', 'id': 'id_telefono'}),            'password': forms.PasswordInput(),
+            'telefono': forms.TextInput(attrs={'placeholder': 'Ingrese su número de teléfono', 'id': 'id_telefono'}),            
+            'password': forms.PasswordInput(),
             'email': forms.EmailInput(attrs={'placeholder': 'Ingrese su correo electrónico'}),
             'tipo_doc': forms.Select(attrs={'class': 'select2'}),
             'genero': forms.Select(attrs={'class': 'select2'}),
@@ -36,6 +37,14 @@ class UsuarioForm(forms.ModelForm):
             if isinstance(field.widget, forms.Select):
                 field.widget.attrs.update({'class': 'select2'})
     
+class ImagenUserForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = ['imagen']
+        widgets = {
+            'imagen' : forms.FileInput()
+        }
+    
     def validar_imagen(self):
         imagen= self.cleaned_data.get(imagen)
         if imagen:
@@ -45,7 +54,7 @@ class UsuarioForm(forms.ModelForm):
             if imagen.size > 102400:
                 raise ValidationError('El tamaño de su imagen exede el limite asigano que es 100 KB')
         return imagen
-
+    
 # **Paciente Form**
 class PacienteForm(forms.ModelForm):
     class Meta:
@@ -242,7 +251,7 @@ class RecetaMedicaForm(forms.ModelForm):
 # **OrdeneMedica Form**
 class OrdeneMedicaForm(forms.ModelForm):
     class Meta:
-        model = OrdeneMedica
+        model = OrdenMedica
         fields = ['especialidad_referido', 'motivo', 'cita']
         widgets = {
             'fecha_ordenado': forms.DateInput(attrs={'type': 'date','readonly': 'readonly'}),
