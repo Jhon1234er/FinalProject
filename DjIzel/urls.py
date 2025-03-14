@@ -66,7 +66,6 @@ urlpatterns = [
     path('usuario/actualizar/<int:id>/', actualizar_usuario, name='actualizar_usuario'),
     path('usuario/detallar/', detallar_usuario, name='detallar_usuario'),
     path('usuario/ver-perfil/', ver_perfil_usuario, name='perfil_usuario'),
-    path('usuario/insertar_imagen/', insertar_imagen_usuario,name='insertar_imagen_usuario'),
     path('usuario/eliminar_imagen/', eliminar_imagen_usuario, name='eliminar_imagen_usuario'),
     path('usuario/login/', login_usuario, name='login'),
     path('usuario/logout/', logout_usuario, name='logout'),

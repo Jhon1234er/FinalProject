@@ -1,26 +1,27 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
+body {
     background: white;
 }
 
-.container-modal{
+.container-modal {
     width: 100%;
     height: 100vh;
     position: fixed;
-    top: 0; left: 0;
-    background-color: rgba(0, 0, 0, 0.4);
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.4);  /* Fondo transparente */
     display: none;
     justify-content: center;
     align-items: center;
     z-index: 100;
 }
 
-.content-modal{
+.content-modal {
     width: 100%;
     max-width: 400px;
     padding: 20px;
@@ -28,7 +29,7 @@ body{
     border-radius: 4px;
 }
 
-.content-modal h2{
+.content-modal h2 {
     margin-bottom: 15px;
 }
 
@@ -37,14 +38,14 @@ body{
     margin-bottom: 15px;
 }
 
-.content-modal .btn-cerrar{
+.content-modal .btn-cerrar {
     width: 100%;
     margin-top: 15px;
     display: flex;
     justify-content: flex-end;
 }
 
-.content-modal .btn-cerrar button{
+.content-modal .btn-cerrar button {
     padding: 7px 10px;
     background-color: #013857;
     color: white;
@@ -54,14 +55,15 @@ body{
     transition: all 300ms ease;
 }
 
-.content-modal .btn-cerrar button:hover{
+.content-modal .btn-cerrar button:hover {
     background-color: #003452;
 }
 
-.cerrar-modal{
+.cerrar-modal {
     width: 100%;
     height: 100vh;
     position: absolute;
-    top: 0; left: 0;
+    top: 0;
+    left: 0;
     z-index: -1;
 }

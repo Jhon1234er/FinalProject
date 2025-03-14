@@ -40,18 +40,6 @@ def eliminar_usuario(request, id):
     messages.success(request, 'Usuario eliminado exitosamente.')
     return redirect('listar_usuarios')
 
-def insertar_imagen_usuario(request):
-    if request.method == 'POST':
-        formulario = ImagenUserForm (request.POST, request.FILES, instance=request.user)
-        if formulario.is_valid():
-            formulario.save()
-            messages.success(request,'Imagen agregada exitosamente')
-            return redirect('detallar_usuario')
-        else:
-            messages.error(request, 'Imagen no admitida, intente de nuevo')
-    else:
-        formulario = ImagenUserForm(instance=request.user)
-    return render(request, 'usuario/insertar_imagen.html',{'formulario':'formulario'})
 def eliminar_imagen_usuario(request):
     usuario = request.user
     if usuario.imagen:
@@ -100,7 +88,15 @@ def ver_perfil_usuario(request):
 @login_required
 def detallar_usuario(request):
     usuario = request.user  # Obtener el usuario logueado
-    return render(request, 'usuario/detallar.html', {'usuario': usuario})
+
+    if request.method == 'POST':
+        formulario = ImagenUserForm(request.POST, request.FILES, instance=usuario)
+        if formulario.is_valid():
+            formulario.save()
+    else:
+        formulario = ImagenUserForm(instance=usuario)
+
+    return render(request, 'usuario/detallar.html', {'usuario': usuario, 'formulario': formulario})
 
 @login_required
 def actualizar_usuario(request, id):
