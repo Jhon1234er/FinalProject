@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
+# settings.py
+LOGIN_REDIRECT_URL = '/'
 
 LOGIN_URL = 'usuario/login'
 

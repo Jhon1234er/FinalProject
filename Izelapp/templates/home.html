@@ -11,8 +11,6 @@
     <h3>Página de inicio de la app</h3>
 
     {% if user.is_authenticated %}
-        <p>Hola, {{ user.username }}! <a href="{% url 'perfil_usuario' %}">Ir a tu perfil</a></p>
-    {% else %}
         <p>¡Hola, bienvenido a Izel! <a href="{% url 'login' %}">Iniciar sesión</a> o <a href="{% url 'registrar_usuario' %}">Registrarse</a></p>
     {% endif %}
 {% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Perfil de Paciente</h1>
+
+    {% if paciente %}
+        <div class="profile-info">
+            <h2>{{ paciente.usuario.first_name }} {{ paciente.usuario.last_name }}</h2>
+            <p><strong>Email:</strong> {{ paciente.usuario.email }}</p>
+            <p><strong>Fecha de nacimiento:</strong> {{ paciente.fecha_nacimiento }}</p>
+            <p><strong>Dirección:</strong> {{ paciente.direccion }}</p>
+            <p><strong>Teléfono:</strong> {{ paciente.telefono }}</p>
+
+            <!-- Si tienes más campos en el modelo, agrégales aquí -->
+            <p><strong>Fecha de registro:</strong> {{ paciente.usuario.date_joined }}</p>
+
+            <a href="{% url 'editar_perfil_paciente' %}" class="btn btn-primary">Editar Perfil</a>
+        </div>
+    {% else %}
+        <p>No se encontró un perfil para este paciente.</p>
+    {% endif %}
+</div>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .profile-info {
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    h2 {
+        margin-top: 0;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+{% endblock %}

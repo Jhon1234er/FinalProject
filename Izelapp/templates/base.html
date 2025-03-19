@@ -9,35 +9,50 @@
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
-
     <header>
         <nav>
             <ul class="nav-list">
                 {% if request.user.is_authenticated %}
-                    <!-- Verifica si el usuario es 'Medico', 'Paciente' o un usuario común -->
+                    <!-- Si es un Médico -->
                     {% if request.user.medico %}
                         <li><a href="#">Consultar historias clínicas</a></li>
                         <li><a href="{% url 'perfil_medico' %}">Ver mi perfil médico</a></li>
-                    {% elif request.user.paciente %}
-                        <li><a href="#">Ver mi perfil</a></li>
-                        <li><a href="#">Solicitar cita médica</a></li>
-                    {% elif request.user.is_staff %}
-                        <!-- Para usuarios Staff (IT), mostrar enlaces de administración -->
-                        <li><a href="{% url 'registrar_empleado' %}">Crear Empleado</a></li>
-                        <li><a href="{% url 'listar_it' %}">Listar IT</a></li>
-                        <li><a href="{% url 'listar_empleado' %}">Listar Empleados</a></li>
+                        <li><a href="{% url 'listar_medico' %}">Listar Médicos</a></li>
+                    {% endif %}
+    
+                    <!-- Si es un Auxiliar -->
+                    {% if request.user.auxiliar %}
+                        <li><a href="#">Ver mis datos de Auxiliar</a></li>
+                        <li><a href="{% url 'listar_auxiliares' %}">Listar Auxiliares</a></li>
+                    {% endif %}
+    
+                    <!-- Si es un Administrador -->
+                    {% if request.user.administrador %}
                         <li><a href="{% url 'listar_administrador' %}">Listar Administradores</a></li>
                         <li><a href="{% url 'listar_medico' %}">Listar Médicos</a></li>
-                    {% else %}
-                        <!-- Si es un usuario común, solo muestra la opción de ver sus datos -->
-                        <li><a href="{% url 'detallar_usuario' %}">Ver mis datos de usuario</a></li>
+                        <li><a href="{% url 'listar_auxiliares' %}">Listar Auxiliares</a></li>
+                    {% endif %}
+    
+                    <!-- Si es un TI -->
+                    {% if request.user.ti %}
+                        <li><a href="#">Gestión de TI</a></li>
+                        <li><a href="{% url 'listar_it' %}">Listar IT</a></li>
+                    {% endif %}
+    
+                    <!-- Si es un Paciente -->
+                    {% if request.user.paciente %}
+                        <li><a href="{% url 'perfil_paciente' %}">Ver mi perfil de paciente</a></li>
+                        <li><a href="#">Solicitar cita médica</a></li>
+                        <li><a href="{% url 'listar_paciente' %}">Listar Pacientes</a></li>
                     {% endif %}
                     <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
                 {% else %}
-                    <!-- Si no está autenticado, muestra opciones de inicio y registro -->
+                    <!-- Si es un Usuario Comun -->
                     <li><a href="{% url 'home' %}">Inicio</a></li>
                     <li><a href="{% url 'listar_usuarios' %}">Listar usuarios</a></li>
-                    <li><a class="login-btn" href="{% url 'login' %}">Iniciar sesión</a></li>                  
+                    <li><a href="{% url 'registrar_administrador' %}">Crear Administrador</a></li>
+                    <li><a href="{% url 'registrar_ti' %}"> Crear TI</a></li>
+                    <li><a class="login-btn" href="{% url 'login' %}">Iniciar sesión</a></li>
                 {% endif %}
             </ul>
         </nav>
