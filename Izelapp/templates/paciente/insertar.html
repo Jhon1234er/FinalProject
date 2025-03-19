@@ -8,14 +8,23 @@
 
 {% block content %}
   <h2>Registrar Paciente</h2>
+  
+  <!-- Mostrar los mensajes de error o éxito -->
   {% if messages %}
-    {% for message in messages %}
-      <p>{{ message }}</p>
-    {% endfor %}
-    {% endif %}
+    <div class="messages">
+      {% for message in messages %}
+        <p class="message">{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Formulario de Registro -->
   <form method="POST">
     {% csrf_token %}
+    <!-- Renderiza el formulario de paciente -->
     {{ formulario.as_p }}
+    
+    <!-- Botón para enviar el formulario -->
     <button type="submit">Registrar</button>
   </form>
 {% endblock %}

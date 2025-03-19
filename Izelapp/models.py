@@ -1,5 +1,5 @@
 from django.db import models
-import os
+import os, json
 import logging
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
@@ -13,7 +13,10 @@ def user_directory_path(instance, filename):
 logger = logging.getLogger(__name__)
 
 
-# region Usuario Base
+
+
+
+# region Usuario 
 class Usuario(AbstractUser):
     OPCIONES_TIPODOC = [
         ('CC', 'Cédula de Ciudadanía'),
@@ -70,7 +73,11 @@ class Usuario(AbstractUser):
 #endregion
 
 
-# region  Paciente
+
+
+
+
+# region Paciente
 class Paciente(Usuario):
     OPCIONES_REGIMEN = [
         ('subcidiado', 'SUBCIDIADO'),
@@ -82,7 +89,80 @@ class Paciente(Usuario):
 #endregion
 
 
-#region  Consulta
+
+
+
+
+#region Administrador
+class Administrador(Usuario):
+    usuario = models.OneToOneField('Usuario', on_delete=models.CASCADE, related_name='Usuario_Admin') 
+    rol_acceso = models.CharField(max_length=100)  
+    centro_administracion = models.CharField(max_length=255)
+    permisos = models.JSONField()  
+
+
+    def cargar_permisos(self, area, rol):
+
+        ruta_archivo = "public/administrador.json"
+        
+        if not os.path.exists(ruta_archivo):
+            print("Permisos a Dar Desconocidos.")
+            return None
+
+        with open(ruta_archivo, 'r') as archivo:
+            permisos_data = json.load(archivo)
+        
+        permisos = permisos_data.get(area, {}).get(rol, {})
+        
+        if permisos:
+            self.permisos = permisos  
+            self.save()
+            return self.permisos
+        else:
+            print(f"No se encontraron permisos para el área '{area}' y rol '{rol}'.")
+            return None
+#endregion
+
+
+
+
+#region Medicos
+class Medico(Usuario):
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='Usuario_Medico')
+    especialidad = models.CharField(max_length=100)
+    numero_registro_profesional = models.CharField(max_length=50)
+    licencia_certificacion = models.BooleanField(default=False)
+    fecha_contratacion = models.DateField()
+#endregion
+
+
+
+
+
+#region Auxiliar
+class Auxiliar(Usuario):
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='Usuario_Auxiliar')
+    departamento = models.CharField(max_length=100)
+    supervisor = models.CharField(max_length=255)
+#endregion
+
+
+
+
+
+
+#region TI
+class TI(Usuario):
+    usuario=models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='Usuario_Ti'),
+    is_staff = models.BooleanField(default=False),
+#endregion
+
+
+
+
+
+
+#region Consulta
 class Consulta(models.Model):
     tratamiento = models.TextField(max_length=200)
     diagnostico = models.TextField(max_length=200)
@@ -92,7 +172,11 @@ class Consulta(models.Model):
 #endregion
 
 
-#region  PerfilPaciente
+
+
+
+
+#region PerfilPaciente
 class PerfilPaciente(models.Model):
     tratamiento = models.TextField(max_length=200, null=True)
     opcion_vida_sexual = [
@@ -110,7 +194,12 @@ class PerfilPaciente(models.Model):
 #endregion
 
 
-#region  Antecedente
+
+
+
+
+
+#region Antecedente
 class Antecedente(models.Model):
     descripcion = models.TextField(max_length=200, null=True)
     tipo_antecedente = models.TextField(max_length=200, null=False)
@@ -118,7 +207,11 @@ class Antecedente(models.Model):
 #endregion
 
 
-#region  Vacuna
+
+
+
+
+#region Vacuna
 class Vacuna(models.Model):
     nombre_vacuna = models.CharField(max_length=150, null=False)
     fecha_aplicacion = models.DateField(null=False)
@@ -127,7 +220,11 @@ class Vacuna(models.Model):
 #endregion
 
 
-#region  DatoQuirurgico
+
+
+
+
+#region DatoQuirurgico
 class DatoQuirurgico(models.Model):
     tipo_cirugia = models.CharField(max_length=150, null=False)
     fecha_cirugia = models.DateField(null=False)
@@ -136,17 +233,25 @@ class DatoQuirurgico(models.Model):
 #endregion
 
 
-#region  HistoriaClinicas
+
+
+
+
+#region HistoriaClinicas
 class HistoriaClinica(models.Model):
     ultima_atencion = models.DateField()  # Esto lo gestionará Django automáticamente
     tratamiento = models.TextField()
     notas = models.TextField()
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-
 #endregion
 
 
-#region  DatoAntropometrico
+
+
+
+
+
+#region DatoAntropometrico
 class DatoAntropometrico(models.Model):
     altura_decimal = models.DecimalField(max_digits=20, decimal_places=2)
     peso = models.DecimalField(max_digits=20, decimal_places=2)
@@ -155,22 +260,12 @@ class DatoAntropometrico(models.Model):
 #endregion
 
 
-#region ** Empleado**
-class Empleado(Usuario):
-    opciones_tipo_empleado = [
-        ('Medico', 'Medico'),
-        ('auxiliar', 'Auxiliar'),
-        ('administrador', 'Administrador')
-    ]
-    tipo_empleado = models.CharField(max_length=20, null=False, choices=opciones_tipo_empleado)
-    
-    def __str__(self):
-        return self.tipo_empleado
-        
-#endregion
 
-#region ** Administrador**
-class Administrador(Empleado):
+
+
+
+#region Contratacion
+class Contratacion(models.Model):
     # Este  gestiona la contratación de empleados
     fecha_contratacion = models.DateField(null=False)   
     # Gestión de archivos
@@ -182,48 +277,35 @@ class Administrador(Empleado):
         empleado.contrato = contrato
         empleado.save()
         return empleado
-    
-    def __str__(self):
-        return self.hoja_vida
-#endregion
-
-#region  Medicos
-class Medico(Empleado):
-    especialidad = models.CharField(max_length=50, null=False)
-    numero_licencia = models.CharField(max_length=10, null=False, unique=True)
-    citas_atender = models.IntegerField(default=0)
-  
-    def __str__(self):
-        return self.especialidad
 #endregion
 
 
-#region ** IT**
-class IT(Empleado):
-    usuario=models.ForeignKey(Usuario, on_delete=models.CASCADE)
-
-#endregion
 
 
-#region  HorarioMedico
+
+#region Horario medico
 class HorarioMedico(models.Model):
     OPCIONES_DIAS_SEMANA = [
         ('lunes', 'Lunes'),
         ('martes', 'Martes'),
-        ('miercoles', 'Miercoles'),
+        ('miercoles', 'Miércoles'),
         ('jueves', 'Jueves'),
         ('viernes', 'Viernes'),
-        ('sabado', 'Sabado'),
+        ('sabado', 'Sábado'),
         ('domingo', 'Domingo')
     ]
-    dia_semana = models.CharField(max_length=10, null=False, choices=OPCIONES_DIAS_SEMANA)
-    hora_inicio = models.TimeField(null=False)
-    hora_fin = models.TimeField(null=False)
-    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='medico_horario')
+
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
+    dia_semana = models.CharField(max_length=10, choices=OPCIONES_DIAS_SEMANA, default='lunes')  # No es necesario null=False cuando usas choices
+    hora_inicio = models.TimeField()
+    hora_fin = models.TimeField()
 #endregion
 
 
-#region  Citas
+
+
+
+#region Citas
 class Cita(models.Model):
     fecha_cita = models.DateField(null=False)
     hora_cita = models.TimeField(null=False)
@@ -238,7 +320,11 @@ class Cita(models.Model):
 #endregion
 
 
-#region  CertificadoIncapacidad
+
+
+
+
+#region CertificadoIncapacidad
 class CertificadoIncapacidad(models.Model):
     dias_incapacidad = models.CharField(max_length=2)
     motivo_incapacidad = models.CharField(max_length=255)
@@ -247,7 +333,11 @@ class CertificadoIncapacidad(models.Model):
 #endregion
 
 
-#region  RecetasMedicas
+
+
+
+
+#region RecetasMedicas
 class RecetaMedica(models.Model):
     medicamento = models.CharField(max_length=100)
     concentracion = models.CharField(max_length=100)
@@ -265,7 +355,7 @@ class RecetaMedica(models.Model):
 
 
 #region  OrdenesMedicas
-class OrdenMedica(models.Model):
+class OrdeneMedica(models.Model):
     especialidad_referido = models.CharField(max_length=255, blank=False)
     motivo = models.CharField(max_length=255)
     fecha_ordenado = models.DateField(auto_now=True)

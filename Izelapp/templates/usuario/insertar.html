@@ -9,16 +9,21 @@
   <link rel="stylesheet" href="{% static 'css/usuario/insertar.css' %}">
 
   <h2>Registrar Usuario</h2>
+
+  <!-- Mostrar los mensajes de error o éxito -->
   {% if messages %}
-    {% for message in messages %}
-      <p>{{ message }}</p>
-    {% endfor %}
+    <div class="messages">
+      {% for message in messages %}
+        <p class="message">{{ message }}</p>
+      {% endfor %}
+    </div>
   {% endif %}
-  
+
+  <!-- Formulario de Registro -->
   <form method="POST">
     {% csrf_token %}
     
-    <!-- Ajuste para todos los campos del formulario -->
+    <!-- Iterar sobre los campos del formulario -->
     {% for field in formulario %}
       <div class="form-row">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -29,6 +34,7 @@
       </div>
     {% endfor %}
 
+    <!-- Botón para enviar el formulario -->
     <button type="submit">Registrar</button>
   </form>
 {% endblock %}

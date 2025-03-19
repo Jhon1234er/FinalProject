@@ -2,14 +2,27 @@ from django import forms
 from Izelapp.models import *
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-import os
 
 
-# **Usuario Form**
+#region Usuario
 class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        fields = ['username', 'password', 'first_name', 'last_name', 'tipo_doc', 'num_doc', 'email', 'genero', 'rh', 'telefono', 'fecha_nacimiento', 'tipo_poblacion', 'ocupacion', 'eps']
+        fields = ['username',
+                  'password', 
+                  'first_name', 
+                  'last_name', 
+                  'email',
+                  'tipo_doc', 
+                  'num_doc', 
+                  'genero', 
+                  'rh', 
+                  'telefono', 
+                  'fecha_nacimiento', 
+                  'tipo_poblacion', 
+                  'ocupacion', 
+                  'eps'
+                  ]
         widgets = {
             'fecha_nacimiento': forms.DateInput(attrs={'class': 'datepicker', 'type': 'text'}),  # Añadir clase datepicker
             'telefono': forms.TextInput(attrs={'placeholder': 'Ingrese su número de teléfono', 'id': 'id_telefono'}),            
@@ -54,74 +67,393 @@ class ImagenUserForm(forms.ModelForm):
             if imagen.size > 102400:
                 raise ValidationError('El tamaño de su imagen exede el limite asigano que es 100 KB')
         return imagen
-    
-# **Paciente Form**
+    #endregion
+
+
+
+
+
+
+
+#region Paciente
 class PacienteForm(forms.ModelForm):
     class Meta:
         model = Paciente
-        fields = ['regimen', 'numero_seguro_social']
+        fields = [
+            #USUARIO
+            'username',
+            'password',
+            'tipo_doc',
+            'num_doc',
+            'genero',
+            'rh',
+            'telefono',
+            'fecha_nacimiento',
+            'tipo_poblacion',
+            'ocupacion',
+            'eps', 
+            #PACIENTE
+            'regimen', 
+            'numero_seguro_social'
+            ]
         widgets = {
             'numero_seguro_social': forms.TextInput(attrs={'placeholder': 'Número de Seguro Social'}),
+            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
         }
 
-# **Consulta Form**
+    def clean_fecha_nacimiento(self):
+        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        if fecha_nacimiento:
+            if fecha_nacimiento > timezone.now().date():
+                raise ValidationError("NO SE PERMITEN FECHAS FUTURAS")
+            edad = timezone.now().date().year - fecha_nacimiento.year
+            if (timezone.now().date().month, timezone.now().date().day) < (fecha_nacimiento.month, fecha_nacimiento.day):
+                edad -= 1  
+            if edad < 18:
+                raise ValidationError("DEBES SER MAYOR A 18 AÑOS")
+        return fecha_nacimiento
+#endregion
+
+
+
+
+
+
+#region Administrador
+class AdministradorForm(forms.ModelForm):
+    class Meta:
+        model = Administrador
+        fields = [
+            # USUARIO
+            'username',
+            'password',
+            'tipo_doc',
+            'num_doc',
+            'genero',
+            'rh',
+            'telefono',
+            'fecha_nacimiento',
+            'tipo_poblacion',
+            'ocupacion',
+            'eps',
+            # ADMINISTRADOR
+            'rol_acceso',
+            'centro_administracion',
+            'permisos',
+        ]
+        widgets = {
+            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
+            'rol_acceso': forms.TextInput(attrs={'placeholder': 'Rol de acceso del administrador'}),
+            'centro_administracion': forms.TextInput(attrs={'placeholder': 'Centro de administración'}),
+        }
+
+    def clean_fecha_nacimiento(self):
+        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        if fecha_nacimiento:
+            if fecha_nacimiento > timezone.now().date():
+                raise ValidationError("NO SE PERMITEN FECHAS FUTURAS")
+            edad = timezone.now().date().year - fecha_nacimiento.year
+            if (timezone.now().date().month, timezone.now().date().day) < (fecha_nacimiento.month, fecha_nacimiento.day):
+                edad -= 1  # Ajuste por no haber cumplido aún el cumpleaños este año
+            if edad < 18:
+                raise ValidationError("DEBES SER MAYOR A 18 AÑOS")
+        return fecha_nacimiento
+#endregion
+
+
+
+
+
+
+
+
+#region TI
+class TIForm(forms.ModelForm):
+    class Meta:
+        model = TI
+        fields = [            
+            # USUARIO
+            'username',
+            'password',
+            'tipo_doc',
+            'num_doc',
+            'genero',
+            'rh',
+            'telefono',
+            'fecha_nacimiento',
+            'tipo_poblacion',
+            'ocupacion',
+            'eps',
+            #TI
+            'is_staff',
+            'is_superuser'
+            ]
+        widgets = {
+            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
+            }
+        
+
+    def clean_fecha_nacimiento(self):
+        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        if fecha_nacimiento:
+            if fecha_nacimiento > timezone.now().date():
+                raise ValidationError("NO SE PERMITEN FECHAS FUTURAS")
+            edad = timezone.now().date().year - fecha_nacimiento.year
+            if (timezone.now().date().month, timezone.now().date().day) < (fecha_nacimiento.month, fecha_nacimiento.day):
+                edad -= 1 
+            if edad < 18:
+                raise ValidationError("DEBES SER MAYOR A 18 AÑOS")
+        return fecha_nacimiento
+
+
+    def save(self, commit=True):
+        it_instance = super().save(commit=False)
+        usuario = it_instance.usuario
+
+        usuario.is_staff = self.cleaned_data['is_staff']
+        usuario.is_superuser = self.cleaned_data['is_superuser']
+        if commit:
+            usuario.save()  
+            it_instance.save() 
+
+        return it_instance
+#endregion    
+
+
+
+
+
+
+
+#region Medico
+class MedicoForm(forms.ModelForm):
+    class Meta:
+        model = Medico
+        fields = [
+            # USUARIO
+            'username',
+            'password',
+            'tipo_doc',
+            'num_doc',
+            'genero',
+            'rh',
+            'telefono',
+            'fecha_nacimiento',
+            'tipo_poblacion',
+            'ocupacion',
+            'eps',
+            # MEDICO
+            'especialidad',
+            'numero_registro_profesional',
+            'licencia_certificacion',
+            'fecha_contratacion' 
+        ]
+        widgets = {
+            'fecha_contratacion': forms.DateInput(attrs={'type':'date'}),
+            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
+            'especialidad': forms.TextInput(attrs={'placeholder': 'Especialidad del médico'}),
+            'numero_registro_profesional': forms.TextInput(attrs={'placeholder': 'Número de registro profesional'}),
+        }
+
+    def clean_fecha_nacimiento(self):
+        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        if fecha_nacimiento:
+            if fecha_nacimiento > timezone.now().date():
+                raise ValidationError("NO SE PERMITEN FECHAS FUTURAS")
+            edad = timezone.now().date().year - fecha_nacimiento.year
+            if (timezone.now().date().month, timezone.now().date().day) < (fecha_nacimiento.month, fecha_nacimiento.day):
+                edad -= 1 
+            if edad < 18:
+                raise ValidationError("DEBES SER MAYOR A 18 AÑOS")
+        return fecha_nacimiento
+
+    def clean_fecha_contratacion(self):
+        fecha_contratacion = self.cleaned_data['fecha_contratacion']
+        if fecha_contratacion:
+            # Verifica que la fecha de contratación no sea una fecha pasada
+            if fecha_contratacion < timezone.now().date():
+                raise ValidationError("La fecha de contratación no puede ser una fecha pasada.")
+        return fecha_contratacion
+#endregion
+
+
+
+
+
+
+
+
+
+#region Auxiliar
+class AuxiliarForm(forms.ModelForm):
+    class Meta:
+        model = Auxiliar
+        fields = [
+            # USUARIO
+            'username',
+            'password',
+            'tipo_doc',
+            'num_doc',
+            'genero',
+            'rh',
+            'telefono',
+            'fecha_nacimiento',
+            'tipo_poblacion',
+            'ocupacion',
+            'eps',
+            # AUXILIAR
+            'departamento',  
+            'supervisor',  
+        ]
+        widgets = {
+            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
+            'departamento': forms.TextInput(attrs={'placeholder': 'Área de trabajo del auxiliar'}),
+            'supervisor': forms.TextInput(attrs={'placeholder': 'Nombre del supervisor'}),
+        }
+
+    def clean_fecha_nacimiento(self):
+        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        if fecha_nacimiento:
+            # Verifica que la fecha no sea una fecha futura
+            if fecha_nacimiento > timezone.now().date():
+                raise ValidationError("ERROR DE INGRESO DE FECHA DE NACIMIENTO")
+            
+            # Verifica que la edad sea mayor a 18 años
+            edad = timezone.now().date().year - fecha_nacimiento.year
+            if (timezone.now().date().month, timezone.now().date().day) < (fecha_nacimiento.month, fecha_nacimiento.day):
+                edad -= 1 
+            if edad < 18:
+                raise ValidationError("LA EDAD INGRESADA DEBE SER MAYOR A 18")
+        return fecha_nacimiento
+
+
+
+#region Consulta
 class ConsultaForm(forms.ModelForm):
     class Meta:
         model = Consulta
-        fields = ['tratamiento', 'diagnostico', 'motivo_consulta', 'fecha_consulta', 'paciente']
+        fields = ['tratamiento',
+                  'diagnostico',
+                  'motivo_consulta', 
+                  'fecha_consulta', 
+                  'paciente'
+                  ]
         widgets = {
             'fecha_consulta': forms.SelectDateWidget(),
             'tratamiento': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Descripción del tratamiento'}),
             'diagnostico': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Diagnóstico del paciente'}),
             'motivo_consulta': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Motivo de la consulta'}),
         }
+#endregion
 
-# **PerfilPaciente Form**
+
+
+
+
+
+
+
+#region PerfilPaciente
 class PerfilPacienteForm(forms.ModelForm):
     class Meta:
         model = PerfilPaciente
-        fields = ['tratamiento', 'vida_sexual', 'ciclo_mestrual', 'sustancias_psicotivas', 'habitos_alimenticios', 'consumo_alcohol', 'habito_sueño', 'antecedentes_personales', 'consulta']
+        fields = ['tratamiento', 
+                  'vida_sexual', 
+                  'ciclo_mestrual', 
+                  'sustancias_psicotivas', 
+                  'habitos_alimenticios', 
+                  'consumo_alcohol', 
+                  'habito_sueño', 
+                  'antecedentes_personales', 
+                  'consulta'
+                  ]
         widgets = {
             'tratamiento': forms.Textarea(attrs={'rows': 4}),
             'ciclo_mestrual': forms.Textarea(attrs={'rows': 4}),
             'habitos_alimenticios': forms.Textarea(attrs={'rows': 4}),
             'antecedentes_personales': forms.Textarea(attrs={'rows': 4}),
         }
+#endregion
 
-# **Antecedente Form**
+
+
+
+
+
+
+
+#region Antecedente
 class AntecedenteForm(forms.ModelForm):
     class Meta:
         model = Antecedente
-        fields = ['descripcion', 'tipo_antecedente', 'paciente']
+        fields = ['descripcion',
+                  'tipo_antecedente',
+                  'paciente'
+                  ]
         widgets = {
             'descripcion': forms.Textarea(attrs={'rows': 4}),
         }
+#endregion
 
-# **Vacuna Form**
+
+
+
+
+
+
+
+#region Vacuna
 class VacunaForm(forms.ModelForm):
     class Meta:
         model = Vacuna
-        fields = ['nombre_vacuna', 'fecha_aplicacion', 'dosis', 'paciente']
+        fields = ['nombre_vacuna',
+                  'fecha_aplicacion', 
+                  'dosis', 
+                  'paciente'
+                  ]
         widgets = {
             'fecha_aplicacion': forms.DateInput(attrs={'type': 'date'}),
             'dosis': forms.TextInput(attrs={'placeholder': 'Dosis de la vacuna'}),
         }
+#endregion
 
-# **DatoQuirurgico Form**
+
+
+
+
+
+
+
+#region DatoQuirurgico 
 class DatoQuirurgicoForm(forms.ModelForm):
     class Meta:
         model = DatoQuirurgico
-        fields = ['tipo_cirugia', 'fecha_cirugia', 'complicaciones', 'paciente']
+        fields = ['tipo_cirugia', 
+                  'fecha_cirugia', 
+                  'complicaciones', 
+                  'paciente'
+                  ]
         widgets = {
             'fecha_cirugia': forms.DateInput(attrs={'type': 'date'}),
             'complicaciones': forms.Textarea(attrs={'rows': 4}),
         }
+#endregion
 
-# **HistoriaClinica Form**
+
+
+
+
+
+
+#region HistoriaClinica
 class HistoriaClinicaForm(forms.ModelForm):
     class Meta:
         model = HistoriaClinica
-        fields = ['ultima_atencion', 'tratamiento', 'notas', 'paciente']
+        fields = ['ultima_atencion',
+                  'tratamiento',
+                  'notas',
+                  'paciente'
+                  ]
         widgets = {
             'ultima_atencion': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),  # Solo lectura
             'tratamiento': forms.Textarea(attrs={'rows': 4}),
@@ -129,115 +461,117 @@ class HistoriaClinicaForm(forms.ModelForm):
         }
 
 
-# **DatoAntropometrico Form**
+
+
+
+
+
+
+#region DatoAntropometrico 
 class DatoAntropometricoForm(forms.ModelForm):
     class Meta:
         model = DatoAntropometrico
-        fields = ['altura_decimal', 'peso', 'indice_masa_corporal', 'paciente']
+        fields = ['altura_decimal', 
+                  'peso', 
+                  'indice_masa_corporal', 
+                  'paciente'
+                  ]
         widgets = {
             'altura_decimal': forms.NumberInput(attrs={'placeholder': 'Altura en metros'}),
             'peso': forms.NumberInput(attrs={'placeholder': 'Peso en kg'}),
             'indice_masa_corporal': forms.NumberInput(attrs={'placeholder': 'Índice de masa corporal'}),
         }
-
-# **Empleado Form**
-class EmpleadoForm(forms.ModelForm):
-    class Meta:
-        model = Empleado
-        fields = ['tipo_empleado']
-        widgets = {
-            'tipo_empleado': forms.Select(attrs={'class': 'form-control'}),
-        }
-
-# **Administrador Form**
-class AdministradorForm(forms.ModelForm):
-    class Meta:
-        model = Administrador
-        fields = ['fecha_contratacion', 'hoja_vida', 'contrato']
-        widgets = {
-            'fecha_contratacion': forms.DateInput(attrs={'type': 'date'}),
-            'hoja_vida': forms.ClearableFileInput(),
-            'contrato': forms.ClearableFileInput(),
-        }
+#endregion
 
 
-# **IT Form**
-class ITForm(forms.ModelForm):
-    class Meta:
-        model = IT
-        fields = ['usuario']
-    
-    # Campos adicionales para activar staff o superusuario
-    is_staff = forms.BooleanField(required=False, label="Es Staff")
-    is_superuser = forms.BooleanField(required=False, label="Es Superusuario")
-    
-    def save(self, commit=True):
-        it_instance = super().save(commit=False)
-        usuario = it_instance.usuario
 
-        # Actualizamos los permisos de usuario (is_staff, is_superuser)
-        usuario.is_staff = self.cleaned_data['is_staff']
-        usuario.is_superuser = self.cleaned_data['is_superuser']
 
-        if self.cleaned_data['fecha_nacimiento']:
-            usuario.fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
-        
-        if commit:
-            usuario.save()  # Guardamos los cambios en el usuario
-            it_instance.save()  # Guardamos el modelo IT
 
-        return it_instance
-    
 
-# **Medicos Form**
-class MedicosForm(forms.ModelForm):
-    class Meta:
-        model = Medico
-        fields = ['especialidad', 'numero_licencia', 'citas_atender']
-        widgets = {
-            'especialidad': forms.TextInput(attrs={'placeholder': 'Especialidad del médico'}),
-            'numero_licencia': forms.TextInput(attrs={'placeholder': 'Número de licencia'}),
-            'citas_atender': forms.NumberInput(attrs={'placeholder': 'Número de citas a atender'}),
-        }
 
-# **HorarioMedico Form**
+#region HorarioMedico 
 class HorarioMedicoForm(forms.ModelForm):
     class Meta:
         model = HorarioMedico
-        fields = ['dia_semana', 'hora_inicio', 'hora_fin', 'medico']
+        fields = ['dia_semana', 
+                  'hora_inicio', 
+                  'hora_fin', 
+                  'medico'
+                  ]
         widgets = {
             'hora_inicio': forms.TimeInput(attrs={'type': 'time'}),
             'hora_fin': forms.TimeInput(attrs={'type': 'time'}),
             'dia_semana': forms.Select(attrs={'class': 'form-control'}),
         }
+#endregion
 
-# **Cita Form**
+
+
+
+
+
+
+#region Cita
 class CitaForm(forms.ModelForm):
     class Meta:
         model = Cita
-        fields = ['fecha_cita', 'hora_cita', 'estado_cita', 'medico', 'paciente']
+        fields = ['fecha_cita', 
+                  'hora_cita', 
+                  'estado_cita', 
+                  'medico', 
+                  'paciente'
+                  ]
         widgets = {
             'fecha_cita': forms.DateInput(attrs={'type': 'date'}),
             'hora_cita': forms.TimeInput(attrs={'type': 'time'}),
             'estado_cita': forms.Select(attrs={'class': 'form-control'}),
         }
+#endregion
 
-# **CertificadoIncapacidad Form**
+
+
+
+
+
+
+#region CertificadoIncapacidad 
 class CertificadoIncapacidadForm(forms.ModelForm):
     class Meta:
         model = CertificadoIncapacidad
-        fields = ['dias_incapacidad', 'motivo_incapacidad', 'cita']
+        fields = ['dias_incapacidad', 
+                  'motivo_incapacidad', 
+                  'cita'
+                  ]
         widgets = {
             'fecha_emision': forms.DateInput(attrs={'type': 'date'}),
             'motivo_incapacidad': forms.Textarea(attrs={'rows': 4}),
         }
+#endregion
 
-# **RecetaMedica Form**
+
+
+
+
+
+
+
+
+#region RecetaMedica 
 class RecetaMedicaForm(forms.ModelForm):
     class Meta:
         model = RecetaMedica
         fields = ['medicamento', 
-                  'concentracion', 'duracion', 'cantidad', 'via_administracion', 'diagnostico_principal', 'diagnostico_relacionados', 'intervalo', 'recomendaciones', 'indicaciones',  'cita']
+                  'concentracion', 
+                  'duracion', 
+                  'cantidad', 
+                  'via_administracion', 
+                  'diagnostico_principal', 
+                  'diagnostico_relacionados', 
+                  'intervalo', 
+                  'recomendaciones', 
+                  'indicaciones',  
+                  'cita'
+                  ]
         widgets = {
             'fecha_medicado': forms.DateInput(attrs={'type': 'date','readonly': 'readonly'}),
             'medicamento': forms.TextInput(attrs={'placeholder': 'Nombre del medicamento'}),
@@ -247,14 +581,25 @@ class RecetaMedicaForm(forms.ModelForm):
             'recomendaciones': forms.Textarea(attrs={'rows': 4}),
             'indicaciones': forms.Textarea(attrs={'rows': 4}),
         }
+#endregion
 
-# **OrdeneMedica Form**
+
+
+
+
+
+
+#region OrdeneMedica
 class OrdeneMedicaForm(forms.ModelForm):
     class Meta:
-        model = OrdenMedica
-        fields = ['especialidad_referido', 'motivo', 'cita']
+        model = OrdeneMedica
+        fields = ['especialidad_referido', 
+                  'motivo', 
+                  'cita'
+                  ]
         widgets = {
             'fecha_ordenado': forms.DateInput(attrs={'type': 'date','readonly': 'readonly'}),
             'motivo': forms.Textarea(attrs={'rows': 4}),
             'especialidad_referido': forms.TextInput(attrs={'placeholder': 'Especialidad a la que se refiere'}),
         }
+#endregion

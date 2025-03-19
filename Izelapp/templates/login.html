@@ -16,25 +16,38 @@
     <div class="Ingresar">
         <div class="Ingresar__formulario">
             <h2 class="Ingresar__titulo">Iniciar Sesión</h2>
+
+            <!-- Mostrar mensajes de error -->
+            {% if mensaje_error %}
+                <div class="error">{{ mensaje_error }}</div>
+            {% endif %}
+
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
             <form action="{% url 'login' %}" method="POST">
                 {% csrf_token %}
                 <div class="Ingresar__campo">
                     <input type="text" id="username" name="username" required class="Ingresar__campo-input" placeholder="Ingrese su usuario" />
                     <label for="username" class="Ingresar__campo-label">Usuario</label>
                 </div>
-
+            
                 <div class="Ingresar__campo">
                     <input type="password" id="password" name="password" required class="Ingresar__campo-input" placeholder="Ingrese su contraseña" />
                     <label for="password" class="Ingresar__campo-label">Contraseña</label>
                 </div>
-
+            
                 <div>
                     <button type="submit" class="Ingresar__submit">Iniciar sesión</button>
                 </div>
             </form>
-            <p>¿No tienes cuenta?</p>
+            
             <ul>
-                <li><a href="{% url 'registrar_usuario' %}" class="Ingresar__registro-enlace">Crear Cuenta</a></li>
+                <li><a href="{% url 'registrar_paciente' %}" class="Ingresar__registro-enlace">Crear Cuenta</a></li>
                 <li><a href="#" class="Ingresar__olvido-enlace">¿Olvidaste tu contraseña?</a></li>
             </ul>
         </div>
