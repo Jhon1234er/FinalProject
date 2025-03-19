@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'DjIzel.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'izel_db',
+        'NAME': 'izel_db1',
         'USER': 'root',
         'PASSWORD':'',
         'PORT':'3306',
