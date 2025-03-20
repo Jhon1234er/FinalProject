@@ -26,12 +26,6 @@ urlpatterns = [
     path('', home, name='home'),
     #endregion
 
-
-
-    #region Pruebas
-    path('comunicacion/envio/<int:entero>/', procesar_entero, name='procesar_enetero'),
-    path('comunicacion/envio/<int:entero1>/<int:entero2>/', procesar_dos_enteros, name='procesar_dos_enteros'),
-
     #region Inicio Sesion 
     path('login/', login_usuario, name='login'), 
     path('logout/', logout_usuario, name='logout'),
@@ -128,6 +122,10 @@ urlpatterns = [
     path('horario/eliminar/<int:id>/', eliminar_horario_medico, name='eliminar_horario_medico'),
     # endregion
 
+
+#region agenda
+    path('medico/agenda',listar_agenda, name='listar_agenda'),
+#endregion
 
 
 

@@ -61,7 +61,7 @@
                     <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
                     <td>
                         {% if user.imagen %}
-                            <img src="{{ user.imagen.url }}" alt="Imagen { user.first_name }" width="30">
+                            <img src="{{ user.imagen.url }}" alt="Imagen { user.first_name }" width="50">
                         {% else %}
                         <img src="{% static 'img/user_default.png' %}" alt="Imagen de usuario" width="50">
                         {% endif %}
@@ -74,6 +74,9 @@
                     <li><a href="{% url 'registrar_administrador' %}">Crear Administrador</a></li>
                     <li><a href="{% url 'registrar_ti' %}"> Crear TI</a></li>
                     <li><a class="login-btn" href="{% url 'login' %}">Iniciar sesión</a></li>
+                    <li><a href="{% url 'registrar_consulta' %}">Consulta PROVICIONAL</a></li>
+                    <li><a href="{% url 'listar_agenda' %}">AGENDA PROVICIONAL</a></li>
+                    <li><a href="{% url 'registrar_cita' %}">Agendar cita PROVICIONAL</a></li>
                 {% endif %}
             </ul>
         </nav>

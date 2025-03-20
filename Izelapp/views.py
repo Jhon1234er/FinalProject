@@ -459,12 +459,12 @@ def registrar_consulta(request):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Consulta registrada exitosamente.')
-            return redirect('crear_consulta')
+            return redirect('registrar_consulta')
         else:
             messages.error(request, 'Por favor, llena todos los campos.')
     else:
         formulario = ConsultaForm()
-    return render(request, 'consulta/crear.html', {'formulario': formulario})
+    return render(request, 'consulta/insertar.html', {'formulario': formulario})
 
 def lista_consulta(request):
     consultas = Consulta.objects.all()
@@ -565,7 +565,7 @@ def registrar_receta_medica(request):
             messages.error(request, 'Por favor, llena todos los campos.')
     else:
         formulario = RecetaMedicaForm()
-    return render(request, 'receta_medica/crear.html', {'formulario': formulario})
+    return render(request, 'receta_medica/insertar.html', {'formulario': formulario})
 
 def lista_receta_medica(request):
     recetas = RecetaMedica.objects.all()
@@ -691,12 +691,12 @@ def registrar_cita(request):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Cita creada exitosamente.')
-            return redirect('crear_cita')
+            return redirect('registrar_cita')
         else:
             messages.error(request, 'Por favor, llena todos los campos.')
     else:
         formulario = CitaForm()
-    return render(request, 'cita/crear.html', {'formulario': formulario})
+    return render(request, 'cita/insertar.html', {'formulario': formulario})
 
 def lista_cita(request):
     citas = Cita.objects.all()
@@ -721,7 +721,7 @@ def registrar_certificado_incapacidad(request):
             messages.error(request, 'Por favor, llena todos los campos.')
     else:
         formulario = CertificadoIncapacidadForm()
-    return render(request, 'certificado_incapacidad/crear.html', {'formulario': formulario})
+    return render(request, 'certificado_incapacidad/insertar.html', {'formulario': formulario})
 
 def lista_certificado_incapacidad(request):
     certificados = CertificadoIncapacidad.objects.all()
@@ -746,7 +746,7 @@ def registrar_orden_medica(request):
             messages.error(request, 'Por favor, llena todos los campos.')
     else:
         formulario = OrdeneMedicaForm()
-    return render(request, 'orden_medica/crear.html', {'formulario': formulario})
+    return render(request, 'orden_medica/insertar.html', {'formulario': formulario})
 
 def lista_orden_medica(request):
     ordenes = OrdenMedica.objects.all()
@@ -798,34 +798,11 @@ def eliminar_horario_medico(request, id):
     return redirect('lista_horario_medico')
 #endregion
 
-
-
-
-
-
-
-
-
-def procesar_entero(request, entero):
-    resultado= entero * 2
-    return HttpResponse (f'se recibio el numero: {entero} multiplicacion')
-
-def procesar_dos_enteros(request,entero1,entero2):
-    multiplicacion=entero1*entero2
-    return HttpResponse(f'Datos y resultados{entero1},{entero2},multiplicacion{multiplicacion}')
-    
-def procesar_cadena(request,cadena):
-    return
-
-
-
-
-
-
-
-
-
-
+#region AgendaMedico
+def listar_agenda(request):
+    agenda = AgendaMedica.objects.all()
+    return render(request, 'medico/agenda.html', {'agenda': agenda})
+#endregion
 # def login_usuario(request):
 #     if request.method == 'POST':
 #         username_recibido = request.POST.get('username')

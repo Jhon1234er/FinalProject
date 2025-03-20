@@ -1,34 +1,29 @@
-<!-- listar_citas.html -->
 {% extends 'base.html' %}
 
 {% block title %}
-    Citas Médicas Agendadas
+    Agenda Médica
 {% endblock %}
 
 {% block content %}
-    <h2>Citas Médicas Agendadas</h2>
-
-    {% if citas %}
+    <h2>Agenda</h2>
+    <h3>{{ medico.first_name }}</h3>
+    {% if agenda %}
         <table border="1">
             <thead>
                 <tr>
-                    <th>Fecha</th>
+                    <th>Medico</th>
                     <th>Hora</th>
-                    <th>Especialidad</th>
-                    <th>Médico</th>
                     <th>Paciente</th>
-                    <th>Estado</th>
+                    <th>Motivo</th>
                 </tr>
             </thead>
             <tbody>
-                {% for cita in citas %}
+                {% for cita in agenda %}
                     <tr>
-                        <td>{{ cita.fecha_cita }}</td>
-                        <td>{{ cita.hora_cita }}</td>
-                        <td>{{ cita.especialidad }}</td>
                         <td>{{ cita.medico }}</td>
+                        <td>{{ cita.hora }}</td>
                         <td>{{ cita.paciente }}</td>
-                        <td>{{ cita.estado_cita }}</td>
+                        <td>{{ cita.motivo }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -36,6 +31,5 @@
     {% else %}
         <p>No hay citas agendadas en este momento.</p>
     {% endif %}
-    
-    <a href="{% url 'registrar_cita' %}">Agendar Nueva Cita</a>
+
 {% endblock %}

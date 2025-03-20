@@ -335,11 +335,9 @@ class ConsultaForm(forms.ModelForm):
         fields = ['tratamiento',
                   'diagnostico',
                   'motivo_consulta', 
-                  'fecha_consulta', 
                   'paciente'
                   ]
         widgets = {
-            'fecha_consulta': forms.SelectDateWidget(),
             'tratamiento': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Descripción del tratamiento'}),
             'diagnostico': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Diagnóstico del paciente'}),
             'motivo_consulta': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Motivo de la consulta'}),
@@ -507,25 +505,37 @@ class HorarioMedicoForm(forms.ModelForm):
 
 
 
+#region AgendaMedico
+from django import forms
+from .models import AgendaMedica, Medico, Paciente
 
+class AgendaMedicaForm(forms.ModelForm):
+    class Meta:
+        model = AgendaMedica
+        fields = ['medico', 'hora', 'paciente', 'motivo']
+        widgets = {
+            'hora': forms.TimeInput(attrs={'type': 'time'}),
+        }
+#endregion
 
 
 
 #region Cita
+# forms.py
 class CitaForm(forms.ModelForm):
     class Meta:
         model = Cita
-        fields = ['fecha_cita', 
+        fields = ['fecha_cita',
                   'hora_cita', 
-                  'estado_cita', 
+                  'especialidad', 
                   'medico', 
-                  'paciente'
-                  ]
+                  'paciente']
+
         widgets = {
             'fecha_cita': forms.DateInput(attrs={'type': 'date'}),
             'hora_cita': forms.TimeInput(attrs={'type': 'time'}),
-            'estado_cita': forms.Select(attrs={'class': 'form-control'}),
         }
+
 #endregion
 
 
@@ -592,7 +602,7 @@ class RecetaMedicaForm(forms.ModelForm):
 #region OrdeneMedica
 class OrdeneMedicaForm(forms.ModelForm):
     class Meta:
-        model = OrdeneMedica
+        model = OrdenMedica
         fields = ['especialidad_referido', 
                   'motivo', 
                   'cita'

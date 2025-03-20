@@ -20,7 +20,6 @@ logger = logging.getLogger(__name__)
 class Usuario(AbstractUser):
     OPCIONES_TIPODOC = [
         ('CC', 'Cédula de Ciudadanía'),
-        ('TI', 'Tarjeta de identidad'),
         ('CE', 'Cédula de Extranjería')
     ]
     tipo_doc = models.CharField(max_length=20, choices=OPCIONES_TIPODOC)
@@ -80,7 +79,7 @@ class Usuario(AbstractUser):
 # region Paciente
 class Paciente(Usuario):
     OPCIONES_REGIMEN = [
-        ('subcidiado', 'SUBCIDIADO'),
+        ('subcidiado', 'SUBSIDIADO'),
         ('contributivo', 'CONTRIBUTIVO'),
         ('otro', 'OTRO')
     ]
@@ -167,7 +166,7 @@ class Consulta(models.Model):
     tratamiento = models.TextField(max_length=200)
     diagnostico = models.TextField(max_length=200)
     motivo_consulta = models.TextField(max_length=200)
-    fecha_consulta = models.DateField(null=False) 
+    fecha_consulta = models.DateField(auto_now_add=True) 
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='consultas')
 #endregion
 
@@ -301,8 +300,13 @@ class HorarioMedico(models.Model):
     hora_fin = models.TimeField()
 #endregion
 
-
-
+#region Agenda
+class AgendaMedica(models.Model):
+    medico=models.ForeignKey(Medico,on_delete=models.CASCADE,related_name='medico_agenda')
+    hora=models.TimeField()
+    paciente=models.ForeignKey(Paciente,on_delete=models.CASCADE,related_name='paciente_cita')
+    motivo=models.CharField(max_length=200,null=False)
+#endregion
 
 
 #region Citas
@@ -310,13 +314,15 @@ class Cita(models.Model):
     fecha_cita = models.DateField(null=False)
     hora_cita = models.TimeField(null=False)
     OPCIONES_ESTADO_CITA = [
-        ('pendiente', 'Pendiente'),
-        ('confirmada', 'Confirmada'),
-        ('cancelada', 'Cancelada')
+        ('agendada', 'Agendada'),
+        ('atendida', 'Atendida'),
+        ('cancelada', 'Cancelada'),
+        ('NA','No atendida')
     ]
-    estado_cita = models.CharField(max_length=10, null=False, choices=OPCIONES_ESTADO_CITA)
+    estado_cita = models.CharField(max_length=10, null=False, choices=OPCIONES_ESTADO_CITA,default='Agendada')
+    especialidad=models.CharField(max_length=100,null=False ,blank=True)
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='medico_citas')
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='pacientes')
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='paciente_agenda_cita')
 #endregion
 
 
@@ -355,7 +361,7 @@ class RecetaMedica(models.Model):
 
 
 #region  OrdenesMedicas
-class OrdeneMedica(models.Model):
+class OrdenMedica(models.Model):
     especialidad_referido = models.CharField(max_length=255, blank=False)
     motivo = models.CharField(max_length=255)
     fecha_ordenado = models.DateField(auto_now=True)
