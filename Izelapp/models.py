@@ -95,32 +95,37 @@ class Paciente(Usuario):
 
 #region Administrador
 class Administrador(Usuario):
-    usuario = models.OneToOneField('Usuario', on_delete=models.CASCADE, related_name='Usuario_Admin') 
     rol_acceso = models.CharField(max_length=100)  
     centro_administracion = models.CharField(max_length=255)
     permisos = models.JSONField()  
 
 
-    def cargar_permisos(self, area, rol):
-
-        ruta_archivo = "public/administrador.json"
-        
-        if not os.path.exists(ruta_archivo):
-            print("Permisos a Dar Desconocidos.")
-            return None
-
-        with open(ruta_archivo, 'r') as archivo:
-            permisos_data = json.load(archivo)
-        
-        permisos = permisos_data.get(area, {}).get(rol, {})
-        
-        if permisos:
-            self.permisos = permisos  
-            self.save()
-            return self.permisos
-        else:
-            print(f"No se encontraron permisos para el área '{area}' y rol '{rol}'.")
-            return None
+    def save(self, *args, **kwargs):
+        # Asigna los permisos automáticamente al crear un administrador
+        if not self.permisos:
+            self.permisos = {
+                "ODONTOLOGIA": {
+                    "medico": {"ver_pacientes": True, "editar_pacientes": True, "ver_historia_clinica": True, "realizar_tratamientos": True},
+                    "auxiliar": {"ver_pacientes": True, "realizar_tratamientos": False},
+                    "administrador": {"ver_pacientes": True, "editar_pacientes": True, "ver_historia_clinica": True, "gestion_usuarios": True}
+                },
+                "CIRUGIA": {
+                    "medico": {"ver_pacientes": True, "realizar_cirugia": True, "ver_historia_clinica": True},
+                    "auxiliar": {"ver_pacientes": True, "realizar_cirugia": False},
+                    "administrador": {"ver_pacientes": True, "realizar_cirugia": True, "ver_historia_clinica": True, "gestion_usuarios": True}
+                },
+                "GENERAL": {
+                    "medico": {"ver_pacientes": True, "ver_historia_clinica": True},
+                    "auxiliar": {"ver_pacientes": True, "ver_historia_clinica": False},
+                    "administrador": {"ver_pacientes": True, "ver_historia_clinica": True, "gestion_usuarios": True}
+                },
+                "RAYOS_X": {
+                    "medico": {"ver_pacientes": True, "ver_imagenes": True, "realizar_imagenes": True},
+                    "auxiliar": {"ver_pacientes": True, "ver_imagenes": False},
+                    "administrador": {"ver_pacientes": True, "ver_imagenes": True, "realizar_imagenes": True, "gestion_usuarios": True}
+                }
+            }
+        super().save(*args, **kwargs)
 #endregion
 
 
@@ -128,7 +133,6 @@ class Administrador(Usuario):
 
 #region Medicos
 class Medico(Usuario):
-    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='Usuario_Medico')
     especialidad = models.CharField(max_length=100)
     numero_registro_profesional = models.CharField(max_length=50)
     licencia_certificacion = models.BooleanField(default=False)
@@ -141,7 +145,6 @@ class Medico(Usuario):
 
 #region Auxiliar
 class Auxiliar(Usuario):
-    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='Usuario_Auxiliar')
     departamento = models.CharField(max_length=100)
     supervisor = models.CharField(max_length=255)
 #endregion
@@ -153,7 +156,6 @@ class Auxiliar(Usuario):
 
 #region TI
 class TI(Usuario):
-    usuario=models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='Usuario_Ti'),
     is_staff = models.BooleanField(default=False),
 #endregion
 
@@ -355,9 +357,30 @@ class RecetaMedica(models.Model):
 
 
 #region  OrdenesMedicas
-class OrdeneMedica(models.Model):
+class OrdenMedica(models.Model):
     especialidad_referido = models.CharField(max_length=255, blank=False)
     motivo = models.CharField(max_length=255)
     fecha_ordenado = models.DateField(auto_now=True)
     cita = models.ForeignKey(Cita, on_delete=models.CASCADE, related_name='ordenes')
+#endregion
+
+
+
+
+
+
+
+
+
+#region Disponibilidad 
+class Disponibilidad(models.Model):
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
+    fecha = models.DateField()
+    hora_inicio = models.TimeField()
+    hora_fin = models.TimeField()
+    tipo_cita = models.CharField(max_length=50, choices=[('general', 'General'), ('odontologia', 'Odontología')])
+
+    def __str__(self):
+        return f"{self.medico} - {self.fecha} de {self.hora_inicio} a {self.hora_fin}"
+    
 #endregion

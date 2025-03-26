@@ -1,17 +1,99 @@
-body {
-    margin: 0;
-    padding: 0;
-    background-color:floralwhite;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+/* Sección principal (bienvenida) */
+#bienvenida {
+    background-color: #FFFFFF; /* Fondo blanco */
+    padding: 40px 20px;
+    text-align: center;
 }
 
-h3{
-    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+#bienvenida h1 {
+    color: #011f30; /* Azul oscuro */
+}
+
+#bienvenida p {
+    font-size: 18px;
+    color: #333333; /* Gris oscuro */
+}
+
+/* Estilo de los botones */
+button {
+    background-color: #013857; /* Azul más oscuro */
+    color: #ffffff; /* Blanco */
+    border: 2px solid #ffffff; /* Borde blanco */
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #ffffff; /* Fondo blanco */
+    color: #013857; /* Azul más oscuro */
+}
+
+/* Sección de servicios */
+#servicios {
+    padding: 40px 20px;
+    background-color: #FFFFFF; /* Fondo blanco */
     text-align: center;
 }
-p{
-    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+
+#servicios h2 {
+    color: #011f30; /* Azul oscuro */
+    font-size: 24px;
+}
+
+#servicios ul {
+    list-style: none;
+    padding: 0;
+}
+
+#servicios ul li {
+    font-size: 18px;
+    color: #333333; /* Gris oscuro */
+}
+
+/* Sección de afiliación */
+#afiliacion {
+    padding: 40px 20px;
+    background-color: #ffffff; /* Fondo blanco */
     text-align: center;
+}
+
+#afiliacion h2 {
+    color: #011f30; /* Azul oscuro */
+}
+
+#afiliacion p {
+    font-size: 18px;
+    color: #333333; /* Gris oscuro */
+}
+
+/* Sección de noticias */
+#noticias {
+    padding: 40px 20px;
+    background-color: #ffffff; /* Fondo blanco */
+    text-align: center;
+}
+
+#noticias h2 {
+    color: #011f30; /* Azul oscuro */
+}
+
+#noticias ul {
+    list-style: none;
+    padding: 0;
+}
+
+#noticias ul li {
+    font-size: 18px;
+    color: #333333; /* Gris oscuro */
+}
+
+#noticias ul li a {
+    color: #013857; /* Azul más oscuro */
+    transition: color 0.3s ease;
+}
+
+#noticias ul li a:hover {
+    color: #013857; /* Mismo azul oscuro para hover */
 }

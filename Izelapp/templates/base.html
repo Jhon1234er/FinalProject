@@ -5,108 +5,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Bienvenido a Izel{% endblock %}</title>
+    <title>{% block title %}Bienvenido a EPS Izel{% endblock %}</title>
 
-    <!-- jQuery Library -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap CSS for styling -->
+
+    <!-- Carga de estilos CSS para Bootstrap y componentes adicionales -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Select2 CSS for enhanced select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-    <!-- jQuery UI CSS for datepicker -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <!-- intl-tel-input CSS for international telephone input -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
-    <!-- Custom base CSS -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
+    <!-- Encabezado con el logotipo, menú de navegación y usuario -->
     <header>
-        <nav>
-            <ul class="nav-list">
-                {% if request.user.is_authenticated %}
-                    <!-- Si es un Médico -->
-                    {% if request.user.medico %}
-                        <!-- Navigation for authenticated users with 'medico' role -->
-                        <li><a href="#">Consultar historias clínicas</a></li>
-                        <li><a href="{% url 'perfil_medico' %}">Ver mi perfil médico</a></li>
-                        <li><a href="{% url 'listar_medico' %}">Listar Médicos</a></li>
-                    {% endif %}
-    
-                    <!-- Si es un Auxiliar -->
-                    {% if request.user.auxiliar %}
-                        <li><a href="#">Ver mis datos de Auxiliar</a></li>
-                        <li><a href="{% url 'listar_auxiliares' %}">Listar Auxiliares</a></li>
-                    {% endif %}
-    
-                    <!-- Si es un Administrador -->
-                    {% if request.user.administrador %}
-                        <li><a href="{% url 'listar_administrador' %}">Listar Administradores</a></li>
-                        <li><a href="{% url 'listar_medico' %}">Listar Médicos</a></li>
-                        <li><a href="{% url 'listar_auxiliares' %}">Listar Auxiliares</a></li>
-                    {% endif %}
-    
-                    <!-- Si es un TI -->
-                    {% if request.user.ti %}
-                        <li><a href="#">Gestión de TI</a></li>
-                        <li><a href="{% url 'listar_it' %}">Listar IT</a></li>
-                    {% endif %}
-    
-                    <!-- Si es un Paciente -->
-                    {% if request.user.paciente %}
-                        <li><a href="{% url 'perfil_paciente' %}">Ver mi perfil de paciente</a></li>
-                        <li><a href="#">Solicitar cita médica</a></li>
-                        <li><a href="{% url 'listar_paciente' %}">Listar Pacientes</a></li>
-                    {% endif %}
-                    <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
-                    <td>
-                        {% if user.imagen %}
-                            <img src="{{ user.imagen.url }}" alt="Imagen { user.first_name }" width="30">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <!-- Logotipo de EPS Izel -->
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <img src="{% static 'img/logo.png' %}" alt="Logo de Izel" >
+
+                </a>
+                
+                <!-- Menú de navegación -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        {% if request.user.is_authenticated %}
+                            <!-- Menú de opciones para usuarios autenticados -->
+                            {% if request.user.medico %}
+                                <li class="nav-item"><a class="nav-link" href="#">Consultar historias clínicas</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'listar_medico' %}">Listar Médicos</a></li>
+                                <li><a href="{% url 'gestionar_disponibilidad' %}">Gestionar Disponibilidad</a></li>
+                            {% endif %}
+                            {% if request.user.auxiliar %}
+                                <li class="nav-item"><a class="nav-link" href="#">Ver mis datos de Auxiliar</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'listar_auxiliares' %}">Listar Auxiliares</a></li>
+                            {% endif %}
+                            {% if request.user.administrador %}
+                                <li class="nav-item"><a class="nav-link" href="{% url 'listar_administrador' %}">Listar Administradores</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'listar_usuarios' %}">Listar Usuarios</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'listar_medico' %}">Listar Médicos</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'detallar_usuario' %}">Perfil</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'listar_auxiliares' %}">Listar Auxiliares</a></li>
+                            {% endif %}
+                            {% if request.user.paciente %}
+                                <li class="nav-item"><a class="nav-link" href="#">Solicitar cita médica</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'listar_paciente' %}">Listar Pacientes</a></li>
+                                <li><a href="{% url 'calendario' %}">Agendar cita</a></li>
+                            {% endif %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a></li>
+                            <!-- Imagen del usuario -->
+                            <li class="nav-item">
+                                {% if user.imagen %}
+                                    <img src="{{ user.imagen.url }}" alt="Imagen {{ user.first_name }}" class="img-fluid rounded-circle" width="40">
+                                {% else %}
+                                    <img src="{% static 'img/user_default.png' %}" alt="Imagen de usuario" class="img-fluid rounded-circle" width="40">
+                                {% endif %}
+                            </li>
                         {% else %}
-                        <img src="{% static 'img/user_default.png' %}" alt="Imagen de usuario" width="50">
+                            <!-- Menú para usuarios no autenticados -->
+                            <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a></li>
                         {% endif %}
-                    </td>
-                {% else %}
-                    <!-- Si es un Usuario Comun -->
-                    <li><a href="{% url 'home' %}">Inicio</a></li>
-                    <li><a href="{% url 'listar_usuarios' %}">Listar usuarios</a></li>
-                    <li><a href="{% url 'registrar_usuario' %}">Crear Usuario</a></li>
-                    <li><a href="{% url 'registrar_administrador' %}">Crear Administrador</a></li>
-                    <li><a href="{% url 'registrar_ti' %}"> Crear TI</a></li>
-                    <li><a class="login-btn" href="{% url 'login' %}">Iniciar sesión</a></li>
-                {% endif %}
-            </ul>
+                    </ul>
+                </div>
+            </div>
         </nav>
     </header>
 
-    <main>
-        {% block content %}
-        <!-- Content from child templates will be inserted here -->
-        {% endblock %}
+    <!-- Contenido principal de la página -->
+    <main class="container mt-5">
+        {% block content %}{% endblock %}
     </main>
 
-    <footer>
-        <p class="footer">2025 - IZEL APP - Derechos reservados</p>
+    <!-- Pie de página (Footer) con enlaces legales y FAQ -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <!-- Enlaces de contacto y legales -->
+                <div class="col-md-6">
+                    <h5>Contactos y Enlaces</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Política de Privacidad</a></li>
+                        <li><a href="#" class="text-white">Términos y Condiciones</a></li>
+                        <li><a href="#" class="text-white">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <!-- Preguntas frecuentes (FAQ) -->
+                <div class="col-md-6">
+                    <h5>Preguntas Frecuentes</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">¿Cómo puedo afiliarme?</a></li>
+                        <li><a href="#" class="text-white">¿Cómo solicitar una cita médica?</a></li>
+                        <li><a href="#" class="text-white">¿Qué hacer en caso de emergencia?</a></li>
+                        <li><a href="#" class="text-white">¿Cómo acceder a mis consultas anteriores?</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Derechos reservados -->
+            <div class="text-center mt-4">
+                <p>&copy; 2025 EPS Izel. Todos los derechos reservados.</p>
+            </div>
+        </div>
     </footer>
 
-    <!-- Select2 JavaScript for enhanced select boxes -->
+    <!-- jQuery Library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Select2 JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    
     <!-- jQuery UI JavaScript for datepicker -->
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
     <!-- jQuery UI Datepicker localization for Spanish -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui/1.12.1/i18n/datepicker-es.min.js"></script>
-    <!-- intl-tel-input JavaScript for international telephone input -->
+    
+    <!-- intl-tel-input JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-
+    
     <script>
         $(document).ready(function() {
-            // Inicializar Select2 en los elementos select con la clase 'select2'
             $('.select2').select2({
                 placeholder: "Selecciona una opción",
                 allowClear: true
             });
 
-            // Inicializar jQuery UI Datepicker en los elementos input con la clase 'datepicker'
             $('.datepicker').datepicker({
                 dateFormat: 'dd/mm/yy',
                 changeMonth: true,
@@ -115,8 +144,7 @@
                 regional: "es"
             });
 
-            // Inicializar intl-tel-input en el campo de teléfono con el ID 'id_telefono'
-            var input = document.querySelector("#id_telefono");  
+            var input = document.querySelector("#id_telefono");
             var iti = intlTelInput(input, {
                 initialCountry: "auto",
                 geoIpLookup: function(callback) {
@@ -124,10 +152,9 @@
                         .then(function(resp) { return resp.json(); })
                         .then(function(resp) { callback(resp.country); });
                 },
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js" // Solo para formateo de números y validaciones
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
             });
 
-            // Al enviar el formulario, se guarda el número de teléfono completo en un campo oculto
             $('form').on('submit', function() {
                 if (iti.isValidNumber()) {
                     var hiddenInput = document.createElement("input");
@@ -137,11 +164,10 @@
                     this.appendChild(hiddenInput);
                 } else {
                     alert("Por favor, ingrese un número de teléfono válido.");
-                    return false;  // Evita que el formulario se envíe si el número no es válido
+                    return false;
                 }
             });
         });
     </script>
-    
 </body>
 </html>

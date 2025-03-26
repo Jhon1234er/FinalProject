@@ -27,11 +27,6 @@ urlpatterns = [
     #endregion
 
 
-
-    #region Pruebas
-    path('comunicacion/envio/<int:entero>/', procesar_entero, name='procesar_enetero'),
-    path('comunicacion/envio/<int:entero1>/<int:entero2>/', procesar_dos_enteros, name='procesar_dos_enteros'),
-
     #region Inicio Sesion 
     path('login/', login_usuario, name='login'), 
     path('logout/', logout_usuario, name='logout'),
@@ -47,6 +42,7 @@ urlpatterns = [
     path('usuario/eliminar/<int:id>/', eliminar_usuario, name='eliminar_usuario'),
     path('usuario/lista/', lista_usuario, name='listar_usuarios'),
     path('usuario/actualizar/<int:id>/', actualizar_usuario, name='actualizar_usuario'),
+    path('usuario/eliminar_imagen/', eliminar_imagen_usuario, name='eliminar_imagen_usuario'),
     # endregion
 
 
@@ -58,7 +54,7 @@ urlpatterns = [
     path('medico/listar/', lista_medico, name='listar_medico'),
     path('medico/actualizar/<int:id>/', actualizar_medico, name='actualizar_medico'),
     path('medico/eliminar/<int:id>/', eliminar_medico, name='eliminar_medico'),
-    path('perfil_medico/', ver_perfil_usuario, name='perfil_medico'),
+    path('perfil/', login_usuario, name='perfil'),
     # endregion
 
 
@@ -69,7 +65,6 @@ urlpatterns = [
     path('ti/listar/', lista_ti, name='listar_ti'),
     path('ti/actualizar/<int:id>/', actualizar_ti, name='actualizar_ti'),
     path('ti/eliminar/<int:id>/', eliminar_ti, name='eliminar_ti'),
-    path('perfil_ti/', ver_perfil_usuario, name='perfil_ti'),
     # endregion
 
 
@@ -81,28 +76,15 @@ urlpatterns = [
     path('administrador/listar/', lista_administrador, name='listar_administrador'),
     path('administrador/actualizar/<int:id>/', actualizar_administrador, name='actualizar_administrador'),
     path('administrador/eliminar/<int:id>/', eliminar_administrador, name='eliminar_administrador'),
-    path('perfil_administrador/', ver_perfil_usuario, name='perfil_administrador'),
     # endregion
 
 
-    # region Usuario (Usuario Base) 
-    path('usuario/insertar/', registrar_usuario, name='registrar_usuario'),
-    path('usuario/eliminar/<int:id>/', eliminar_usuario, name='eliminar_usuario'),
-    path('usuario/lista/', lista_usuario, name='listar_usuarios'),
-    path('usuario/actualizar/<int:id>/', actualizar_usuario, name='actualizar_usuario'),
-    path('usuario/detallar/', detallar_usuario, name='detallar_usuario'),
-    path('usuario/ver-perfil/', ver_perfil_usuario, name='perfil_usuario'),
-    path('usuario/eliminar_imagen/', eliminar_imagen_usuario, name='eliminar_imagen_usuario'),
-    path('usuario/login/', login_usuario, name='login'),
-    path('usuario/logout/', logout_usuario, name='logout'),
-    # endregion
 
     # region Paciente 
     path('paciente/registrar/', registrar_paciente, name='registrar_paciente'),
     path('paciente/listar/', lista_paciente, name='listar_paciente'),
     path('paciente/actualizar/<int:id>/', actualizar_paciente, name='actualizar_paciente'),
     path('paciente/eliminar/<int:id>/', eliminar_paciente, name='eliminar_paciente'),
-    path('perfil_paciente/', ver_perfil_usuario, name='perfil_paciente'),
     # endregion
 
 
@@ -113,7 +95,6 @@ urlpatterns = [
     path('auxiliar/lista/', lista_auxiliar, name='listar_auxiliares'),
     path('auxiliar/actualizar/<int:id>/', actualizar_auxiliar, name='actualizar_auxiliar'),
     path('auxiliar/eliminar/<int:id>/', eliminar_auxiliar, name='eliminar_auxiliar'),
-    path('perfil_auxiliar/', ver_perfil_usuario, name='perfil_auxiliar'),
     #endregion
 
 
@@ -239,5 +220,16 @@ urlpatterns = [
     path('orden/registrar/', registrar_orden_medica, name='registrar_orden_medica'),
     path('orden/listar/', lista_orden_medica, name='listar_orden_medica'),
     # endregion
+
+
+
+
+    #region Disponibilidad
+
+    path('calendario/', calendario, name='calendario'),
+    path('obtener_disponibilidad/', obtener_disponibilidad, name='obtener_disponibilidad'),
+    path('verificar_disponibilidad/', verificar_disponibilidad, name='verificar_disponibilidad'),
+    path('confirmar_cita/', confirmar_cita, name='confirmar_cita'),
+    path('gestionar_disponibilidad/', gestionar_disponibilidad, name='gestionar_disponibilidad'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

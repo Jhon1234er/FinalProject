@@ -83,6 +83,9 @@ class PacienteForm(forms.ModelForm):
             #USUARIO
             'username',
             'password',
+            'first_name', 
+            'last_name', 
+            'email',
             'tipo_doc',
             'num_doc',
             'genero',
@@ -127,6 +130,9 @@ class AdministradorForm(forms.ModelForm):
             # USUARIO
             'username',
             'password',
+            'first_name', 
+            'last_name', 
+            'email',
             'tipo_doc',
             'num_doc',
             'genero',
@@ -139,7 +145,6 @@ class AdministradorForm(forms.ModelForm):
             # ADMINISTRADOR
             'rol_acceso',
             'centro_administracion',
-            'permisos',
         ]
         widgets = {
             'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
@@ -175,6 +180,9 @@ class TIForm(forms.ModelForm):
             # USUARIO
             'username',
             'password',
+            'first_name', 
+            'last_name', 
+            'email',
             'tipo_doc',
             'num_doc',
             'genero',
@@ -233,6 +241,9 @@ class MedicoForm(forms.ModelForm):
             # USUARIO
             'username',
             'password',
+            'first_name', 
+            'last_name', 
+            'email',
             'tipo_doc',
             'num_doc',
             'genero',
@@ -592,7 +603,7 @@ class RecetaMedicaForm(forms.ModelForm):
 #region OrdeneMedica
 class OrdeneMedicaForm(forms.ModelForm):
     class Meta:
-        model = OrdeneMedica
+        model = OrdenMedica
         fields = ['especialidad_referido', 
                   'motivo', 
                   'cita'
@@ -602,4 +613,26 @@ class OrdeneMedicaForm(forms.ModelForm):
             'motivo': forms.Textarea(attrs={'rows': 4}),
             'especialidad_referido': forms.TextInput(attrs={'placeholder': 'Especialidad a la que se refiere'}),
         }
+#endregion
+
+
+
+
+
+
+
+
+
+#region Disponibilidad
+class DisponibilidadForm(forms.ModelForm):
+    class Meta:
+        model = Disponibilidad
+        fields = [
+            'fecha',
+            'hora_inicio', 
+            'hora_fin', 
+            'tipo_cita'
+            ]
+        
+
 #endregion

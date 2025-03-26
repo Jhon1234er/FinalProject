@@ -1,16 +1,70 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}
-    Página de inicio
-{% endblock %}
+{% block title %}Bienvenido a EPS Izel{% endblock %}
 
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    
-    <h3>Página de inicio de la app</h3>
 
-    {% if user.is_authenticated %}
-        <p>¡Hola, bienvenido a Izel! <a href="{% url 'login' %}">Iniciar sesión</a> o <a href="{% url 'registrar_usuario' %}">Registrarse</a></p>
-    {% endif %}
+    <!-- Banner principal -->
+    <section id="banner">
+        <div class="banner-content">
+            <h1>Bienvenido a EPS Izel</h1>
+            <p>Tu salud es nuestra prioridad. Estamos aquí para ofrecerte los mejores servicios en salud.</p>
+            <a href="#" class="btn-primary">Afíliate ahora</a>
+            <a href="#" class="btn-primary">Ver servicios</a>
+        </div>
+    </section>
+
+    <!-- Sección de servicios -->
+    <section id="servicios">
+        <h2>Servicios que ofrecemos</h2>
+        <div class="service-cards">
+            <div class="service-card">
+                <h3>Atención médica general</h3>
+                <p>Contamos con médicos especialistas para brindarte atención integral.</p>
+            </div>
+            <div class="service-card">
+                <h3>Consultas especializadas</h3>
+                <p>Consulta a nuestros especialistas en diversas áreas de la salud.</p>
+            </div>
+            <div class="service-card">
+                <h3>Urgencias 24/7</h3>
+                <p>Disponibilidad para emergencias médicas en cualquier momento del día.</p>
+            </div>
+            <div class="service-card">
+                <h3>Programas de prevención</h3>
+                <p>Participa en programas preventivos para cuidar tu salud.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de afiliación -->
+    <section id="afiliacion">
+        <h2>¿Cómo afiliarte?</h2>
+        <p>Afíliate a EPS Izel y disfruta de todos nuestros servicios. Es fácil y rápido.</p>
+        <a href="#" class="btn-primary">Afíliate ahora</a>
+    </section>
+
+    <!-- Sección de beneficios -->
+    <section id="beneficios">
+        <h2>Beneficios para nuestros afiliados</h2>
+        <ul>
+            <li>Descuentos en farmacias y laboratorios</li>
+            <li>Consultas médicas a precios accesibles</li>
+            <li>Acceso a programas de bienestar y prevención</li>
+            <li>Red de atención médica de calidad</li>
+        </ul>
+    </section>
+
+    <!-- Sección de noticias o novedades -->
+    <section id="noticias">
+        <h2>Últimas noticias de salud</h2>
+        <ul>
+            <li><a href="#">Nuevo servicio de telemedicina disponible</a></li>
+            <li><a href="#">Campaña de vacunación contra la influenza</a></li>
+            <li><a href="#">Recomendaciones para prevenir enfermedades respiratorias</a></li>
+        </ul>
+    </section>
+
 {% endblock %}

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+</head>
+<body>
+    <div class="error-container">
+        <h1>¡Oops! Algo salió mal</h1>
+        <p><strong>Error:</strong> {{ mensaje }}</p>
+        <a href="{% url 'home' %}">Volver al inicio</a> <!-- O cualquier otra página a la que quieras redirigir -->
+    </div>
+</body>
+</html>
