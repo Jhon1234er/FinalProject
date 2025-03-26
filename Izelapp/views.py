@@ -4,53 +4,23 @@ from django.contrib.auth import login, logout, authenticate
 from Izelapp.forms import *
 from Izelapp.models import *
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
+
+
 
 
 #region Home
 def home(request):
     return render(request, 'home.html')
 #endregion
-
-# region **Usuario **
-
-def registrar_usuario(request):
-    if request.method == 'POST':
-        formulario = UsuarioForm(request.POST)
-        if formulario.is_valid():
-            usuario = formulario.save(commit=False)
-            usuario.set_password(formulario.cleaned_data['password'])  # Encripta la contraseña
-            usuario.save()
-            messages.success(request, 'Usuario creado exitosamente.')
-            return redirect('registrar_usuario')
-        else:
-            messages.error(request, 'Hay algunos errores en el registro. Vuelva a intentar...')
-    else:
-        formulario = UsuarioForm()
-    return render(request, 'usuario/insertar.html', {'formulario': formulario})
-
-def lista_usuario(request):
-    usuarios = Usuario.objects.all()
-    return render(request, 'usuario/lista.html', {'usuarios': usuarios})
-
-def eliminar_usuario(request, id):
-    usuario = get_object_or_404(Usuario, id=id)
-    usuario.delete()
-    messages.success(request, 'Usuario eliminado exitosamente.')
-    return redirect('listar_usuarios')
+ 
 
 
-def eliminar_imagen_usuario(request):
-    usuario = request.user
-    if usuario.imagen:
-        usuario.imagen.delete()
-        usuario.imagen = None
-        usuario.save()
-        messages.success(request, 'Imagen eliminada exitosamente')
-    else:
-        messages.error(request, 'No hay imagen para eliminar')
-    return redirect('detallar_usuario')
-# Vista para login
+
+
+
+  
+# region login
 def login_usuario(request):
     if request.method == 'POST':
         username_recibido = request.POST.get('username')
@@ -64,61 +34,65 @@ def login_usuario(request):
             login(request, usuario)
 
             # Verificar si el usuario es Médico u otros roles
-            if isinstance(request.user, Medico):
+            if hasattr(request.user, 'medico'):
                 return render(request, 'medico/perfil.html', {'tipo_usuario': 'Medico'})
-            elif isinstance(request.user, Paciente):
+            elif hasattr(request.user, 'paciente'):
                 return render(request, 'paciente/perfil.html', {'tipo_usuario': 'Paciente'})
-            elif isinstance(request.user, Administrador):
+            elif hasattr(request.user, 'administrador'):
                 return render(request, 'administrador/perfil.html', {'tipo_usuario': 'Administrador'})
-            elif isinstance(request.user, TI):
+            elif hasattr(request.user, 'ti'):
                 return render(request, 'ti/perfil.html', {'tipo_usuario': 'TI'})
-            else:
-                return render(request, 'usuario/perfil.html', {'tipo_usuario': 'Usuario sin rol en el sistema'})
+            elif hasattr(request.user, 'auxiliar'):
+                return render (request, 'auxiliar/perfil.html', {'tipo_usuario': 'Auxiliar'})
         else:
             return render(request, 'login.html', {'mensaje_error': 'Credenciales incorrectas, intente de nuevo o consulte con Administrador de Usuarios'})
 
     return render(request, 'login.html')
 
 
-@login_required
-def ver_perfil_usuario(request):
-    usuario = request.user  # Obtener el usuario logueado
-
-    if hasattr(usuario, 'medico'):
-        return render(request, 'medico/perfil.html', {'usuario': usuario})
-    elif hasattr(usuario, 'auxiliar'):
-        return render(request, 'auxiliar/perfil.html', {'usuario': usuario})
-    elif hasattr(usuario, 'administrador'):
-        return render(request, 'administrador/perfil.html', {'usuario': usuario})
-    elif hasattr(usuario, 'ti'):
-        return render(request, 'ti/perfil.html', {'usuario': usuario})
-    elif hasattr(usuario, 'paciente'):
-        return render(request, 'paciente/perfil.html', {'usuario': usuario})
-    else:
-        messages.error(request, 'No se encontró un perfil asociado a este usuario.')
-        return redirect('home')
-
 
 @login_required
 def detallar_usuario(request):
     usuario = request.user  # Obtener el usuario logueado
 
+    # Inicializar 'template' y 'tipo_usuario' a None
+    template = None
+    tipo_usuario = None
 
+    # Determinar el tipo de usuario y asignar el template correspondiente utilizando isinstance
+    if hasattr(usuario, 'medico'):
+        tipo_usuario = 'medico'
+        template = 'medico/detallar.html'
+    elif hasattr(usuario, 'administrador'):
+        tipo_usuario = 'administrador'
+        template = 'administrador/detallar.html'
+    elif hasattr(usuario, 'auxiliar'):
+        tipo_usuario = 'auxiliar'
+        template = 'auxiliar/detallar.html'
+    elif hasattr(usuario, 'ti'):
+        tipo_usuario = 'ti'
+        template = 'ti/detallar.html'
+    elif hasattr(usuario, 'paciente'):
+        tipo_usuario = 'paciente'
+        template = 'paciente/detallar.html'
+
+    # Si no se asignó un template, mostrar error
+    if template is None:
+        return render(request, 'usuario/error.html', {'mensaje': 'Usuario no tiene un tipo válido asignado'})
+
+    # Si el template es válido, procesar el formulario
     if request.method == 'POST':
         formulario = ImagenUserForm(request.POST, request.FILES, instance=usuario)
         if formulario.is_valid():
             formulario.save()
+            return render(request, template, {'formulario': formulario, 'tipo_usuario': tipo_usuario, 'mensaje': 'Imagen de usuario actualizada correctamente.'})
     else:
         formulario = ImagenUserForm(instance=usuario)
 
-    if hasattr(usuario, 'medico'):
-        return render(request, 'medico/detallar.html', {'usuario': usuario})
-    elif hasattr(usuario, 'administrador'):
-        return render(request, 'administrador/detallar.html', {'usuario': usuario, 'formulario': formulario})
-    elif hasattr(usuario, 'auxiliar'):
-        return render(request, 'auxiliar/detallar.html', {'usuario': usuario})
-    elif hasattr(usuario, 'ti'):
-        return render(request, 'ti/detallar.html', {'usuario': usuario})
+    # Renderizar el template correspondiente
+    return render(request, template, {'formulario': formulario, 'tipo_usuario': tipo_usuario})
+
+
 
 
 
@@ -136,7 +110,6 @@ def logout_usuario(request):
 
 
 
-
 # region Usuario
 def registrar_usuario(request):
     if request.method == 'POST':
@@ -146,9 +119,6 @@ def registrar_usuario(request):
             usuario.set_password(formulario.cleaned_data['password'])
             usuario.save()
             messages.success(request, 'Usuario creado exitosamente.')
-
-            # Redirigir a la creación del perfil específico
-            return redirect('registrar_perfil')
         else:
             messages.error(request, 'Hay algunos errores en el registro. Vuelva a intentar...')
     else:
@@ -185,6 +155,17 @@ def eliminar_usuario(request, id):
     messages.success(request, 'Usuario eliminado exitosamente.')
     return redirect('listar_usuarios')
 
+
+def eliminar_imagen_usuario(request):
+    usuario = request.user
+    if usuario.imagen:
+        usuario.imagen.delete()
+        usuario.imagen = None
+        usuario.save()
+        messages.success(request, 'Imagen eliminada exitosamente')
+    else:
+        messages.error(request, 'No hay imagen para eliminar')
+    return redirect('detallar_usuario')
 
 
 #endregion
@@ -298,10 +279,7 @@ def registrar_ti(request):
         formulario = TIForm(request.POST)
         if formulario.is_valid():
             ti = formulario.save(commit=False)
-            # Asociar el usuario al TI
-            usuario_id = request.POST.get('usuario')
-            usuario = Usuario.objects.get(id=usuario_id)
-            ti.usuario = usuario
+            ti.set_password(formulario.cleaned_data['password'])
             ti.save()
             messages.success(request, 'TI registrado exitosamente.')
             return redirect('listar_ti')  # Redirigir a la lista de TI
@@ -309,7 +287,6 @@ def registrar_ti(request):
             messages.error(request, 'Por favor, complete todos los campos del TI.')
     else:
         formulario = TIForm()
-
     return render(request, 'ti/insertar.html', {'formulario': formulario})
 
 
@@ -352,10 +329,7 @@ def registrar_medico(request):
         formulario = MedicoForm(request.POST)
         if formulario.is_valid():
             medico = formulario.save(commit=False)
-            # Asociar el usuario al médico
-            usuario_id = request.POST.get('usuario')
-            usuario = Usuario.objects.get(id=usuario_id)
-            medico.usuario = usuario
+            medico.set_password(formulario.cleaned_data['password'])
             medico.save()
             messages.success(request, 'Médico registrado exitosamente.')
             return redirect('listar_medico')  # Redirigir a la lista de médicos
@@ -798,51 +772,73 @@ def eliminar_horario_medico(request, id):
     return redirect('lista_horario_medico')
 #endregion
 
-#region AgendaMedico
-def listar_agenda(request):
-    agenda = AgendaMedica.objects.all()
-    return render(request, 'medico/agenda.html', {'agenda': agenda})
+
+
+
+
+
+
+
+
+
+#region AGENDA
+
+
+# Vista para mostrar el calendario con las citas disponibles
+def calendario(request):
+    return render(request, 'cita/calendario.html')
+
+# Vista para obtener las citas disponibles del médico y mostrarlas en el calendario
+def obtener_disponibilidad(request):
+    eventos = []
+    # Filtramos las disponibilidades de los médicos
+    for disponibilidad in Disponibilidad.objects.all():
+        evento = {
+            'title': f'{disponibilidad.tipo_cita.capitalize()} disponible',
+            'start': f'{disponibilidad.fecha}T{disponibilidad.hora_inicio}',
+            'end': f'{disponibilidad.fecha}T{disponibilidad.hora_fin}',
+            'color': 'yellow' if disponibilidad.tipo_cita == 'general' else 'blue',
+        }
+        eventos.append(evento)
+
+    return JsonResponse(eventos, safe=False)
+
+# Vista para verificar la disponibilidad al hacer clic en un día específico
+def verificar_disponibilidad(request):
+    fecha = request.GET.get('fecha')
+    disponibilidad = Disponibilidad.objects.filter(fecha=fecha)
+    if disponibilidad.exists():
+        return JsonResponse({'disponible': True})
+    return JsonResponse({'disponible': False})
+
+# Vista para confirmar la cita después de la selección
+def confirmar_cita(request):
+    if request.method == 'POST':
+        form = CitaForm(request.POST)
+        if form.is_valid():
+            cita = form.save(commit=False)
+            cita.paciente = request.user.paciente  # Asumimos que el usuario es paciente
+            cita.save()
+            return render(request,'paciente/perfil.html')  # Redirige al perfil después de solicitar la cita
+    else:
+        form = CitaForm()
+    return render(request, 'cita/confirmar_cita.html', {'form': form})
+
+# Vista para que el médico registre su disponibilidad
+def gestionar_disponibilidad(request):
+    if request.method == 'POST':
+        form = DisponibilidadForm(request.POST)
+        if form.is_valid():
+            disponibilidad = form.save(commit=False)
+            disponibilidad.medico = request.user.medico  # Asumimos que el usuario es médico
+            disponibilidad.save()
+            return redirect('medico/perfil.html')  # Redirige al perfil del médico
+    else:
+        form = DisponibilidadForm()
+    return render(request, 'cita/gestionar_disponibilidad.html', {'form': form})
+
+
 #endregion
-# def login_usuario(request):
-#     if request.method == 'POST':
-#         username_recibido = request.POST.get('username')
-#         password_recibido = request.POST.get('password')
-
-#         if not username_recibido or not password_recibido:
-#             return render(request, 'usuario/login.html', {'mensaje_error': 'Por favor, complete todos los campos.'})
-
-#         usuario = authenticate(request, username=username_recibido, password=password_recibido)
-        
-#         if usuario is not None:
-#             login(request, usuario)
-            
-#             if hasattr(usuario, 'medico'): 
-#                 return render('medico:perfil') 
-#             elif hasattr(usuario, 'cliente'):  
-#                 return render('cliente:perfil')  
-#             else:
-#                 return render(request,'usuario/perfil.html',{'tipo_usuario':'Bienvenido usuario'}) 
-#         else:
-#             return render(request, 'usuario/login.html', {'mensaje_error': 'Credenciales incorrectas, intente de nuevo.'})
-    
-#     return render(request, 'usuario/login.html')
-
-# @login_required
-# def ver_perfil_usuario(request):
-#     usuario = request.user  # Obtener el usuario logueado
-#     return render(request, 'usuario/perfil.html', {'usuario': usuario})
-
-# @login_required
-# def detallar_usuario(request):
-#     usuario = request.user  # Obtener el usuario logueado
-#     return render(request, 'usuario/detallar.html', {'usuario': usuario})
-
-
-# # Vista para logout
-# def logout_usuario(request):
-#     logout(request)
-#     messages.success(request, 'Has cerrado sesión exitosamente.')
-#     return redirect('home')  # Redirigir al home después de hacer logout
 
 
 

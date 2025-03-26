@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario de Citas</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/fullcalendar.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/fullcalendar.min.js"></script>
+</head>
+<body>
+    <h1>Calendario de Citas Médicas</h1>
+    <div id="calendar"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+                events: "{% url 'obtener_disponibilidad' %}",
+                dayRender: function(date, cell) {
+                    var fecha = date.format('YYYY-MM-DD');
+                    $.ajax({
+                        url: "{% url 'verificar_disponibilidad' %}",
+                        data: {fecha: fecha},
+                        success: function(data) {
+                            if (data.disponible) {
+                                cell.css('background-color', 'yellow');
+                            } else {
+                                cell.css('background-color', 'lightgray');
+                            }
+                        }
+                    });
+                },
+                eventClick: function(event) {
+                    window.location.href = "{% url 'confirmar_cita' %}";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
