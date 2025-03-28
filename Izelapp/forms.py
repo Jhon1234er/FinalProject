@@ -101,8 +101,32 @@ class PacienteForm(forms.ModelForm):
             ]
         widgets = {
             'numero_seguro_social': forms.TextInput(attrs={'placeholder': 'Número de Seguro Social'}),
-            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
+            'fecha_nacimiento': forms.DateInput(attrs={'class': 'datepicker', 'type': 'text'}),  # Añadir clase datepicker
+            'telefono': forms.TextInput(attrs={'placeholder': 'Ingrese su número de teléfono', 'id': 'id_telefono'}),            
+            'password': forms.PasswordInput(),
+            'email': forms.EmailInput(attrs={'placeholder': 'Ingrese su correo electrónico'}),
+            'tipo_doc': forms.Select(attrs={'class': 'select2'}),
+            'genero': forms.Select(attrs={'class': 'select2'}),
+            'rh':forms.Select(attrs={'class':'select2'})
         }
+
+    tipo_doc = forms.ChoiceField(label='Tipo de documento', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_TIPODOC, widget=forms.Select(attrs={'class': 'select2'}))
+    genero = forms.ChoiceField(label='Género', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_GENERO, widget=forms.Select(attrs={'class': 'select2'}))
+    rh=forms.ChoiceField(label='RH',choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_RH, widget=forms.Select(attrs={'class': 'select2'}))
+    num_doc = forms.CharField(label='Número de documento')
+    tipo_poblacion = forms.CharField(label='Tipo de población')
+    username = forms.CharField(label='Nombre de Usuario')
+    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
+    first_name = forms.CharField(label='Primer Nombre')
+    last_name = forms.CharField(label='Apellido')
+    email = forms.CharField(label='Correo')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.Select):
+                field.widget.attrs.update({'class': 'select2'})
+
 
     def clean_fecha_nacimiento(self):
         fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
@@ -147,10 +171,29 @@ class AdministradorForm(forms.ModelForm):
             'centro_administracion',
         ]
         widgets = {
-            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
+            'fecha_nacimiento': forms.DateInput(attrs={'class': 'datepicker', 'type': 'text','placeholder':'Seleccione la fecha de nacimiento'}),
             'rol_acceso': forms.TextInput(attrs={'placeholder': 'Rol de acceso del administrador'}),
             'centro_administracion': forms.TextInput(attrs={'placeholder': 'Centro de administración'}),
         }
+    
+    tipo_doc = forms.ChoiceField(label='Tipo de documento', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_TIPODOC, widget=forms.Select(attrs={'class': 'select2'}))
+    genero = forms.ChoiceField(label='Género', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_GENERO, widget=forms.Select(attrs={'class': 'select2'}))
+    rh=forms.ChoiceField(label='RH',choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_RH, widget=forms.Select(attrs={'class': 'select2'}))
+    num_doc = forms.CharField(label='Número de documento')
+    tipo_poblacion = forms.CharField(label='Tipo de población')
+    username = forms.CharField(label='Nombre de Usuario')
+    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
+    first_name = forms.CharField(label='Primer Nombre')
+    last_name = forms.CharField(label='Apellido')
+    email = forms.CharField(label='Correo')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.Select):
+                field.widget.attrs.update({'class': 'select2'})
+
+
 
     def clean_fecha_nacimiento(self):
         fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
@@ -197,9 +240,25 @@ class TIForm(forms.ModelForm):
             'is_superuser'
             ]
         widgets = {
-            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
+            'fecha_nacimiento': forms.DateInput(attrs={'class': 'datepicker', 'type': 'text','placeholder':'Seleccione la fecha de nacimiento'}),
             }
-        
+    tipo_doc = forms.ChoiceField(label='Tipo de documento', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_TIPODOC, widget=forms.Select(attrs={'class': 'select2'}))
+    genero = forms.ChoiceField(label='Género', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_GENERO, widget=forms.Select(attrs={'class': 'select2'}))
+    rh=forms.ChoiceField(label='RH',choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_RH, widget=forms.Select(attrs={'class': 'select2'}))
+    num_doc = forms.CharField(label='Número de documento')
+    tipo_poblacion = forms.CharField(label='Tipo de población')
+    username = forms.CharField(label='Nombre de Usuario')
+    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
+    first_name = forms.CharField(label='Primer Nombre')
+    last_name = forms.CharField(label='Apellido')
+    email = forms.CharField(label='Correo')
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.Select):
+                field.widget.attrs.update({'class': 'select2'})
+
 
     def clean_fecha_nacimiento(self):
         fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
@@ -251,8 +310,8 @@ class MedicoForm(forms.ModelForm):
             'telefono',
             'fecha_nacimiento',
             'tipo_poblacion',
-            'ocupacion',
             'eps',
+            'ocupacion',
             # MEDICO
             'especialidad',
             'numero_registro_profesional',
@@ -260,11 +319,28 @@ class MedicoForm(forms.ModelForm):
             'fecha_contratacion' 
         ]
         widgets = {
-            'fecha_contratacion': forms.DateInput(attrs={'type':'date'}),
-            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
+            'fecha_contratacion': forms.DateInput(attrs={'class':'datepicker','type':'text','placeholder':'Ingrese la fecha de contratacion del medico'}),
+            'fecha_nacimiento': forms.DateInput(attrs={'class':'datepicker','type': 'text','placeholder':'Ingrese la fecha de nacimiento del medico'}),
             'especialidad': forms.TextInput(attrs={'placeholder': 'Especialidad del médico'}),
             'numero_registro_profesional': forms.TextInput(attrs={'placeholder': 'Número de registro profesional'}),
         }
+    
+    tipo_doc = forms.ChoiceField(label='Tipo de documento', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_TIPODOC, widget=forms.Select(attrs={'class': 'select2'}))
+    genero = forms.ChoiceField(label='Género', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_GENERO, widget=forms.Select(attrs={'class': 'select2'}))
+    rh=forms.ChoiceField(label='RH',choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_RH, widget=forms.Select(attrs={'class': 'select2'}))
+    num_doc = forms.CharField(label='Número de documento')
+    tipo_poblacion = forms.CharField(label='Tipo de población')
+    username = forms.CharField(label='Nombre de Usuario')
+    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
+    first_name = forms.CharField(label='Primer Nombre')
+    last_name = forms.CharField(label='Apellido')
+    email = forms.CharField(label='Correo')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.Select):
+                field.widget.attrs.update({'class': 'select2'})
 
     def clean_fecha_nacimiento(self):
         fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
@@ -310,17 +386,35 @@ class AuxiliarForm(forms.ModelForm):
             'telefono',
             'fecha_nacimiento',
             'tipo_poblacion',
-            'ocupacion',
             'eps',
+            'ocupacion',
             # AUXILIAR
             'departamento',  
             'supervisor',  
         ]
         widgets = {
-            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
+            'fecha_nacimiento': forms.DateInput(attrs={'class': 'datepicker', 'type': 'text','placeholder':'Seleccione la fecha de nacimiento'}),
             'departamento': forms.TextInput(attrs={'placeholder': 'Área de trabajo del auxiliar'}),
             'supervisor': forms.TextInput(attrs={'placeholder': 'Nombre del supervisor'}),
         }
+        
+    tipo_doc = forms.ChoiceField(label='Tipo de documento', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_TIPODOC, widget=forms.Select(attrs={'class': 'select2'}))
+    genero = forms.ChoiceField(label='Género', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_GENERO, widget=forms.Select(attrs={'class': 'select2'}))
+    rh=forms.ChoiceField(label='RH',choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_RH, widget=forms.Select(attrs={'class': 'select2'}))
+    num_doc = forms.CharField(label='Número de documento')
+    tipo_poblacion = forms.CharField(label='Tipo de población')
+    username = forms.CharField(label='Nombre de Usuario')
+    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
+    first_name = forms.CharField(label='Primer Nombre')
+    last_name = forms.CharField(label='Apellido')
+    email = forms.CharField(label='Correo')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.Select):
+                field.widget.attrs.update({'class': 'select2'})
+
 
     def clean_fecha_nacimiento(self):
         fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
@@ -517,9 +611,6 @@ class HorarioMedicoForm(forms.ModelForm):
 
 
 #region AgendaMedico
-from django import forms
-from .models import AgendaMedica, Medico, Paciente
-
 class AgendaMedicaForm(forms.ModelForm):
     class Meta:
         model = AgendaMedica
@@ -555,53 +646,45 @@ class CitaForm(forms.ModelForm):
 
 
 
-#region CertificadoIncapacidad 
-class CertificadoIncapacidadForm(forms.ModelForm):
-    class Meta:
-        model = CertificadoIncapacidad
-        fields = ['dias_incapacidad', 
-                  'motivo_incapacidad', 
-                  'cita'
-                  ]
-        widgets = {
-            'fecha_emision': forms.DateInput(attrs={'type': 'date'}),
-            'motivo_incapacidad': forms.Textarea(attrs={'rows': 4}),
-        }
-#endregion
-
-
-
-
-
-
-
 
 
 #region RecetaMedica 
+
 class RecetaMedicaForm(forms.ModelForm):
     class Meta:
         model = RecetaMedica
-        fields = ['medicamento', 
-                  'concentracion', 
-                  'duracion', 
-                  'cantidad', 
-                  'via_administracion', 
-                  'diagnostico_principal', 
-                  'diagnostico_relacionados', 
-                  'intervalo', 
-                  'recomendaciones', 
-                  'indicaciones',  
-                  'cita'
-                  ]
-        widgets = {
-            'fecha_medicado': forms.DateInput(attrs={'type': 'date','readonly': 'readonly'}),
-            'medicamento': forms.TextInput(attrs={'placeholder': 'Nombre del medicamento'}),
-            'concentracion': forms.TextInput(attrs={'placeholder': 'Concentración del medicamento'}),
-            'cantidad': forms.NumberInput(attrs={'placeholder': 'Cantidad prescrita'}),
-            'intervalo': forms.TextInput(attrs={'placeholder': 'Intervalo de administración'}),
-            'recomendaciones': forms.Textarea(attrs={'rows': 4}),
-            'indicaciones': forms.Textarea(attrs={'rows': 4}),
-        }
+        fields = [
+            'medico',
+            'paciente',
+            'medicamento',
+            'concentracion',
+            'duracion',
+            'cantidad',
+            'via_administracion',
+            'diagnostico_principal',
+            'diagnostico_relacionados',
+            'intervalo',
+            'recomendaciones',
+            'indicaciones',
+            'fecha_medicado',
+        ]
+
+    widgets = {
+        'medico': forms.Select(attrs={'class': 'form-control'}),
+        'paciente': forms.Select(attrs={'class': 'form-control'}),
+        'medicamento': forms.TextInput(attrs={'class': 'form-control'}),
+        'concentracion': forms.TextInput(attrs={'class': 'form-control'}),
+        'duracion': forms.TextInput(attrs={'class': 'form-control'}),
+        'cantidad': forms.TextInput(attrs={'class': 'form-control'}),
+        'via_administracion': forms.TextInput(attrs={'class': 'form-control'}),
+        'diagnostico_principal': forms.Textarea(attrs={'class': 'form-control'}),
+        'diagnostico_relacionados': forms.Textarea(attrs={'class': 'form-control'}),
+        'intervalo': forms.TextInput(attrs={'class': 'form-control'}),
+        'recomendaciones': forms.TextInput(attrs={'class': 'form-control'}),
+        'indicaciones': forms.TextInput(attrs={'class': 'form-control'}),
+        'fecha_medicado': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),  # Solo lectura
+    }
+
 #endregion
 
 
@@ -611,38 +694,41 @@ class RecetaMedicaForm(forms.ModelForm):
 
 
 #region OrdeneMedica
-class OrdeneMedicaForm(forms.ModelForm):
+class OrdenMedicaForm(forms.ModelForm):
     class Meta:
         model = OrdenMedica
-        fields = ['especialidad_referido', 
-                  'motivo', 
-                  'cita'
-                  ]
+        fields = ['cups', 'medico', 'paciente', 'especialidad_referido', 'cantidad', 'diagnostico', 'motivo', 'vigencia']
+        
         widgets = {
-            'fecha_ordenado': forms.DateInput(attrs={'type': 'date','readonly': 'readonly'}),
-            'motivo': forms.Textarea(attrs={'rows': 4}),
-            'especialidad_referido': forms.TextInput(attrs={'placeholder': 'Especialidad a la que se refiere'}),
+            'cups': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Código CUPS'}),
+            'medico': forms.Select(attrs={'class': 'form-control'}),
+            'paciente': forms.Select(attrs={'class': 'form-control'}),
+            'especialidad_referido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Especialidad a la que remite'}),
+            'cantidad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Cantidad'}),
+            'diagnostico': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Diagnóstico'}),
+            'motivo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Motivo de la orden'}),
+            'fecha_ordenado': forms.DateInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+            'vigencia': forms.SelectDateWidget(attrs={'class': 'form-control'}, years=range(2025, 2026)),
         }
 #endregion
 
 
-
-
-
-
-
-
-
-#region Disponibilidad
-class DisponibilidadForm(forms.ModelForm):
+# region Incapacidad Medica
+class CertificadoIncapacidadForm(forms.ModelForm):
     class Meta:
-        model = Disponibilidad
-        fields = [
-            'fecha',
-            'hora_inicio', 
-            'hora_fin', 
-            'tipo_cita'
-            ]
+        model = CertificadoIncapacidad
+        fields = ['medico', 'paciente', 'dias_incapacidad', 'motivo_incapacidad', 'fecha_inicio', 'fecha_fin', 
+                  'diagnostico_principal', 'diagnostico_relacionados', 'observaciones']
         
-
+        widgets = {
+            'medico': forms.Select(attrs={'class': 'form-control'}),
+            'paciente': forms.Select(attrs={'class': 'form-control'}),
+            'dias_incapacidad': forms.TextInput(attrs={'class': 'form-control'}),
+            'motivo_incapacidad': forms.TextInput(attrs={'class': 'form-control'}),
+            'fecha_inicio': forms.SelectDateWidget(attrs={'class': 'form-control'}, years=range(2025, 2026)),
+            'fecha_fin': forms.SelectDateWidget(attrs={'class': 'form-control'}, years=range(2025, 2026)),
+            'diagnostico_principal': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Diagnóstico principal'}),
+            'diagnostico_relacionados': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Diagnósticos relacionados'}),
+            'observaciones': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Observaciones'})
+        }
 #endregion

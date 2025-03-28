@@ -3,12 +3,14 @@
 {% load static %}
 
 {% block title %}
-    Crear Cuenta IT
+    Crear Cuenta TI
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/usuario/insertar.css' %}">
 
-    <h1>Crear Cuenta IT</h1>
+
+    <h1>Crear Cuenta TI</h1>
 
 {% if messages %}
     <div>
@@ -20,8 +22,16 @@
 
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ formulario.as_p }}
-    <button type="submit">CREAR CUENTA IT</button>
+    {% for field in formulario %}
+      <div class="form-row">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}
+          <span class="help-text">{{ field.help_text }}</span>
+        {% endif %}
+        </div>    
+    {% endfor %}
+    <button type="submit">CREAR CUENTA TI</button>
 </form>
 
 {% endblock %}

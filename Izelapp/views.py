@@ -55,11 +55,7 @@ def login_usuario(request):
 def detallar_usuario(request):
     usuario = request.user  # Obtener el usuario logueado
 
-    # Inicializar 'template' y 'tipo_usuario' a None
-    template = None
-    tipo_usuario = None
-
-    # Determinar el tipo de usuario y asignar el template correspondiente utilizando isinstance
+    # Determinar el tipo de usuario y asignar el template correspondiente
     if hasattr(usuario, 'medico'):
         tipo_usuario = 'medico'
         template = 'medico/detallar.html'
@@ -75,24 +71,20 @@ def detallar_usuario(request):
     elif hasattr(usuario, 'paciente'):
         tipo_usuario = 'paciente'
         template = 'paciente/detallar.html'
-
-    # Si no se asignó un template, mostrar error
-    if template is None:
+    else:
         return render(request, 'usuario/error.html', {'mensaje': 'Usuario no tiene un tipo válido asignado'})
 
-    # Si el template es válido, procesar el formulario
+    # Procesar el formulario de imagen si es un POST
     if request.method == 'POST':
         formulario = ImagenUserForm(request.POST, request.FILES, instance=usuario)
         if formulario.is_valid():
             formulario.save()
-            return render(request, template, {'formulario': formulario, 'tipo_usuario': tipo_usuario, 'mensaje': 'Imagen de usuario actualizada correctamente.'})
+            return render(request, template, {'formulario': formulario, 'tipo_usuario': tipo_usuario, 'usuario': usuario, 'mensaje': 'Imagen de usuario actualizada correctamente.'})
     else:
         formulario = ImagenUserForm(instance=usuario)
 
     # Renderizar el template correspondiente
-    return render(request, template, {'formulario': formulario, 'tipo_usuario': tipo_usuario})
-
-
+    return render(request, template, {'formulario': formulario, 'tipo_usuario': tipo_usuario, 'usuario': usuario})
 
 
 
@@ -205,7 +197,7 @@ def actualizar_paciente(request, id):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Paciente actualizado exitosamente.')
-            return redirect('listar_paciente')
+            return redirect('detallar_usuario')
         else:
             messages.error(request, 'Por favor, revisa los campos del formulario.')
     else:
@@ -376,13 +368,9 @@ def registrar_auxiliar(request):
         formulario = AuxiliarForm(request.POST)
         if formulario.is_valid():
             auxiliar = formulario.save(commit=False)
-            # Asociar el usuario al auxiliar
-            usuario_id = request.POST.get('usuario')
-            usuario = Usuario.objects.get(id=usuario_id)
-            auxiliar.usuario = usuario
             auxiliar.save()
             messages.success(request, 'Auxiliar registrado exitosamente.')
-            return redirect('listar_auxiliares')  # Redirigir a la lista de auxiliares
+            return render(request,'auxiliar/insertar.html')
         else:
             messages.error(request, 'Por favor, complete todos los campos del auxiliar.')
     else:
@@ -711,7 +699,7 @@ def lista_certificado_incapacidad(request):
 #region OrdenMedica
 def registrar_orden_medica(request):
     if request.method == 'POST':
-        formulario = OrdeneMedicaForm(request.POST)
+        formulario = OrdenMedicaForm(request.POST)
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Orden médica creada exitosamente.')
@@ -719,7 +707,7 @@ def registrar_orden_medica(request):
         else:
             messages.error(request, 'Por favor, llena todos los campos.')
     else:
-        formulario = OrdeneMedicaForm()
+        formulario = OrdenMedicaForm()
     return render(request, 'orden_medica/insertar.html', {'formulario': formulario})
 
 def lista_orden_medica(request):

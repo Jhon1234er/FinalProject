@@ -110,9 +110,6 @@ urlpatterns = [
     # endregion
 
 
-#region agenda
-    path('medico/agenda',listar_agenda, name='listar_agenda'),
-#endregion
 
 
 

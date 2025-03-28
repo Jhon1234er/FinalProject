@@ -18,7 +18,7 @@
 <body>
     <!-- Encabezado con el logotipo, menú de navegación y usuario -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav>
             <div class="container">
                 <!-- Logotipo de EPS Izel -->
                 <a class="navbar-brand" href="{% url 'home' %}">
@@ -31,7 +31,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarNav">
+                <div id="navbarNav">
                     <ul class="navbar-nav ml-auto">
                         {% if request.user.is_authenticated %}
                             <!-- Menú de opciones para usuarios autenticados -->
@@ -39,6 +39,7 @@
                                 <li class="nav-item"><a class="nav-link" href="#">Consultar historias clínicas</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{% url 'listar_medico' %}">Listar Médicos</a></li>
                                 <li><a href="{% url 'gestionar_disponibilidad' %}">Gestionar Disponibilidad</a></li>
+                                <li><a href="{% url 'registrar_consulta' %}">CONSULTA PROVICIONAL</a></li>
                             {% endif %}
                             {% if request.user.auxiliar %}
                                 <li class="nav-item"><a class="nav-link" href="#">Ver mis datos de Auxiliar</a></li>
@@ -55,6 +56,7 @@
                                 <li class="nav-item"><a class="nav-link" href="#">Solicitar cita médica</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{% url 'listar_paciente' %}">Listar Pacientes</a></li>
                                 <li><a href="{% url 'calendario' %}">Agendar cita</a></li>
+                                <li><a href="{% url 'detallar_usuario' %}">Mis datos</a></li>
                             {% endif %}
                             <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a></li>
                             <!-- Imagen del usuario -->

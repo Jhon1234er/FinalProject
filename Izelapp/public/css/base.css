@@ -1,7 +1,4 @@
-/* Sobrescribir el fondo de la navbar */
-.navbar.bg-primary {
-    background-color: #011f30 !important; /* Azul oscuro para la barra de navegación */
-}
+
 
 /* Otros elementos del header (asegurando que el resto mantenga el color adecuado) */
 header {
@@ -42,7 +39,6 @@ header .navbar-nav {
 }
 
 header .navbar-nav .nav-link {
-    color: #ffffff !important;
     padding: 10px 15px;
     font-size: 16px;
     text-transform: uppercase;

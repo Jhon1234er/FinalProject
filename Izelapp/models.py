@@ -3,6 +3,7 @@ import os, json
 import logging
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils import timezone
 
 # Destinar una carpeta en el sistema de archivos para subir documentos
 def user_directory_path(instance, filename):
@@ -316,6 +317,7 @@ class Cita(models.Model):
     fecha_cita = models.DateField(null=False)
     hora_cita = models.TimeField(null=False)
     OPCIONES_ESTADO_CITA = [
+        ('DP','Disponible'),
         ('agendada', 'Agendada'),
         ('atendida', 'Atendida'),
         ('cancelada', 'Cancelada'),
@@ -334,10 +336,15 @@ class Cita(models.Model):
 
 #region CertificadoIncapacidad
 class CertificadoIncapacidad(models.Model):
-    dias_incapacidad = models.CharField(max_length=2)
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='medico_incapacidad_medica')
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='paciente_incapacidad_medica')
+    dias_incapacidad = models.CharField(max_length=4)
     motivo_incapacidad = models.CharField(max_length=255)
-    fecha_emision = models.DateField(auto_now=True)
-    cita = models.ForeignKey(Cita, on_delete=models.CASCADE, related_name='certificados')
+    fecha_inicio = models.DateField(default=timezone.now)
+    fecha_fin = models.DateField(null=True, blank=True)
+    diagnostico_principal = models.TextField(max_length=255,null=False,default='No especificado')
+    diagnostico_relacionados = models.TextField(max_length=255,default='No especificado',null=False)
+    observaciones = models.CharField(max_length=255)
 #endregion
 
 
@@ -347,32 +354,34 @@ class CertificadoIncapacidad(models.Model):
 
 #region RecetasMedicas
 class RecetaMedica(models.Model):
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='medico_receta_medica')
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='paciente_receta_medica')
     medicamento = models.CharField(max_length=100)
     concentracion = models.CharField(max_length=100)
     duracion = models.CharField(max_length=100)
     cantidad = models.CharField(max_length=100)
     via_administracion = models.CharField(max_length=20)
-    diagnostico_principal = models.TextField(max_length=255)
-    diagnostico_relacionados = models.TextField(max_length=255)
+    diagnostico_principal = models.TextField(max_length=255,default='No especificado',null=False)
+    diagnostico_relacionados = models.TextField(max_length=255,default='No especificado',null=False)
     intervalo = models.CharField(max_length=20)
     recomendaciones = models.CharField(max_length=255)
     indicaciones = models.CharField(max_length=255)
-    fecha_medicado = models.DateField(auto_now=True)
-    cita = models.ForeignKey(Cita, on_delete=models.CASCADE, related_name='recetas')
+    fecha_medicado = models.DateField(default=timezone.now)
 #endregion
 
 
 #region  OrdenesMedicas
 class OrdenMedica(models.Model):
+    cups = models.CharField(max_length=10, unique=True)
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='medico_orden_medica')
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='paciente_orden_medica')
     especialidad_referido = models.CharField(max_length=255, blank=False)
+    cantidad = models.CharField(max_length=4,null=False)
+    diagnostico = models.CharField(max_length=10,null=False)
     motivo = models.CharField(max_length=255)
-    fecha_ordenado = models.DateField(auto_now=True)
-    cita = models.ForeignKey(Cita, on_delete=models.CASCADE, related_name='ordenes')
+    fecha_ordenado = models.DateField(default=timezone.now)
+    vigencia = models.DateField(null=False)
 #endregion
-
-
-
-
 
 
 

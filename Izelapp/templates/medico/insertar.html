@@ -1,27 +1,40 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
 {% block title %}
-    Crear Medico
+    Registro de Medico
 {% endblock %}
 
 {% block content %}
+  <link rel="stylesheet" href="{% static 'css/usuario/insertar.css' %}">
 
-    <h1>Crear Medivo</h1>
+  <h2>Registro de Medico</h2>
 
-{% if messages %}
-    <div>
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
+  <!-- Mostrar los mensajes de error o éxito -->
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+        <p class="message">{{ message }}</p>
+      {% endfor %}
     </div>
-{% endif %}
+  {% endif %}
 
-<form method="POST" enctype="multipart/form-data">
+  <!-- Formulario de Registro -->
+  <form method="POST">
     {% csrf_token %}
-    {{ formulario.as_p }}
-    <button type="submit">CREAR MEDICO</button>
-</form>
+    
+    <!-- Iterar sobre los campos del formulario -->
+    {% for field in formulario %}
+      <div class="form-row">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}
+          <span class="help-text">{{ field.help_text }}</span>
+        {% endif %}
+      </div>
+    {% endfor %}
 
+    <!-- Botón para enviar el formulario -->
+    <button type="submit">Registrar</button>
+  </form>
 {% endblock %}
