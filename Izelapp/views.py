@@ -35,20 +35,19 @@ def login_usuario(request):
 
             # Verificar si el usuario es Médico u otros roles
             if hasattr(request.user, 'medico'):
-                return render(request, 'medico/perfil.html', {'tipo_usuario': 'Medico'})
+                return render(request, 'medico/perfil.html', {'tipo_usuario': 'medico', 'usuario': usuario})
             elif hasattr(request.user, 'paciente'):
-                return render(request, 'paciente/perfil.html', {'tipo_usuario': 'Paciente'})
+                return render(request, 'paciente/perfil.html', {'tipo_usuario': 'paciente', 'usuario': usuario})
             elif hasattr(request.user, 'administrador'):
-                return render(request, 'administrador/perfil.html', {'tipo_usuario': 'Administrador'})
+                return render(request, 'administrador/perfil.html', {'tipo_usuario': 'administrador', 'usuario': usuario})
             elif hasattr(request.user, 'ti'):
-                return render(request, 'ti/perfil.html', {'tipo_usuario': 'TI'})
+                return render(request, 'ti/perfil.html', {'tipo_usuario': 'TI', 'usuario': usuario})
             elif hasattr(request.user, 'auxiliar'):
-                return render (request, 'auxiliar/perfil.html', {'tipo_usuario': 'Auxiliar'})
+                return render(request, 'auxiliar/perfil.html', {'tipo_usuario': 'Auxiliar', 'usuario': usuario})
         else:
             return render(request, 'login.html', {'mensaje_error': 'Credenciales incorrectas, intente de nuevo o consulte con Administrador de Usuarios'})
 
     return render(request, 'login.html')
-
 
 
 @login_required
@@ -415,19 +414,28 @@ def eliminar_auxiliar(request, id):
 
 
 #region Consulta 
+
 def registrar_consulta(request):
     if request.method == 'POST':
-        formulario = ConsultaForm(request.POST)
-        if formulario.is_valid():
-            formulario.save()
-            messages.success(request, 'Consulta registrada exitosamente.')
+        formulario_consulta = ConsultaForm(request.POST)
+        formulario_atp = DatoAntropometricoForm(request.POST)
+        
+        # Si ambos formularios son válidos
+        if formulario_consulta.is_valid() and formulario_atp.is_valid():
+            formulario_consulta.save()
+            formulario_atp.save()  # Guarda los datos antropométricos
+            messages.success(request, 'Consulta y datos antropométricos registrados exitosamente.')
             return redirect('registrar_consulta')
         else:
-            messages.error(request, 'Por favor, llena todos los campos.')
+            messages.error(request, 'Por favor, llena todos los campos correctamente.')
     else:
-        formulario = ConsultaForm()
-    return render(request, 'consulta/insertar.html', {'formulario': formulario})
+        formulario_consulta = ConsultaForm()
+        formulario_atp = DatoAntropometricoForm()
 
+    return render(request, 'consulta/insertar.html', {
+        'formulario_consulta': formulario_consulta,
+        'formulario_atp': formulario_atp,
+    })
 def lista_consulta(request):
     consultas = Consulta.objects.all()
     return render(request, 'consulta/lista.html', {'consultas': consultas})
@@ -633,7 +641,7 @@ def registrar_dato_antropometrico(request):
             messages.error(request, 'Por favor, llena todos los campos.')
     else:
         formulario = DatoAntropometricoForm()
-    return render(request, 'dato_antropometrico/crear.html', {'formulario': formulario})
+    return render(request, 'dato_antropometrico/insertar.html', {'formulario': formulario})
 
 def lista_dato_antropometrico(request):
     datos_antropometricos = DatoAntropometrico.objects.all()

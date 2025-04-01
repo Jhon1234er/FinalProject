@@ -31,6 +31,7 @@ urlpatterns = [
     path('login/', login_usuario, name='login'), 
     path('logout/', logout_usuario, name='logout'),
     path('detallar_usuario/', detallar_usuario, name='detallar_usuario'),
+    path('actualizar_usuario/',actualizar_usuario,name='actualizar_usuario'),
 
 
 
@@ -55,6 +56,7 @@ urlpatterns = [
     path('medico/actualizar/<int:id>/', actualizar_medico, name='actualizar_medico'),
     path('medico/eliminar/<int:id>/', eliminar_medico, name='eliminar_medico'),
     path('perfil/', login_usuario, name='perfil'),
+    # path('medico/agenda/',name='agenda_medico'),
     # endregion
 
 

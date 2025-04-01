@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-    datos del paciente
+    Datos del medico
 {% block content %}
 <h2>Tus datos</h2>
 <table>
@@ -30,11 +30,13 @@
     <tr><th>Tipo de Población:</th><td>{{ usuario.tipo_poblacion }}</td></tr>
     <tr><th>Ocupación:</th><td>{{ usuario.ocupacion }}</td></tr>
     <tr><th>EPS:</th><td>{{ usuario.eps }}</td></tr>
-    <tr><th>Regimen:</th>{{ usuario.paciente.regimen }}</tr>
-    <tr><th>Numero de seguro social:</th>{{ usuario.paciente.numero_seguro_social }}</tr>
+    <tr><th>Especialidad:</th><td>{{ usuario.medico.especialidad }}</td></tr>
+    <tr><th>Registro profesional:</th><td>{{ usuario.medico.numero_registro_profesional }}</td></tr>
+    <tr><th>Licencia:</th><td>{{ usuario.medico.licencia_certificacion }}</td></tr>
+    <tr><th>Fecha de contratación:</th><td>{{ usuario.medico.fecha_contratacion }}</td></tr>
 </table>
 <br>
-<form action="{% url 'actualizar_usuario' id=usuario.id %}" method="get">
+<form action="{% url 'actualizar_medico' id=usuario.id %}" method="get">
         <button type="submit">Actualizar mis datos</button>
 </form>
 

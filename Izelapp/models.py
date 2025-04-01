@@ -381,6 +381,14 @@ class OrdenMedica(models.Model):
     motivo = models.CharField(max_length=255)
     fecha_ordenado = models.DateField(default=timezone.now)
     vigencia = models.DateField(null=False)
+    ESTADO_CITA=[
+        ('VIG','Vigente'),
+        ('VEN','Vencida'),
+        ('AG','Agendada'),
+        ('PA','Por autorizar'),
+        ('AUT','Por autorizar')
+    ]
+    estado=models.CharField(max_length=15,choices=ESTADO_CITA,null=False)
 #endregion
 
 

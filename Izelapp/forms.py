@@ -437,10 +437,10 @@ class AuxiliarForm(forms.ModelForm):
 class ConsultaForm(forms.ModelForm):
     class Meta:
         model = Consulta
-        fields = ['tratamiento',
+        fields = ['motivo_consulta', 
+                  'tratamiento',
                   'diagnostico',
-                  'motivo_consulta', 
-                  'paciente'
+                  'paciente',
                   ]
         widgets = {
             'tratamiento': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Descripción del tratamiento'}),

@@ -6,8 +6,7 @@
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ formulario.as_p }}
-    <button type="submit">Actualizar Médico</button>
+    <button type="submit">Actualizar mis datos</button>
   </form>
 
-  <p><a href="{% url 'listar_medico' %}">Volver a la lista de médicos</a></p>
 {% endblock %}
