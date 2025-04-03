@@ -784,11 +784,9 @@ def eliminar_horario_medico(request, id):
 #region AGENDA
 
 
-# Vista para mostrar el calendario con las citas disponibles
 def calendario(request):
     return render(request, 'cita/calendario.html')
 
-# Vista para obtener las citas disponibles del médico y mostrarlas en el calendario
 def obtener_disponibilidad(request):
     eventos = []
     # Filtramos las disponibilidades de los médicos
@@ -797,13 +795,12 @@ def obtener_disponibilidad(request):
             'title': f'{disponibilidad.tipo_cita.capitalize()} disponible',
             'start': f'{disponibilidad.fecha}T{disponibilidad.hora_inicio}',
             'end': f'{disponibilidad.fecha}T{disponibilidad.hora_fin}',
-            'color': 'yellow' if disponibilidad.tipo_cita == 'general' else 'blue',
+            'color': 'white blue' if disponibilidad.tipo_cita == 'general' else 'blue',
         }
         eventos.append(evento)
 
     return JsonResponse(eventos, safe=False)
 
-# Vista para verificar la disponibilidad al hacer clic en un día específico
 def verificar_disponibilidad(request):
     fecha = request.GET.get('fecha')
     disponibilidad = Disponibilidad.objects.filter(fecha=fecha)
@@ -811,28 +808,28 @@ def verificar_disponibilidad(request):
         return JsonResponse({'disponible': True})
     return JsonResponse({'disponible': False})
 
-# Vista para confirmar la cita después de la selección
 def confirmar_cita(request):
     if request.method == 'POST':
         form = CitaForm(request.POST)
         if form.is_valid():
             cita = form.save(commit=False)
-            cita.paciente = request.user.paciente  # Asumimos que el usuario es paciente
+            cita.paciente = request.user.paciente  
             cita.save()
-            return render(request,'paciente/perfil.html')  # Redirige al perfil después de solicitar la cita
+            return render(request,'paciente/perfil.html') 
     else:
         form = CitaForm()
     return render(request, 'cita/confirmar_cita.html', {'form': form})
 
-# Vista para que el médico registre su disponibilidad
+
+@login_required
 def gestionar_disponibilidad(request):
     if request.method == 'POST':
         form = DisponibilidadForm(request.POST)
         if form.is_valid():
             disponibilidad = form.save(commit=False)
-            disponibilidad.medico = request.user.medico  # Asumimos que el usuario es médico
+            disponibilidad.administrador = request.user.administrador  
             disponibilidad.save()
-            return redirect('medico/perfil.html')  # Redirige al perfil del médico
+            return render(request, 'medico/perfil.html') 
     else:
         form = DisponibilidadForm()
     return render(request, 'cita/gestionar_disponibilidad.html', {'form': form})

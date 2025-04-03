@@ -1,0 +1,92 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F5F5F5;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    background-color: #011f30;
+    color: #ffffff;
+    padding: 20px;
+    margin: 0;
+    border-bottom: 3px solid #013857;
+}
+
+
+
+/* Calendario */
+#calendar {
+    text-align: center;
+    background-color: #FFFFFF;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 20px auto;
+    width: 80%; /* Puedes ajustar el ancho si lo deseas */
+    height: 500px; /* Ajusta la altura del calendario */
+}
+
+/* Centrar el nombre del mes */
+.fc-toolbar .fc-center {
+    text-align: center !important;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+/* Estilo de los días del calendario */
+.fc-day-header {
+    background-color: #011f30;
+    color: #ffffff;
+}
+
+.fc-day {
+    background-color: #F5F5F5;
+}
+
+/* Modificación de eventos */
+.fc-event {
+    background-color: #A8D8B9;
+    border: none;
+    color: #333;
+}
+
+.fc-event:hover {
+    background-color: #6AC1B8;
+}
+
+/* Ajuste de bordes y colores al pasar el cursor */
+.fc-day:hover {
+    background-color: #A8D8B9;
+}
+
+.fc-day.fc-day-other {
+    background-color: #F5F5F5;
+}
+
+.fc-button {
+    background-color: #013857;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+}
+
+.fc-button:hover {
+    background-color: #ffffff;
+    color: #013857;
+}
+
+/* Pie de página */
+footer {
+    background-color: #013857;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+footer .social-links {
+    color: #dddddd;
+}

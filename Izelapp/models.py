@@ -137,6 +137,9 @@ class Medico(Usuario):
     numero_registro_profesional = models.CharField(max_length=50)
     licencia_certificacion = models.BooleanField(default=False)
     fecha_contratacion = models.DateField()
+
+    def __str__(self):
+        return f"{self.first_name}"
 #endregion
 
 

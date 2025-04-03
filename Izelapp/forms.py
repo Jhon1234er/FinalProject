@@ -533,9 +533,11 @@ class CitaForm(forms.ModelForm):
                   'paciente'
                   ]
         widgets = {
-            'fecha_cita': forms.DateInput(attrs={'type': 'date'}),
-            'hora_cita': forms.TimeInput(attrs={'type': 'time'}),
-            'estado_cita': forms.Select(attrs={'class': 'form-control'}),
+            'fecha_cita': forms.DateInput(attrs={'type': 'date','readonly': 'readonly' }),
+            'hora_cita': forms.TimeInput(attrs={'type': 'time','readonly': 'readonly'}),
+            'estado_cita': forms.Select(attrs={'class': 'form-control','readonly': 'readonly'}),
+            'medico': forms.Select (attrs={'class': 'from-control','readonly': 'readonly'}),
+            'paciente':forms.Select(attrs={'class': 'from-control','readonly': 'readonly'}),
         }
 #endregion
 
@@ -631,8 +633,13 @@ class DisponibilidadForm(forms.ModelForm):
             'fecha',
             'hora_inicio', 
             'hora_fin', 
-            'tipo_cita'
+            'tipo_cita',
+            'medico',
             ]
-        
+        widgets={
+            'fecha':forms.DateInput(attrs={'type': 'date',}),
+            'hora_inicio':forms.TimeInput(attrs={'type': 'time'}),
+            'hora_fin':forms.TimeInput(attrs={'type': 'time'}),
+        }
 
 #endregion
