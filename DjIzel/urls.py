@@ -234,5 +234,6 @@ urlpatterns = [
     path('verificar_disponibilidad/', verificar_disponibilidad, name='verificar_disponibilidad'),
     path('confirmar_cita/', confirmar_cita, name='confirmar_cita'),
     path('gestionar_disponibilidad/', gestionar_disponibilidad, name='gestionar_disponibilidad'),
+    path('medico/agenda/', agenda_medico, name='agenda_medico')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

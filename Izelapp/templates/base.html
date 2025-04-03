@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static 'img/logo.png' %}">
     <title>{% block title %}Bienvenido a EPS Izel{% endblock %}</title>
 
 
@@ -38,7 +39,6 @@
                             {% if request.user.medico %}
                                 <li class="nav-item"><a class="nav-link" href="#">Consultar historias clínicas</a></li>
                                 <li><a href="{% url 'gestionar_disponibilidad' %}">Gestionar Disponibilidad</a></li>
-                                <li><a href="{% url 'registrar_consulta' %}">CONSULTA PROVICIONAL</a></li>
                                 <li><a href="{% url 'detallar_usuario' %}">Ver mis datos</a></li>
                             {% endif %}
                             {% if request.user.auxiliar %}

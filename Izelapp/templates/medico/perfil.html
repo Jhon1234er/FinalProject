@@ -5,7 +5,7 @@
 {% block content %}
     <h1>Bienvenido, <td>{{ usuario.first_name }}</td>!</h1>
 
-    <form action="" method="get">
+    <form action="{% url 'agenda_medico' %}" method="get">
         <button type="submit">Atenciones para hoy</button>
     </form>
 {% endblock %}

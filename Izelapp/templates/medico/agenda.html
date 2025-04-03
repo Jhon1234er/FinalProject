@@ -1,35 +1,55 @@
 {% extends 'base.html' %}
-
+{% load static %}
+    Agenda
 {% block title %}
-    Agenda Médica
+    Agenda
 {% endblock %}
 
 {% block content %}
-    <h2>Agenda</h2>
-    <h3>{{ medico.first_name }}</h3>
-    {% if agenda %}
-        <table border="1">
+<div>
+    <h2>AGENDA DEL DÍA {{ fecha_actual|upper }}</h2>
+    <div>
+        <table>            
             <thead>
                 <tr>
-                    <th>Medico</th>
                     <th>Hora</th>
                     <th>Paciente</th>
-                    <th>Motivo</th>
+                    <th>Motivo De Consulta</th>
+                    <th>Asistencia</th>
+                    <th>Iniciar Consulta</th>
                 </tr>
             </thead>
             <tbody>
-                {% for cita in agenda %}
-                    <tr>
-                        <td>{{ cita.medico }}</td>
-                        <td>{{ cita.hora }}</td>
-                        <td>{{ cita.paciente }}</td>
-                        <td>{{ cita.motivo }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
+                <tr>
+                    <td>06:30</td>
+                    <td>Harold Steven</td>
+                    <td>Consulta General</td>
+                    <td><input type="checkbox"></td>
+                    <td><a href="{% url 'registrar_consulta' %}">Empezar</a></td>
+                </tr>
+                <tr>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                </tr>
+                <tr>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                </tr>
+                <tr>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                </tr>
+            </tbody> 
         </table>
-    {% else %}
-        <p>No hay citas agendadas en este momento.</p>
-    {% endif %}
-
+    </div>
+</div>
 {% endblock %}

@@ -166,10 +166,13 @@ class TI(Usuario):
 
 #region Consulta
 class Consulta(models.Model):
+    especialidad=models.CharField(max_length=100,null=False ,blank=True)
     tratamiento = models.TextField(max_length=200)
-    diagnostico = models.TextField(max_length=200)
+    diagnostico_principal = models.TextField(max_length=255,null=False)
+    diagnostico_relacionado = models.TextField(max_length=255,null=False)    
     motivo_consulta = models.TextField(max_length=200)
     fecha_consulta = models.DateField(auto_now_add=True) 
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='medico_consulta')
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='consultas')
 #endregion
 
@@ -342,8 +345,8 @@ class CertificadoIncapacidad(models.Model):
     motivo_incapacidad = models.CharField(max_length=255)
     fecha_inicio = models.DateField(default=timezone.now)
     fecha_fin = models.DateField(null=True, blank=True)
-    diagnostico_principal = models.TextField(max_length=255,null=False,default='No especificado')
-    diagnostico_relacionados = models.TextField(max_length=255,default='No especificado',null=False)
+    diagnostico_principal = models.TextField(max_length=255,null=False)
+    diagnostico_relacionado = models.TextField(max_length=255,null=False)
     observaciones = models.CharField(max_length=255)
 #endregion
 
@@ -361,8 +364,8 @@ class RecetaMedica(models.Model):
     duracion = models.CharField(max_length=100)
     cantidad = models.CharField(max_length=100)
     via_administracion = models.CharField(max_length=20)
-    diagnostico_principal = models.TextField(max_length=255,default='No especificado',null=False)
-    diagnostico_relacionados = models.TextField(max_length=255,default='No especificado',null=False)
+    diagnostico_principal = models.TextField(max_length=255,null=False)
+    diagnostico_relacionado = models.TextField(max_length=255,null=False)
     intervalo = models.CharField(max_length=20)
     recomendaciones = models.CharField(max_length=255)
     indicaciones = models.CharField(max_length=255)
@@ -377,7 +380,8 @@ class OrdenMedica(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='paciente_orden_medica')
     especialidad_referido = models.CharField(max_length=255, blank=False)
     cantidad = models.CharField(max_length=4,null=False)
-    diagnostico = models.CharField(max_length=10,null=False)
+    diagnostico_principal = models.TextField(max_length=255,null=False)
+    diagnostico_relacionado = models.TextField(max_length=255,null=False)    
     motivo = models.CharField(max_length=255)
     fecha_ordenado = models.DateField(default=timezone.now)
     vigencia = models.DateField(null=False)

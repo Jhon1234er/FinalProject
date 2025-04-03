@@ -2,19 +2,28 @@
 {% load static %}
 
 {% block title %}
-    Registro de Medico
+    Registro de Médico
 {% endblock %}
 
 {% block content %}
   <link rel="stylesheet" href="{% static 'css/usuario/insertar.css' %}">
 
-  <h2>Registro de Medico</h2>
+  <h2>Registro de Médico</h2>
 
-  <!-- Mostrar los mensajes de error o éxito -->
+  <!-- Mostrar mensajes de éxito o error -->
   {% if messages %}
     <div class="messages">
       {% for message in messages %}
         <p class="message">{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Mostrar errores generales del formulario -->
+  {% if formulario.non_field_errors %}
+    <div class="error-messages">
+      {% for error in formulario.non_field_errors %}
+        <p class="error">{{ error }}</p>
       {% endfor %}
     </div>
   {% endif %}
@@ -28,6 +37,16 @@
       <div class="form-row">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
         {{ field }}
+        
+        <!-- Mostrar errores debajo del campo -->
+        {% if field.errors %}
+          <div class="error-messages">
+            {% for error in field.errors %}
+              <p class="error">{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+
         {% if field.help_text %}
           <span class="help-text">{{ field.help_text }}</span>
         {% endif %}

@@ -5,6 +5,10 @@ from Izelapp.forms import *
 from Izelapp.models import *
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse,JsonResponse
+from datetime import date
+import locale
+
+locale.setlocale(locale.LC_TIME, 'Spanish_Colombia.1252')
 
 
 
@@ -227,7 +231,7 @@ def registrar_administrador(request):
             messages.success(request, 'Administrador creado exitosamente.')
             return redirect('registrar_administrador')      
         else:
-            messages.error(request, 'Por favor, complete todos los campos del administrador.')
+            messages.error(request, 'Por favor, corrija los errores en el formulario.')
     else:
         formulario = AdministradorForm()
     return render(request, 'administrador/insertar.html', {'formulario': formulario})
@@ -275,7 +279,7 @@ def registrar_ti(request):
             messages.success(request, 'TI registrado exitosamente.')
             return redirect('listar_ti')  # Redirigir a la lista de TI
         else:
-            messages.error(request, 'Por favor, complete todos los campos del TI.')
+            messages.error(request, 'Por favor, corrija los errores en el formulario.')
     else:
         formulario = TIForm()
     return render(request, 'ti/insertar.html', {'formulario': formulario})
@@ -323,9 +327,9 @@ def registrar_medico(request):
             medico.set_password(formulario.cleaned_data['password'])
             medico.save()
             messages.success(request, 'Médico registrado exitosamente.')
-            return redirect('listar_medico')  # Redirigir a la lista de médicos
+            return redirect('login')  # Redirigir a la lista de médicos
         else:
-            messages.error(request, 'Por favor, complete todos los campos del médico.')
+            messages.error(request, 'Por favor, corrija los errores en el formulario.')
     else:
         formulario = MedicoForm()
 
@@ -371,7 +375,7 @@ def registrar_auxiliar(request):
             messages.success(request, 'Auxiliar registrado exitosamente.')
             return render(request,'auxiliar/insertar.html')
         else:
-            messages.error(request, 'Por favor, complete todos los campos del auxiliar.')
+            messages.error(request, 'Por favor, corrija los errores del formulario.')
     else:
         formulario = AuxiliarForm()
 
@@ -834,10 +838,14 @@ def gestionar_disponibilidad(request):
     return render(request, 'cita/gestionar_disponibilidad.html', {'form': form})
 
 
+
+
+def agenda_medico(request):
+    fecha_actual = date.today().strftime("%d-%B-%Y")  # Formato: 12-Marzo-2025
+    return render(request, 'medico/agenda.html', {'fecha_actual': fecha_actual})
+
+
 #endregion
-
-
-
 
 
 

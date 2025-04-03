@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Atenciones medicas
+{% endblock %}
+
+{% block content %}
+<body>
+    <div class="atenciones__tabla">
+        <h2 class="atenciones__titulo">ULTIMAS ATENCIONES</h2>
+        <table class="tabla__atenciones">
+            <thead>
+                <tr>
+                    <th class="tabla__atenciones--cabecera">FECHA</th>
+                    <th class="tabla__atenciones--cabecera">ESPECIALIDAD</th>
+                    <th class="tabla__atenciones--cabecera">MEDICO</th>
+                    <th class="tabla__atenciones--cabecera">MOTIVO</th>
+                    <th class="tabla__atenciones--cabecera">DIAGNOSTICO PRINCIPAL</th>
+                    <th class="tabla__atenciones--cabecera">DIAGNOSTICOS RELACIONADOS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for consulta in consultas %}
+                <tr>
+                    <td class="tabla__atenciones--celda-1">{{ consulta.fecha_consulta }}</td>
+                    <td class="tabla__atenciones--celda-2">{{ consulta.especialidad }}</td>
+                    <td class="tabla__atenciones--celda-3">{{ consulta.medico }}</td>
+                    <td class="tabla__atenciones--celda-4">{{ consulta.motivo_consulta}}</td>
+                    <td class="tabla__atenciones--celda-5">{{ consulta.diagnostico_principal }}</td>
+                    <td class="tabla__atenciones--celda-5">{{ consulta.diagnostico_relacionado }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="contenedor__boton">
+        <a href="/HTML/Medico/recoleccion.html" class="contenedor__boton--enlace">
+            <button class="contenedor__boton--boton">Continuar</button>
+        </a>
+    </div>
+{% endblock %}
+
