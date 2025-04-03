@@ -9,7 +9,7 @@
 {% block content %}
 <body>
     <div class="atenciones__tabla">
-        <h2 class="atenciones__titulo">ULTIMAS ATENCIONES</h2>
+        <h2 class="atenciones__titulo">ULTIMAS ATENCIONES de (NOMBRE DE USUARIO) </h2>
         <table class="tabla__atenciones">
             <thead>
                 <tr>
@@ -30,6 +30,7 @@
                     <td class="tabla__atenciones--celda-4">{{ consulta.motivo_consulta}}</td>
                     <td class="tabla__atenciones--celda-5">{{ consulta.diagnostico_principal }}</td>
                     <td class="tabla__atenciones--celda-5">{{ consulta.diagnostico_relacionado }}</td>
+                {% endfor %}
                 </tr>
             </tbody>
         </table>
