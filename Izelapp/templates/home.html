@@ -4,66 +4,77 @@
 {% block title %}Bienvenido a EPS Izel{% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
 
-    <!-- Banner principal -->
-    <section id="banner">
-        <div class="banner-content">
-            <h1>Bienvenido a EPS Izel</h1>
-            <p>Tu salud es nuestra prioridad. Estamos aquí para ofrecerte los mejores servicios en salud.</p>
-            <a href="#" class="btn-primary">Afíliate ahora</a>
-            <a href="#" class="btn-primary">Ver servicios</a>
-        </div>
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+
+    <!-- Sección de noticias o novedades -->
+    <section class="seccion-noticias">
+        <h2 class="titulo-principal">Últimas noticias de salud</h2>
+        <ul class="lista-noticias">
+            <li><a href="#">Nuevo servicio de telemedicina disponible</a></li>
+            <li><a href="#">Campaña de vacunación contra la influenza</a></li>
+            <li><a href="#">Recomendaciones para prevenir enfermedades respiratorias</a></li>
+        </ul>
     </section>
 
     <!-- Sección de servicios -->
-    <section id="servicios">
-        <h2>Servicios que ofrecemos</h2>
-        <div class="service-cards">
-            <div class="service-card">
-                <h3>Atención médica general</h3>
-                <p>Contamos con médicos especialistas para brindarte atención integral.</p>
+        <section class="seccion-servicios">
+            <h2 class="titulo-principal">SERVICIOS QUE OFRECEMOS</h2>
+            <p class="texto-parrafo">En nuestra EPS, nos comprometemos a ofrecerte la mejor atención médica, brindando acceso a un amplio abanico de servicios diseñados para atender tu bienestar integral. Nuestro enfoque se basa en la calidad, la cercanía y la eficiencia, garantizando que cada uno de nuestros afiliados reciba atención de primera.</p>
+        </section>
+        
+        
+        <section class="seccion-detalle">
+            <div class="detalle-servicio">
+                <h3 class="titulo-secundario">Atención médica general</h3>
+                <p class="texto-parrafo">Contamos con un equipo de médicos generales altamente capacitados, dispuestos a ofrecerte un servicio de salud accesible y personalizado. Las consultas médicas generales son el primer paso para mantener tu salud en óptimas condiciones. Nuestros médicos te brindarán un diagnóstico preciso y te orientarán sobre el tratamiento adecuado en función de tu estado de salud.</p>
             </div>
-            <div class="service-card">
-                <h3>Consultas especializadas</h3>
-                <p>Consulta a nuestros especialistas en diversas áreas de la salud.</p>
-            </div>
-            <div class="service-card">
-                <h3>Urgencias 24/7</h3>
-                <p>Disponibilidad para emergencias médicas en cualquier momento del día.</p>
-            </div>
-            <div class="service-card">
-                <h3>Programas de prevención</h3>
-                <p>Participa en programas preventivos para cuidar tu salud.</p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Sección de afiliación -->
-    <section id="afiliacion">
-        <h2>¿Cómo afiliarte?</h2>
-        <p>Afíliate a EPS Izel y disfruta de todos nuestros servicios. Es fácil y rápido.</p>
-        <a href="#" class="btn-primary">Afíliate ahora</a>
+        <section class="seccion-detalle">
+            <div class="detalle-servicio">
+                <h3 class="titulo-secundario">Consultas especializadas</h3>
+                <p class="texto-parrafo">En nuestra EPS, entendemos que cada persona tiene necesidades de salud únicas. Es por eso que ponemos a tu disposición un amplio equipo de especialistas en diversas ramas de la medicina, quienes se encargan de atender condiciones más complejas y ofrecerte un diagnóstico detallado.</p>
+            </div>
+        </section>
+
+        <section class="seccion-detalle">
+            <h2 class="titulo-principal">Urgencias 24/7</h2>
+            <p class="texto-parrafo">Tu bienestar es nuestra prioridad, por eso ofrecemos atención de urgencias las 24 horas del día, los 7 días de la semana. En situaciones de emergencia, puedes contar con nuestro equipo de profesionales capacitados para brindarte la atención que necesitas de manera inmediata y eficaz.</p>
+            
+            <h3 class="titulo-secundario">¿Por qué elegirnos para tus urgencias?</h3>
+            <ul class="lista-enlaces">
+                <li><strong>Atención inmediata:</strong>Disponibilidad para atenderte en cualquier momento, sin importar la hora o el día</li>
+                <li><strong>Equipos de última tecnología:</strong> Contamos con equipos médicos avanzados para hacer diagnósticos rápidos y precisos</li>
+                <li><strong>Médicos y personal capacitado:</strong>Nuestro personal está altamente entrenado para actuar rápidamente ante cualquier emergencia</li>
+                <li><strong>Acomodo y confort:</strong>Queremos que te sientas lo más cómodo y tranquilo posible mientras recibes la atención que necesitas.</li>
+            </ul>
+        </section>
+
+        <section class="seccion-detalle">
+            <h2 class="titulo-principal">Programas de Prevención</h2>
+            <p class="texto-parrafo">La prevención es la clave para una vida saludable. En nuestra EPS, te ofrecemos programas de prevención diseñados para identificar posibles riesgos de salud antes de que se conviertan en problemas graves. Nuestros programas incluyen chequeos regulares, asesoramiento personalizado y seguimiento para promover hábitos saludables.</p>
+        
+            <h3 class="titulo-secundario">Programas destacados:</h3>
+            <ul class="lista-enlaces">
+                <li><strong>Chequeos preventivos:</strong>Revisión periódica de tu estado de salud para detectar cualquier problema a tiempo</li>
+                <li><strong>Vacunación:</strong> Ofrecemos programas de vacunación para protegerte de diversas enfermedades.</li>
+                <li><strong>Salud mental:</strong>Promovemos tu bienestar emocional a través de talleres, consultas y asesorías con psicólogos y psiquiatras.</li>
+                <li><strong>Nutrición y actividad física:</strong>Programas enfocados en una dieta equilibrada y un estilo de vida activo, diseñados para prevenir enfermedades crónicas.</li>
+            </ul>
+            <p class="texto-parrafo">Participar en estos programas te permitirá no solo prevenir enfermedades, sino también mejorar tu calidad de vida. La prevención es un paso fundamental para asegurarte de que tu salud esté siempre en las mejores manos.</p>
+        </section>
     </section>
 
     <!-- Sección de beneficios -->
-    <section id="beneficios">
-        <h2>Beneficios para nuestros afiliados</h2>
-        <ul>
+    <section class="seccion-beneficios">
+        <h2 class="titulo-principal">Beneficios para nuestros afiliados</h2>
+        <ul class="lista-beneficios">
             <li>Descuentos en farmacias y laboratorios</li>
             <li>Consultas médicas a precios accesibles</li>
             <li>Acceso a programas de bienestar y prevención</li>
             <li>Red de atención médica de calidad</li>
-        </ul>
-    </section>
-
-    <!-- Sección de noticias o novedades -->
-    <section id="noticias">
-        <h2>Últimas noticias de salud</h2>
-        <ul>
-            <li><a href="#">Nuevo servicio de telemedicina disponible</a></li>
-            <li><a href="#">Campaña de vacunación contra la influenza</a></li>
-            <li><a href="#">Recomendaciones para prevenir enfermedades respiratorias</a></li>
         </ul>
     </section>
 

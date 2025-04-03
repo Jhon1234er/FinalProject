@@ -1,6 +1,19 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Confirmar Cita
+{% endblock %}
+
+{% block content %}
+
+
 <h1>Confirmar Cita</h1>
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Confirmar Cita</button>
 </form>
+
+{% endblock %}

@@ -1,99 +1,137 @@
-/* Sección principal (bienvenida) */
-#bienvenida {
-    background-color: #FFFFFF; /* Fondo blanco */
-    padding: 40px 20px;
-    text-align: center;
-}
-
-#bienvenida h1 {
-    color: #011f30; /* Azul oscuro */
-}
-
-#bienvenida p {
-    font-size: 18px;
+/* Body */
+body {
+    background-color: #F5F5F5; /* Gris claro */
     color: #333333; /* Gris oscuro */
-}
-
-/* Estilo de los botones */
-button {
-    background-color: #013857; /* Azul más oscuro */
-    color: #ffffff; /* Blanco */
-    border: 2px solid #ffffff; /* Borde blanco */
-    padding: 10px 20px;
+    line-height: 1.6;
     font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    padding: 0; /* Eliminado el padding de los lados */
+    margin: 0; /* Eliminar márgenes globales */
 }
 
-button:hover {
-    background-color: #ffffff; /* Fondo blanco */
-    color: #013857; /* Azul más oscuro */
-}
-
-/* Sección de servicios */
-#servicios {
-    padding: 40px 20px;
-    background-color: #FFFFFF; /* Fondo blanco */
-    text-align: center;
-}
-
-#servicios h2 {
+/* Títulos principales */
+.titulo-principal {
+    font-size: 2.5rem;
     color: #011f30; /* Azul oscuro */
-    font-size: 24px;
+    margin-bottom: 1rem;
+    border-bottom: 3px solid #013857; /* Azul más oscuro */
+    padding-bottom: 0.5rem;
 }
 
-#servicios ul {
+/* Títulos secundarios */
+.titulo-secundario {
+    font-size: 1.8rem;
+    color: #011f30; /* Azul oscuro */
+    margin-bottom: 0.8rem;
+    border-bottom: 2px solid #A8D8B9; /* Verde menta claro */
+    padding-bottom: 0.3rem;
+}
+
+/* Texto */
+.texto-parrafo {
+    font-size: 1.1rem;
+    color: #333333; /* Gris oscuro */
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+}
+
+/* Estilo para listas */
+ul.lista-enlaces {
     list-style: none;
+    margin: 0;
     padding: 0;
 }
 
-#servicios ul li {
-    font-size: 18px;
-    color: #333333; /* Gris oscuro */
+ul.lista-enlaces li {
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
 }
 
-/* Sección de afiliación */
-#afiliacion {
-    padding: 40px 20px;
-    background-color: #ffffff; /* Fondo blanco */
-    text-align: center;
-}
-
-#afiliacion h2 {
+ul.lista-enlaces li strong {
     color: #011f30; /* Azul oscuro */
 }
 
-#afiliacion p {
-    font-size: 18px;
-    color: #333333; /* Gris oscuro */
+/* Secciones con fondos alternos */
+.seccion-noticias, .seccion-beneficios {
+    background-color: #F5F5F5; /* Gris claro */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 1.5rem; /* Espaciado interno */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
 }
 
-/* Sección de noticias */
-#noticias {
-    padding: 40px 20px;
-    background-color: #ffffff; /* Fondo blanco */
-    text-align: center;
+/* Secciones de contenido */
+.seccion-servicios, .seccion-detalle {
+    background-color: #FFFFFF; /* Blanco */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 1.5rem; /* Espaciado interno */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
 }
 
-#noticias h2 {
-    color: #011f30; /* Azul oscuro */
-}
-
-#noticias ul {
+/* Estilo para las listas de beneficios */
+ul.lista-beneficios {
     list-style: none;
-    padding: 0;
+    padding-left: 0;
 }
 
-#noticias ul li {
-    font-size: 18px;
+ul.lista-beneficios li {
+    font-size: 1.2rem;
     color: #333333; /* Gris oscuro */
+    margin-bottom: 1rem;
+    position: relative;
 }
 
-#noticias ul li a {
+ul.lista-beneficios li:before {
+    content: "•";
+    position: absolute;
+    left: -1.5rem;
+    color: #A8D8B9; /* Verde menta claro */
+}
+
+/* Enlaces */
+a {
     color: #013857; /* Azul más oscuro */
+    text-decoration: none;
     transition: color 0.3s ease;
 }
 
-#noticias ul li a:hover {
-    color: #013857; /* Mismo azul oscuro para hover */
+a:hover {
+    color: #6AC1B8; /* Verde menta más intenso */
+}
+
+/* Botones */
+button {
+    background-color: #A8D8B9; /* Verde menta claro */
+    color: #333333; /* Gris oscuro */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #6AC1B8; /* Verde menta más intenso */
+}
+
+/* Diseño responsivo */
+@media screen and (max-width: 768px) {
+    .titulo-principal {
+        font-size: 2rem;
+    }
+
+    .titulo-secundario {
+        font-size: 1.6rem;
+    }
+
+    .texto-parrafo {
+        font-size: 1rem;
+    }
+
+    ul.lista-enlaces li {
+        font-size: 1rem;
+    }
+
+    ul.lista-beneficios li {
+        font-size: 1rem;
+    }
 }

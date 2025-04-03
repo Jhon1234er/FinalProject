@@ -659,11 +659,19 @@ class CitaForm(forms.ModelForm):
                   'paciente']
 
         widgets = {
-            'fecha_cita': forms.DateInput(attrs={'type': 'date'}),
-            'hora_cita': forms.TimeInput(attrs={'type': 'time'}),
+            'fecha_cita': forms.DateInput(attrs={'type': 'date','readonly': 'readonly' }),
+            'hora_cita': forms.TimeInput(attrs={'type': 'time','readonly': 'readonly'}),
+            'estado_cita': forms.Select(attrs={'class': 'form-control','readonly': 'readonly'}),
+            'medico': forms.Select (attrs={'class': 'from-control','readonly': 'readonly'}),
+            'paciente':forms.Select(attrs={'class': 'from-control','readonly': 'readonly'}),
         }
-
 #endregion
+
+
+
+
+
+
 
 
 
@@ -742,19 +750,18 @@ class OrdenMedicaForm(forms.ModelForm):
 # region Incapacidad Medica
 class CertificadoIncapacidadForm(forms.ModelForm):
     class Meta:
-        model = CertificadoIncapacidad
-        fields = ['medico', 'paciente', 'dias_incapacidad', 'motivo_incapacidad', 'fecha_inicio', 'fecha_fin', 
-                  'diagnostico_principal', 'diagnostico_relacionado', 'observaciones']
-        
-        widgets = {
-            'medico': forms.Select(attrs={'class': 'form-control'}),
-            'paciente': forms.Select(attrs={'class': 'form-control'}),
-            'dias_incapacidad': forms.TextInput(attrs={'class': 'form-control'}),
-            'motivo_incapacidad': forms.TextInput(attrs={'class': 'form-control'}),
-            'fecha_inicio': forms.SelectDateWidget(attrs={'class': 'form-control'}, years=range(2025, 2026)),
-            'fecha_fin': forms.SelectDateWidget(attrs={'class': 'form-control'}, years=range(2025, 2026)),
-            'diagnostico_principal': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Diagnóstico principal'}),
-            'diagnostico_relacionado': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Diagnósticos relacionados'}),
-            'observaciones': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Observaciones'})
+        model = Disponibilidad
+        fields = [
+            'fecha',
+            'hora_inicio', 
+            'hora_fin', 
+            'tipo_cita',
+            'medico',
+            ]
+        widgets={
+            'fecha':forms.DateInput(attrs={'type': 'date',}),
+            'hora_inicio':forms.TimeInput(attrs={'type': 'time'}),
+            'hora_fin':forms.TimeInput(attrs={'type': 'time'}),
         }
+
 #endregion

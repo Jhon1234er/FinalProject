@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,6 +9,9 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/fullcalendar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/locale/es.js"></script>
+    <link rel="stylesheet" href="{% static 'css/cita/calendario.css' %}">
+
 </head>
 <body>
     <h1>Calendario de Citas Médicas</h1>
@@ -24,7 +28,7 @@
                         data: {fecha: fecha},
                         success: function(data) {
                             if (data.disponible) {
-                                cell.css('background-color', 'yellow');
+                                cell.css('background-color', 'amber');
                             } else {
                                 cell.css('background-color', 'lightgray');
                             }
