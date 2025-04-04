@@ -20,35 +20,20 @@
                 </tr>
             </thead>
             <tbody>
+                {% for paciente in pacientes %}
                 <tr>
-                    <td>06:30</td>
-                    <td>Harold Steven</td>
-                    <td>Consulta General</td>
+                    <td>06:30</td>  
+                    <td>{{ paciente.username }} Paciente</td>  <!-- Mostrar el nombre del paciente -->
+                    <td>Consulta General</td>  
                     <td><input type="checkbox"></td>
-                    <td><a href="{% url 'registrar_consulta' %}">Empezar</a></td>
+                    <td><a href="{% url 'consulta_medica' 1 %}">Empezar</a></td>
                 </tr>
+                {% empty %}
                 <tr>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
+                    <td colspan="5">No hay pacientes en la agenda.</td>
                 </tr>
-                <tr>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                </tr>
-                <tr>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                </tr>
-            </tbody> 
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 </div>

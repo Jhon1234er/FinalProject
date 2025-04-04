@@ -7,6 +7,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse,JsonResponse
 from datetime import date
 import locale
+import json
+from django.views.decorators.csrf import csrf_protect
+
+
 
 locale.setlocale(locale.LC_TIME, 'Spanish_Colombia.1252')
 
@@ -22,8 +26,84 @@ def home(request):
 
 
 
+@login_required
+def consulta_medica(request, paciente_id):
+    paciente = get_object_or_404(Paciente, id=paciente_id)  # Busca al paciente
+    medico = request.user  # Obtiene el usuario autenticado (médico)
 
-  
+    return render(request, 'consulta_medica.html', {
+        'paciente': paciente,
+        'medico': medico  # Pasamos el médico al contexto
+    })
+
+def get_form(request, form_name):
+    form_classes = {
+        'vacuna': VacunaForm,
+        'consulta': ConsultaForm,
+        'dato_antropometrico': DatoAntropometricoForm,
+        'certificado_incapacidad': CertificadoIncapacidadForm,
+        'orden_medica': OrdenMedicaForm,
+        'receta_medica': RecetaMedicaForm,
+        'perfil_paciente': PerfilPacienteForm,
+        'antecedente': AntecedenteForm,
+        'dato_quirurgico': DatoQuirurgicoForm,
+    }
+
+    form_class = form_classes.get(form_name)
+    
+    if form_class:
+        form = form_class()
+        return render(request, f'{form_name}/insertar.html', {'form': form})
+    else:
+        return JsonResponse({'error': 'Formulario no encontrado'}, status=404)
+
+@csrf_protect
+def submit_all(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        paciente_id = data.get("paciente_id")
+        medico_id = data.get("medico_id")
+        formularios = data.get("formularios", [])
+
+        paciente = get_object_or_404(Paciente, id=paciente_id)
+        medico = get_object_or_404(Usuario, id=medico_id)
+
+        for formulario in formularios:
+            form_name = formulario.get("form_name")
+            campos = formulario.get("data")
+
+            form_class = {
+                'vacuna': VacunaForm,
+                'consulta': ConsultaForm,
+                'dato_antropometrico': DatoAntropometricoForm,
+                'certificado_incapacidad': CertificadoIncapacidadForm,
+                'orden_medica': OrdenMedicaForm,
+                'receta_medica': RecetaMedicaForm,
+                'perfil_paciente': PerfilPacienteForm,
+                'antecedente': AntecedenteForm,
+                'dato_quirurgico': DatoQuirurgicoForm,
+            }.get(form_name)
+
+            if form_class:
+                form = form_class(campos)
+                if form.is_valid():
+                    instancia = form.save(commit=False)
+                    if hasattr(instancia, 'paciente'):
+                        instancia.paciente = paciente
+                    if hasattr(instancia, 'medico'):
+                        instancia.medico = medico
+                    instancia.save()
+                else:
+                    return JsonResponse({
+                        "error": f"Formulario '{form_name}' inválido",
+                        "errores": form.errors
+                    }, status=400)
+
+        return JsonResponse({"message": "Todos los formularios fueron guardados correctamente"})
+
+    return JsonResponse({"error": "Método no permitido"}, status=405)
+
 # region login
 def login_usuario(request):
     if request.method == 'POST':
@@ -872,9 +952,13 @@ def gestionar_disponibilidad(request):
 
 
 def agenda_medico(request):
-    fecha_actual = date.today().strftime("%d-%B-%Y")  # Formato: 12-Marzo-2025
-    return render(request, 'medico/agenda.html', {'fecha_actual': fecha_actual})
+    fecha_actual = date.today().strftime("%d-%B-%Y") 
+    pacientes = Paciente.objects.all()  # Obtener todos los pacientes de la BD
 
+    return render(request, 'medico/agenda.html', {
+        'fecha_actual': fecha_actual,
+        'pacientes': pacientes  # Enviar pacientes al template
+    })
 
 #endregion
 

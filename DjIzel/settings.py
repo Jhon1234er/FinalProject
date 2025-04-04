@@ -69,7 +69,7 @@ ROOT_URLCONF = 'DjIzel.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "Izelapp/templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -96,6 +96,9 @@ DATABASES = {
         'PASSWORD':'',
         'PORT':'3306',
         'HOST':'localhost',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        },
     }
 }
 

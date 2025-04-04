@@ -1,58 +1,6 @@
-{% extends 'base.html' %}
-
-{% load static %}
-
-{% block title %}
-    Consulta médica
-{% endblock %}
-
-{% block content %}
-    <h2>Consulta médica - Recoleccion de datos</h2>
-
-    <!-- Mostrar los mensajes de error o éxito -->
-    {% if messages %}
-    <div class="messages">
-        {% for message in messages %}
-            <p class="message">{{ message }}</p>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <form method="POST">
-        {% csrf_token %}
-        <!-- Formulario de Consulta Médica -->
-        <div class="row">
-            <div class="col-md-8">
-                {{ formulario_consulta.as_p }}
-            </div>
-        </div>
-
-        <!-- Formulario de Datos Antropométricos -->
-        <div class="row">
-            <div class="col-md-4">
-                <h3>Datos antropométricos</h3>
-                {{ formulario_atp.as_p }}
-            </div>
-        </div>
-
-        <!-- Botón único para registrar ambos formularios -->
-        <button type="submit" class="btn btn-primary">Registrar</button>
-    </form>
-
-    <!-- Otros botones para formularios adicionales -->
-    <form action="{% url 'listar_consulta' %}" method="get">
-        <button type="submit" class="btn btn-secondary">Continuar</button>
-    </form>
-    
-    <form action="{% url 'registrar_orden_medica' %}" method="get">
-        <button type="submit" class="btn btn-secondary">Orden médica</button>
-    </form>
-
-    <form action="{% url 'registrar_receta_medica' %}" method="get">
-        <button type="submit" class="btn btn-secondary">Receta médica</button>
-    </form>
-
-    <form action="{% url 'registrar_certificado_incapacidad' %}" method="get">
-        <button type="submit" class="btn btn-secondary">Incapacidad</button>
-    </form>
-{% endblock %}
+<form id="consulta" oninput="saveFormData('consulta')">
+  <input type="hidden" name="paciente_id" value="{{ paciente.id }}">
+  {% csrf_token %}
+  {{ form.as_p }}
+</form>
+  

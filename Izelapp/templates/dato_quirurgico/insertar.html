@@ -1,0 +1,6 @@
+<form id="dato_quirurgico" oninput="saveFormData('dato_quirurgico')">
+  <input type="hidden" name="paciente_id" value="{{ paciente.id }}">
+  {% csrf_token %}
+  {{ form.as_p }}
+</form>
+  
