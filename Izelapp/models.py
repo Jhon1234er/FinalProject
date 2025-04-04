@@ -322,17 +322,32 @@ class AgendaMedica(models.Model):
 class Cita(models.Model):
     fecha_cita = models.DateField(null=False)
     hora_cita = models.TimeField(null=False)
+
     OPCIONES_ESTADO_CITA = [
-        ('DP','Disponible'),
+        ('DP', 'Disponible'),
         ('agendada', 'Agendada'),
         ('atendida', 'Atendida'),
         ('cancelada', 'Cancelada'),
-        ('NA','No atendida')
+        ('NA', 'No atendida')
     ]
-    estado_cita = models.CharField(max_length=10, null=False, choices=OPCIONES_ESTADO_CITA,default='Agendada')
-    especialidad=models.CharField(max_length=100,null=False ,blank=True)
+
+    estado_cita = models.CharField(max_length=10, null=False, choices=OPCIONES_ESTADO_CITA, default='agendada')
+    especialidad = models.CharField(max_length=100, null=False, blank=True)
+
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='medico_citas')
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='paciente_agenda_cita')
+
+    disponibilidad = models.ForeignKey(
+        'Disponibilidad',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='citas_asociadas'  # ← aquí está el related_name
+    )
+
+    def __str__(self):
+        return f"Cita de {self.paciente} con {self.medico} el {self.fecha_cita} a las {self.hora_cita}"
+
 #endregion
 
 
@@ -403,14 +418,23 @@ class OrdenMedica(models.Model):
 
 
 #region Disponibilidad 
+# models.py
+
 class Disponibilidad(models.Model):
+    ESTADOS = [
+        ('disponible', 'Disponible'),
+        ('ocupado', 'Ocupado'),
+        ('cancelado', 'Cancelado'),
+    ]
+
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
     fecha = models.DateField()
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
     tipo_cita = models.CharField(max_length=50, choices=[('general', 'General'), ('odontologia', 'Odontología')])
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='disponible')  # ← nuevo campo
 
     def __str__(self):
         return f"{self.medico} - {self.fecha} de {self.hora_inicio} a {self.hora_fin}"
-    
+
 #endregion

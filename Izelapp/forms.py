@@ -748,7 +748,7 @@ class OrdenMedicaForm(forms.ModelForm):
 
 
 # region Incapacidad Medica
-class CertificadoIncapacidadForm(forms.ModelForm):
+class DisponibilidadForm(forms.ModelForm):
     class Meta:
         model = Disponibilidad
         fields = [

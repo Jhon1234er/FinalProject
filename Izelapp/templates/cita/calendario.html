@@ -2,44 +2,69 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendario de Citas</title>
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/fullcalendar.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/fullcalendar.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/locale/es.js"></script>
-    <link rel="stylesheet" href="{% static 'css/cita/calendario.css' %}">
+  <meta charset="UTF-8">
+  <title>Calendario de Citas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- CSS de FullCalendar v5 -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      color: #2c3e50;
+    }
+    #calendar {
+      max-width: 900px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
 </head>
 <body>
-    <h1>Calendario de Citas Médicas</h1>
-    <div id="calendar"></div>
 
-    <script>
-        $(document).ready(function() {
-            $('#calendar').fullCalendar({
-                events: "{% url 'obtener_disponibilidad' %}",
-                dayRender: function(date, cell) {
-                    var fecha = date.format('YYYY-MM-DD');
-                    $.ajax({
-                        url: "{% url 'verificar_disponibilidad' %}",
-                        data: {fecha: fecha},
-                        success: function(data) {
-                            if (data.disponible) {
-                                cell.css('background-color', 'amber');
-                            } else {
-                                cell.css('background-color', 'lightgray');
-                            }
-                        }
-                    });
-                },
-                eventClick: function(event) {
-                    window.location.href = "{% url 'confirmar_cita' %}";
-                }
-            });
-        });
-    </script>
+<h1>Calendario de Citas Médicas</h1>
+<div id="calendar"></div>
+
+<!-- JS de FullCalendar v5 -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/locales-all.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      locale: 'es',
+      initialView: 'dayGridMonth',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
+      events: "{% url 'obtener_disponibilidad' %}",
+
+      eventClick: function (info) {
+        const disponibilidadId = info.event.id;
+        if (disponibilidadId) {
+          window.location.href = `/confirmar_cita/${disponibilidadId}/`;
+        } else {
+          alert("Este evento no tiene ID.");
+        }
+      }
+    });
+
+    calendar.render();
+  });
+</script>
+
 </body>
 </html>

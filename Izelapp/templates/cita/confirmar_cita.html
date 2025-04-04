@@ -1,19 +1,43 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
-{% block title %}
-    Confirmar Cita
-{% endblock %}
+{% block title %}Confirmar Cita{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/confirmar_cita.css' %}">
 
+<div class="confirmar-cita-container">
+  <h2>Confirmar Cita</h2>
 
-<h1>Confirmar Cita</h1>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Confirmar Cita</button>
-</form>
+  {% if disponibilidad.0.estado == 'disponible' %}
+    <form method="POST">
+      {% csrf_token %}
+      
+      <table class="tabla-cita">
+        <tr>
+          <td><strong>Médico:</strong></td><td>{{ disponibilidad.0.medico }}</td>
+        </tr>
+        <tr>
+          <td><strong>Fecha:</strong></td><td>{{ disponibilidad.0.fecha }}</td>
+        </tr>
+        <tr>
+          <td><strong>Hora:</strong></td><td>{{ disponibilidad.0.hora_inicio }} - {{ disponibilidad.0.hora_fin }}</td>
+        </tr>
+        <tr>
+          <td><strong>Tipo:</strong></td><td>{{ disponibilidad.0.tipo_cita }}</td>
+        </tr>
+      </table>
 
+      <!-- Campos ocultos -->
+      <input type="hidden" name="fecha_cita" value="{{ disponibilidad.0.fecha }}">
+      <input type="hidden" name="hora_cita" value="{{ disponibilidad.0.hora_inicio }}">
+      <input type="hidden" name="especialidad" value="{{ disponibilidad.0.tipo_cita }}">
+      <input type="hidden" name="disponibilidad" value="{{ disponibilidad.0.id }}">
+
+      <button type="submit" class="btn-confirmar">Confirmar Cita</button>
+    </form>
+  {% else %}
+    <p class="mensaje-no-disponible">La cita ya no está disponible.</p>
+  {% endif %}
+</div>
 {% endblock %}

@@ -89,7 +89,12 @@ def detallar_usuario(request):
     # Renderizar el template correspondiente
     return render(request, template, {'formulario': formulario, 'tipo_usuario': tipo_usuario, 'usuario': usuario})
 
+@login_required
+def ver_mi_cita(request):
+    paciente = request.user.paciente
+    citas = Cita.objects.filter(paciente=paciente).order_by('-fecha_cita', '-hora_cita')
 
+    return render(request, 'paciente/ver_cita.html', {'citas': citas})
 
 def logout_usuario(request):
     logout(request)
@@ -789,17 +794,17 @@ def calendario(request):
 
 def obtener_disponibilidad(request):
     eventos = []
-    # Filtramos las disponibilidades de los médicos
-    for disponibilidad in Disponibilidad.objects.all():
-        evento = {
-            'title': f'{disponibilidad.tipo_cita.capitalize()} disponible',
+
+    for disponibilidad in Disponibilidad.objects.filter(estado='disponible'):
+        eventos.append({
+            'id': disponibilidad.id,
+            'title': f'{disponibilidad.tipo_cita.capitalize()} - {disponibilidad.medico}',
             'start': f'{disponibilidad.fecha}T{disponibilidad.hora_inicio}',
             'end': f'{disponibilidad.fecha}T{disponibilidad.hora_fin}',
-            'color': 'white blue' if disponibilidad.tipo_cita == 'general' else 'blue',
-        }
-        eventos.append(evento)
+        })
 
     return JsonResponse(eventos, safe=False)
+
 
 def verificar_disponibilidad(request):
     fecha = request.GET.get('fecha')
@@ -808,32 +813,61 @@ def verificar_disponibilidad(request):
         return JsonResponse({'disponible': True})
     return JsonResponse({'disponible': False})
 
-def confirmar_cita(request):
+
+def confirmar_cita(request, disponibilidad_id):
+    disponibilidad = get_object_or_404(Disponibilidad, pk=disponibilidad_id)
+
+    if disponibilidad.estado != 'disponible':
+        return render(request, 'cita/no_disponible.html', {'disponibilidad': disponibilidad})
+
+    paciente = request.user.paciente
+
+    ya_tiene_cita = Cita.objects.filter(
+        paciente=paciente,
+        fecha_cita=disponibilidad.fecha,
+        hora_cita=disponibilidad.hora_inicio,
+    ).exists()
+
+    if ya_tiene_cita:
+        messages.warning(request, "Ya tienes una cita agendada en ese horario.")
+        return render(request, 'paciente/perfil.html')
+
     if request.method == 'POST':
-        form = CitaForm(request.POST)
-        if form.is_valid():
-            cita = form.save(commit=False)
-            cita.paciente = request.user.paciente  
-            cita.save()
-            return render(request,'paciente/perfil.html') 
-    else:
-        form = CitaForm()
-    return render(request, 'cita/confirmar_cita.html', {'form': form})
+        # Creamos directamente la cita sin usar el formulario
+        cita = Cita(
+            paciente=paciente,
+            medico=disponibilidad.medico,
+            fecha_cita=disponibilidad.fecha,
+            hora_cita=disponibilidad.hora_inicio,
+            especialidad=disponibilidad.tipo_cita,
+            estado_cita='agendada',
+            disponibilidad=disponibilidad
+        )
+        cita.save()
+
+        disponibilidad.estado = 'pendiente'
+        disponibilidad.save()
+
+        messages.success(request, "Cita confirmada exitosamente.")
+        return render(request, 'paciente/perfil.html')
+
+    return render(request, 'cita/confirmar_cita.html', {
+        'disponibilidad': [disponibilidad]
+    })
 
 
-@login_required
 def gestionar_disponibilidad(request):
     if request.method == 'POST':
         form = DisponibilidadForm(request.POST)
         if form.is_valid():
             disponibilidad = form.save(commit=False)
-            disponibilidad.administrador = request.user.administrador  
+            disponibilidad.estado = 'disponible'  
             disponibilidad.save()
-            return render(request, 'medico/perfil.html') 
+            return render(request, 'administrador/perfil.html')         
     else:
         form = DisponibilidadForm()
+    
     return render(request, 'cita/gestionar_disponibilidad.html', {'form': form})
-
 
 
 

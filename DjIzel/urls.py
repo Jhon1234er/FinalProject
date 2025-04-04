@@ -32,6 +32,7 @@ urlpatterns = [
     path('logout/', logout_usuario, name='logout'),
     path('detallar_usuario/', detallar_usuario, name='detallar_usuario'),
     path('actualizar_usuario/',actualizar_usuario,name='actualizar_usuario'),
+    path('mi-cita/', ver_mi_cita, name='ver_mi_cita'),
 
 
 
@@ -232,7 +233,7 @@ urlpatterns = [
     path('calendario/', calendario, name='calendario'),
     path('obtener_disponibilidad/', obtener_disponibilidad, name='obtener_disponibilidad'),
     path('verificar_disponibilidad/', verificar_disponibilidad, name='verificar_disponibilidad'),
-    path('confirmar_cita/', confirmar_cita, name='confirmar_cita'),
+    path('confirmar_cita/<int:disponibilidad_id>/', confirmar_cita, name='confirmar_cita'),
     path('gestionar_disponibilidad/', gestionar_disponibilidad, name='gestionar_disponibilidad'),
     path('medico/agenda/', agenda_medico, name='agenda_medico')
 

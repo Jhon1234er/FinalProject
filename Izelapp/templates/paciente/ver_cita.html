@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mis Citas{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">📅 Mis Citas Agendadas</h2>
+
+  {% if citas %}
+    <div class="row">
+      {% for cita in citas %}
+        <div class="col-md-6">
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h5 class="card-title">{{ cita.especialidad }}</h5>
+              <p class="card-text"><strong>Médico:</strong> {{ cita.medico }}</p>
+              <p class="card-text"><strong>Fecha:</strong> {{ cita.fecha_cita }}</p>
+              <p class="card-text"><strong>Hora:</strong> {{ cita.hora_cita }}</p>
+              <p class="card-text"><strong>Estado:</strong> {{ cita.estado_cita|title }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info" role="alert">
+      No tienes citas agendadas.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

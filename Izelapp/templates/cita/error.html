@@ -1,0 +1,55 @@
+<!-- error.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Cita no disponible</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>¡Oops! Algo salió mal...</h2>
+        <p><strong>Error:</strong> La cita que intentas confirmar ya ha sido ocupada por otro paciente.</p>
+
+        <p>Lo sentimos, pero la disponibilidad que seleccionaste está marcada como <strong>pendiente</strong> y ya ha sido reservada.</p>
+
+        <p><a href="{% url 'inicio' %}">Regresar al inicio</a> o <a href="{% url 'consultar_disponibilidades' %}">ver otras disponibilidades</a>.</p>
+    </div>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 50px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #d9534f;
+        }
+
+        p {
+            font-size: 1.2em;
+        }
+
+        a {
+            color: #0275d8;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</body>
+</html>
