@@ -37,9 +37,7 @@
                             {% if request.user.medico %}
                                 <li class="opcion-menu"><a class="enlace-menu" href="#">Consultar historias clínicas</a></li>
                                 <li class="opcion-menu"><a class="enlace-menu" href="{% url 'listar_medico' %}">Listar Médicos</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#">Consultar historias clínicas</a></li>
-                                <li><a href="{% url 'gestionar_disponibilidad' %}">Gestionar Disponibilidad</a></li>
-                                <li><a href="{% url 'detallar_usuario' %}">Ver mis datos</a></li>
+                                <li class="opcion-menu"><a class="enlace-menu" href="{% url 'detallar_usuario' %}">Ver mis datos</a></li>
                             {% endif %}
                             {% if request.user.auxiliar %}
                                 <li class="opcion-menu"><a class="enlace-menu" href="#">Ver mis datos de Auxiliar</a></li>

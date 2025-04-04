@@ -433,21 +433,16 @@ class AuxiliarForm(forms.ModelForm):
 
 
 
-#region Consulta
-from django import forms
-from .models import Consulta
 
 class ConsultaForm(forms.ModelForm):
     class Meta:
         model = Consulta
-        fields = [  # Especificamos solo los campos que queremos incluir
+        fields = [
             'especialidad',
             'tratamiento',
             'diagnostico_principal',
             'diagnostico_relacionado',
             'motivo_consulta',
-            'medico',
-            'paciente',
         ]
 
         # Personalización de los widgets
@@ -457,8 +452,6 @@ class ConsultaForm(forms.ModelForm):
             'diagnostico_principal': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Diagnóstico principal'}),
             'diagnostico_relacionado': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Diagnóstico relacionado'}),
             'motivo_consulta': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Motivo de la consulta'}),
-            'medico': forms.Select(attrs={'class': 'form-control'}),
-            'paciente': forms.Select(attrs={'class': 'form-control'}),
         }
 
         # Etiquetas personalizadas
@@ -468,8 +461,7 @@ class ConsultaForm(forms.ModelForm):
             'diagnostico_principal': 'Diagnóstico Principal',
             'diagnostico_relacionado': 'Diagnóstico Relacionado',
             'motivo_consulta': 'Motivo de Consulta',
-            'medico': 'Médico',
-            'paciente': 'Paciente',
+            'medico': 'Médico'
         }
 
 #endregion
@@ -515,8 +507,7 @@ class AntecedenteForm(forms.ModelForm):
     class Meta:
         model = Antecedente
         fields = ['descripcion',
-                  'tipo_antecedente',
-                  'paciente'
+                  'tipo_antecedente'
                   ]
         widgets = {
             'descripcion': forms.Textarea(attrs={'rows': 4}),
@@ -536,8 +527,7 @@ class VacunaForm(forms.ModelForm):
         model = Vacuna
         fields = ['nombre_vacuna',
                   'fecha_aplicacion', 
-                  'dosis', 
-                  'paciente'
+                  'dosis'
                   ]
         widgets = {
             'fecha_aplicacion': forms.DateInput(attrs={'type': 'date'}),
@@ -558,8 +548,7 @@ class DatoQuirurgicoForm(forms.ModelForm):
         model = DatoQuirurgico
         fields = ['tipo_cirugia', 
                   'fecha_cirugia', 
-                  'complicaciones', 
-                  'paciente'
+                  'complicaciones'
                   ]
         widgets = {
             'fecha_cirugia': forms.DateInput(attrs={'type': 'date'}),
@@ -602,7 +591,6 @@ class DatoAntropometricoForm(forms.ModelForm):
         fields = ['altura_decimal', 
                   'peso', 
                   'indice_masa_corporal', 
-                  'paciente'
                   ]
         widgets = {
             'altura_decimal': forms.NumberInput(attrs={'placeholder': 'Altura en metros'}),
@@ -687,8 +675,6 @@ class RecetaMedicaForm(forms.ModelForm):
     class Meta:
         model = RecetaMedica
         fields = [
-            'medico',
-            'paciente',
             'medicamento',
             'concentracion',
             'duracion',
@@ -703,8 +689,6 @@ class RecetaMedicaForm(forms.ModelForm):
         ]
 
     widgets = {
-        'medico': forms.Select(attrs={'class': 'form-control'}),
-        'paciente': forms.Select(attrs={'class': 'form-control'}),
         'medicamento': forms.TextInput(attrs={'class': 'form-control'}),
         'concentracion': forms.TextInput(attrs={'class': 'form-control'}),
         'duracion': forms.TextInput(attrs={'class': 'form-control'}),
@@ -730,12 +714,10 @@ class RecetaMedicaForm(forms.ModelForm):
 class OrdenMedicaForm(forms.ModelForm):
     class Meta:
         model = OrdenMedica
-        fields = ['cups', 'medico', 'paciente', 'especialidad_referido', 'cantidad', 'diagnostico_principal','diagnostico_relacionado', 'motivo', 'vigencia']
+        fields = ['cups', 'especialidad_referido', 'cantidad', 'diagnostico_principal','diagnostico_relacionado', 'motivo', 'vigencia']
         
         widgets = {
             'cups': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Código CUPS'}),
-            'medico': forms.Select(attrs={'class': 'form-control'}),
-            'paciente': forms.Select(attrs={'class': 'form-control'}),
             'especialidad_referido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Especialidad a la que remite'}),
             'cantidad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Cantidad'}),
             'diagnostico_principal': forms.Textarea(attrs={'class': 'form-control','placeholder':'No especificado'}),
@@ -750,18 +732,17 @@ class OrdenMedicaForm(forms.ModelForm):
 # region Incapacidad Medica
 class CertificadoIncapacidadForm(forms.ModelForm):
     class Meta:
-        model = Disponibilidad
-        fields = [
-            'fecha',
-            'hora_inicio', 
-            'hora_fin', 
-            'tipo_cita',
-            'medico',
-            ]
-        widgets={
-            'fecha':forms.DateInput(attrs={'type': 'date',}),
-            'hora_inicio':forms.TimeInput(attrs={'type': 'time'}),
-            'hora_fin':forms.TimeInput(attrs={'type': 'time'}),
+        model = CertificadoIncapacidad
+        fields = ['dias_incapacidad', 'motivo_incapacidad', 'fecha_inicio', 'fecha_fin', 
+                  'diagnostico_principal', 'diagnostico_relacionado', 'observaciones']
+        
+        widgets = {
+            'dias_incapacidad': forms.TextInput(attrs={'class': 'form-control'}),
+            'motivo_incapacidad': forms.TextInput(attrs={'class': 'form-control'}),
+            'fecha_inicio': forms.SelectDateWidget(attrs={'class': 'form-control'}, years=range(2025, 2026)),
+            'fecha_fin': forms.SelectDateWidget(attrs={'class': 'form-control'}, years=range(2025, 2026)),
+            'diagnostico_principal': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Diagnóstico principal'}),
+            'diagnostico_relacionado': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Diagnósticos relacionados'}),
+            'observaciones': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Observaciones'})
         }
-
 #endregion

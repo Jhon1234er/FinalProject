@@ -1,60 +1,6 @@
-{% extends 'base.html' %}
-
-{% block content %}
-    <h1>Registrar Dato Antropométrico</h1>
-
-    <!-- Mostrar mensajes de éxito o error -->
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-
-    <form method="POST">
-        {% csrf_token %}
-        
-        <!-- Renderizar los campos del formulario -->
-        <div class="form-group">
-            <label for="{{ formulario.altura_decimal.id_for_label }}">Altura en metros:</label>
-            {{ formulario.altura_decimal }}
-            {% if formulario.altura_decimal.errors %}
-                <ul class="error-list">
-                    {% for error in formulario.altura_decimal.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="{{ formulario.peso.id_for_label }}">Peso en kg:</label>
-            {{ formulario.peso }}
-            {% if formulario.peso.errors %}
-                <ul class="error-list">
-                    {% for error in formulario.peso.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="{{ formulario.indice_masa_corporal.id_for_label }}">Índice de masa corporal:</label>
-            {{ formulario.indice_masa_corporal }}
-            {% if formulario.indice_masa_corporal.errors %}
-                <ul class="error-list">
-                    {% for error in formulario.indice_masa_corporal.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
-
-
-        <button type="submit" class="btn btn-primary">Registrar</button>
-    </form>
-{% endblock %}
+<form id="dato_antropometrico" oninput="saveFormData('dato_antropometrico')">
+  <input type="hidden" name="paciente_id" value="{{ paciente.id }}">
+  {% csrf_token %}
+  {{ form.as_p }}
+</form>
+  

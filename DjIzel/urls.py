@@ -27,6 +27,12 @@ urlpatterns = [
     #endregion
 
 
+    path('consulta-medica/<int:paciente_id>/', consulta_medica, name='consulta_medica'),
+    path('get-form/<str:form_name>/', get_form, name='get_form'),
+    path('submit-all/', submit_all, name='submit_all'),
+
+
+
     #region Inicio Sesion 
     path('login/', login_usuario, name='login'), 
     path('logout/', logout_usuario, name='logout'),

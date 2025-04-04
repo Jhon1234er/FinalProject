@@ -1,33 +1,6 @@
-{% extends 'base.html' %}
-
-{% load static %}
-
-{% block title %}
-    Orden medica
-{% endblock %}
-
-{% block content %}
-    <h2>Orden medica</h2>
-    <!-- Mostrar los mensajes de error o éxito -->
-    {% if messages %}
-    <div class="messages">
-      {% for message in messages %}
-        <p class="message">{{ message }}</p>
-      {% endfor %}
-    </div>
-    {% endif %}
-
-    
-    <form method="POST">
-    {% csrf_token %}
-    {{ formulario.as_p }}
-    
-    <!-- Botón para enviar el formulario -->
-    <button type="submit">Registrar</button>
-    
-    </form>
-    <form action="{% url 'registrar_consulta' %}" method="get">
-        <button type="submit">Volver a consulta médica</button>
-    </form>
-
-{% endblock %}
+<form id="orden_medica" oninput="saveFormData('orden_medica')">
+  <input type="hidden" name="paciente_id" value="{{ paciente.id }}">
+  {% csrf_token %}
+  {{ form.as_p }}
+</form>
+  
