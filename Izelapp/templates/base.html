@@ -35,7 +35,7 @@
                         {% if request.user.is_authenticated %}
                             <!-- Menú de opciones para usuarios autenticados -->
                             {% if request.user.medico %}
-                                <li class="opcion-menu"><a class="enlace-menu" href="#">Consultar historias clínicas</a></li>
+                                <li class="opcion-menu"><a class="enlace-menu" href="{% url 'agenda_medico' %}">Agenda para hoy</a></li>
                                 <li class="opcion-menu"><a class="enlace-menu" href="{% url 'listar_medico' %}">Listar Médicos</a></li>
                                 <li class="opcion-menu"><a class="enlace-menu" href="{% url 'detallar_usuario' %}">Ver mis datos</a></li>
                             {% endif %}
@@ -177,46 +177,49 @@
     
     <!-- intl-tel-input JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-    
-    <script>
-        $(document).ready(function() {
-            $('.select2').select2({
-                placeholder: "Selecciona una opción",
-                allowClear: true
-            });
-
-            $('.datepicker').datepicker({
-                dateFormat: 'dd/mm/yy',
-                changeMonth: true,
-                changeYear: true,
-                yearRange: "1900:2100",
-                regional: "es"
-            });
-
-            var input = document.querySelector("#id_telefono");
-            var iti = intlTelInput(input, {
-                initialCountry: "auto",
-                geoIpLookup: function(callback) {
-                    fetch('https://ipinfo.io/json')
-                        .then(function(resp) { return resp.json(); })
-                        .then(function(resp) { callback(resp.country); });
-                },
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
-            });
-
-            $('form').on('submit', function() {
-                if (iti.isValidNumber()) {
-                    var hiddenInput = document.createElement("input");
-                    hiddenInput.setAttribute("type", "hidden");
-                    hiddenInput.setAttribute("name", "telefono");
-                    hiddenInput.setAttribute("value", iti.getNumber());
-                    this.appendChild(hiddenInput);
-                } else {
-                    alert("Por favor, ingrese un número de teléfono válido.");
-                    return false;
-                }
-            });
+<script>
+    $(document).ready(function() {
+        // Inicializar Select2 para todos los campos con la clase select2
+        $('.select2').select2({
+            placeholder: function() {
+                return $(this).data('placeholder'); // Usar el placeholder de cada campo, según su atributo data-placeholder
+            },
+            allowClear: true
         });
-    </script>
-</body>
-</html>
+
+        // Inicializar el datepicker para los campos con clase .datepicker
+        $('.datepicker').datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1900:2100",
+            regional: "es"
+        });
+
+        // Inicializar el campo de teléfono con intlTelInput
+        var input = document.querySelector("#id_telefono");
+        var iti = intlTelInput(input, {
+            initialCountry: "auto",
+            geoIpLookup: function(callback) {
+                fetch('https://ipinfo.io/json')
+                    .then(function(resp) { return resp.json(); })
+                    .then(function(resp) { callback(resp.country); });
+            },
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+        });
+
+        // Asegurarse de que el teléfono es válido al enviar el formulario
+        $('form').on('submit', function() {
+            if (iti.isValidNumber()) {
+                var hiddenInput = document.createElement("input");
+                hiddenInput.setAttribute("type", "hidden");
+                hiddenInput.setAttribute("name", "telefono");
+                hiddenInput.setAttribute("value", iti.getNumber());
+                this.appendChild(hiddenInput);
+            } else {
+                alert("Por favor, ingrese un número de teléfono válido.");
+                return false;
+            }
+        });
+    });
+</script>

@@ -177,6 +177,8 @@ class Consulta(models.Model):
     fecha_consulta = models.DateField(auto_now_add=True) 
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='medico_consulta')
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='consultas')
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='medico_consulta')
+
 #endregion
 
 
@@ -238,6 +240,8 @@ class DatoQuirurgico(models.Model):
     fecha_cirugia = models.DateField(null=False)
     complicaciones = models.TextField(max_length=200, null=False)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='datos_quirurgicos')
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='medico_datos_quirurjicos')
+
 #endregion
 
 
@@ -265,6 +269,8 @@ class DatoAntropometrico(models.Model):
     peso = models.DecimalField(max_digits=20, decimal_places=2)
     indice_masa_corporal = models.DecimalField(max_digits=20, decimal_places=2)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='datos_antropometricos')
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='medico_dato_antropometrico')
+
 #endregion
 
 
@@ -438,3 +444,22 @@ class Disponibilidad(models.Model):
         return f"{self.medico} - {self.fecha} de {self.hora_inicio} a {self.hora_fin}"
 
 #endregion
+
+
+
+class TablaReferenciaCIE10(models.Model):
+    tabla=models.CharField(max_length=5,null=False)
+    codigo=models.CharField(max_length=5,unique=True)
+    nombre=models.CharField(max_length=250,null=False)
+    descripcion=models.CharField(max_length=250,null=False)
+    habilitado=models.CharField(max_length=2,null=False)
+    extra_i_aplica_a_sexo=models.CharField(max_length=10,null=False)
+    extra_ii_edad_minima=models.CharField(max_length=3,null=False)
+    extra_iii_edad_maxima=models.CharField(max_length=3,null=False)
+    extra_iv_grupo_mortalidad=models.CharField(max_length=10,null=False)
+    extra_v=models.CharField(max_length=255,null=False)
+    extra_vi_capitulo=models.CharField(max_length=3,null=False)
+    extra_x=models.CharField(max_length=1,null=False)
+    
+    def __str__(self):
+        return f"{self.nombre} - {self.descripcion}"

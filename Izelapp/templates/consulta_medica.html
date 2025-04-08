@@ -28,7 +28,7 @@
     </div>
 
     <!-- Botón para enviar todo -->
-    <button id="submit-button" class="btn btn-success mt-3">Enviar Todo</button>
+    <button type="submit" id="submit-button" class="btn btn-success mt-3">Finalizar consulta</button>
 </div>
 
 <script>
@@ -99,44 +99,53 @@
     }
 
     document.getElementById('submit-button').addEventListener('click', function() {
-        let form = document.querySelector('#form-display form');
-        if (!form) {
-            alert("No hay un formulario cargado.");
-            return;
-        }
+    let forms = document.querySelectorAll('#form-display form');
+    if (forms.length === 0) {
+        alert("No hay formularios cargados.");
+        return;
+    }
 
-        let data = new FormData(form);
-        let jsonData = { paciente_id: pacienteId };
+    let formularioData = [];
 
-        data.forEach((value, key) => {
-            jsonData[key] = value;
+    forms.forEach(form => {
+        let formName = form.getAttribute('data-form-name');
+        let formData = new FormData(form);
+        let data = {};
+        
+        formData.forEach((value, key) => {
+            data[key] = value;
         });
 
-        fetch('/submit-all/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCSRFToken()
-            },
-            body: JSON.stringify(jsonData)
-        })
-        .then(res => {
-            if (!res.ok) {
-                return res.text().then(text => {
-                    console.error("Respuesta inesperada del servidor:", text);
-                    throw new Error("Error al enviar el formulario");
-                });
-            }
-            return res.json();
-        })
-
-        .then(data => {
-            alert(data.message || 'Datos enviados con éxito');
-        })
-        .catch(err => {
-            console.error(err);
-            alert('Error al enviar los datos');
+        formularioData.push({
+            form_name: formName,
+            data: data
         });
     });
+
+    console.log("Datos enviados al backend:", formularioData);  // Esto va a mostrar los datos en la consola
+
+    // Aquí se pasa el formulario con todos los datos
+    fetch('/submit-all/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify({
+            paciente_id: pacienteId,
+            medico_id: medicoId,
+            formularios: formularioData
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message || 'Datos enviados con éxito');
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Error al enviar los datos');
+    });
+});
+
 </script>
 {% endblock %}

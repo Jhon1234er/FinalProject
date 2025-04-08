@@ -20,7 +20,6 @@
                 </tr>
             </thead>
             <tbody>
-                {% for paciente in pacientes %}
                 <tr>
                     <td>06:30</td>  
                     <td>{{ paciente.username }} Paciente</td>  <!-- Mostrar el nombre del paciente -->
@@ -28,11 +27,9 @@
                     <td><input type="checkbox"></td>
                     <td><a href="{% url 'consulta_medica' 1 %}">Empezar</a></td>
                 </tr>
-                {% empty %}
                 <tr>
                     <td colspan="5">No hay pacientes en la agenda.</td>
                 </tr>
-                {% endfor %}
             </tbody>
         </table>
     </div>
