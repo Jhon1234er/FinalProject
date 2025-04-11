@@ -178,6 +178,20 @@
     <!-- intl-tel-input JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 <script>
+
+    function saveFormData(formId) {
+        const form = document.getElementById(formId);
+        if (!form) return;
+
+        const formData = new FormData(form);
+        const json = {};
+        formData.forEach((value, key) => {
+            json[key] = value;
+        });
+
+        sessionStorage.setItem(`form_${formId}`, JSON.stringify(json));
+    }
+    
     $(document).ready(function() {
         // Inicializar Select2 para todos los campos con la clase select2
         $('.select2').select2({
