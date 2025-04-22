@@ -22,7 +22,7 @@
             <div class="contenedor-header">
                 <!-- Logotipo de EPS Izel -->
                 <a class="logo" href="{% url 'home' %}">
-                    <img src="{% static 'img/logo.png' %}" alt="Logo de Izel">
+                    <img src="{% static 'img/logo1.png' %}" alt="Logo de Izel">
                 </a>
                 
                 <!-- Menú de navegación
@@ -48,7 +48,6 @@
                                 <li class="opcion-menu"><a class="enlace-menu" href="{% url 'listar_usuarios' %}">Listar Usuarios</a></li>
                                 <li class="opcion-menu"><a class="enlace-menu" href="{% url 'listar_medico' %}">Listar Médicos</a></li>
                                 <li class="opcion-menu"><a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a></li>
-                                <li class="opcion-menu"><a class="enlace-menu" href="{% url 'listar_auxiliares' %}">Listar Auxiliares</a></li>
                             {% endif %}
                             {% if request.user.paciente %}
                                 <li class="opcion-menu"><a class="enlace-menu"  href="{% url 'calendario' %}">Solicitar cita médica</a></li>

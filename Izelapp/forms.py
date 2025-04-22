@@ -173,7 +173,7 @@ class AdministradorForm(forms.ModelForm):
         widgets = {
             'fecha_nacimiento': forms.DateInput(attrs={'class': 'datepicker', 'type': 'text','placeholder':'Seleccione la fecha de nacimiento'}),
             'rol_acceso': forms.TextInput(attrs={'placeholder': 'Rol de acceso del administrador'}),
-            'centro_administracion': forms.TextInput(attrs={'placeholder': 'Centro de administración'}),
+            'centro_administracion': forms.Select(attrs={'class': 'select2'}),
         }
     
     tipo_doc = forms.ChoiceField(label='Tipo de documento', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_TIPODOC, widget=forms.Select(attrs={'class': 'select2'}))
@@ -321,7 +321,7 @@ class MedicoForm(forms.ModelForm):
         widgets = {
             'fecha_contratacion': forms.DateInput(attrs={'class':'datepicker','type':'text','placeholder':'Ingrese la fecha de contratacion del medico'}),
             'fecha_nacimiento': forms.DateInput(attrs={'class':'datepicker','type': 'text','placeholder':'Ingrese la fecha de nacimiento del medico'}),
-            'especialidad': forms.TextInput(attrs={'placeholder': 'Especialidad del médico'}),
+            'especialidad': forms.Select(attrs={'class': 'select2'}),
             'numero_registro_profesional': forms.TextInput(attrs={'placeholder': 'Número de registro profesional'}),
         }
     
@@ -654,7 +654,7 @@ class CitaForm(forms.ModelForm):
 class DisponibilidadForm(forms.ModelForm):
     class Meta:
         model = Disponibilidad
-        fields = ['medico', 'fecha', 'hora_inicio', 'hora_fin', 'tipo_cita', 'estado']
+        fields = ['medico', 'fecha', 'hora_inicio', 'hora_fin']
 
         widgets = {
             'medico': forms.Select(attrs={

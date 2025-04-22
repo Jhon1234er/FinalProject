@@ -95,37 +95,64 @@ class Paciente(Usuario):
 
 #region Administrador
 class Administrador(Usuario):
-    rol_acceso = models.CharField(max_length=100)  
-    centro_administracion = models.CharField(max_length=255)
-    permisos = models.JSONField()  
+    RUTA_AREAS = [
+        ('Odontologia', 'Odontología'),
+        ('Cirugia', 'Cirugía'),
+        ('General', 'General'),
+        ('Rayos_x', 'Rayos X'),
+    ]
 
+    rol_acceso = models.CharField(max_length=100)
+    centro_administracion = models.CharField(max_length=255, choices=RUTA_AREAS)
+    permisos = models.JSONField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # Asigna los permisos automáticamente al crear un administrador
         if not self.permisos:
-            self.permisos = {
-                "ODONTOLOGIA": {
-                    "medico": {"ver_pacientes": True, "editar_pacientes": True, "ver_historia_clinica": True, "realizar_tratamientos": True},
-                    "auxiliar": {"ver_pacientes": True, "realizar_tratamientos": False},
-                    "administrador": {"ver_pacientes": True, "editar_pacientes": True, "ver_historia_clinica": True, "gestion_usuarios": True}
+            area = self.centro_administracion  # Ya viene validado por choices
+
+            todos_los_permisos = {
+                "Odontologia": {
+                    "administrador": {
+                        "ver_pacientes": True,
+                        "editar_pacientes": True,
+                        "ver_historia_clinica": True,
+                        "gestion_usuarios": True
+                    }
                 },
-                "CIRUGIA": {
-                    "medico": {"ver_pacientes": True, "realizar_cirugia": True, "ver_historia_clinica": True},
-                    "auxiliar": {"ver_pacientes": True, "realizar_cirugia": False},
-                    "administrador": {"ver_pacientes": True, "realizar_cirugia": True, "ver_historia_clinica": True, "gestion_usuarios": True}
+                "Cirugia": {
+                    "administrador": {
+                        "ver_pacientes": True,
+                        "realizar_cirugia": True,
+                        "ver_historia_clinica": True,
+                        "gestion_usuarios": True
+                    }
                 },
-                "GENERAL": {
-                    "medico": {"ver_pacientes": True, "ver_historia_clinica": True},
-                    "auxiliar": {"ver_pacientes": True, "ver_historia_clinica": False},
-                    "administrador": {"ver_pacientes": True, "ver_historia_clinica": True, "gestion_usuarios": True}
+                "General": {
+                    "administrador": {
+                        "ver_pacientes": True,
+                        "ver_historia_clinica": True,
+                        "gestion_usuarios": True
+                    }
                 },
-                "RAYOS_X": {
-                    "medico": {"ver_pacientes": True, "ver_imagenes": True, "realizar_imagenes": True},
-                    "auxiliar": {"ver_pacientes": True, "ver_imagenes": False},
-                    "administrador": {"ver_pacientes": True, "ver_imagenes": True, "realizar_imagenes": True, "gestion_usuarios": True}
+                "Rayos_x": {
+                    "administrador": {
+                        "ver_pacientes": True,
+                        "ver_imagenes": True,
+                        "realizar_imagenes": True,
+                        "gestion_usuarios": True
+                    }
                 }
             }
+
+            permisos_area = todos_los_permisos.get(area)
+            if permisos_area:
+                self.permisos = {area: permisos_area["administrador"]}
+            else:
+                self.permisos = {}
+
         super().save(*args, **kwargs)
+
+
 #endregion
 
 
@@ -133,13 +160,21 @@ class Administrador(Usuario):
 
 #region Medicos
 class Medico(Usuario):
-    especialidad = models.CharField(max_length=100)
+    AREAS = [
+        ('Odontologia', 'Odontología'),
+        ('Cirugia', 'Cirugía'),
+        ('General', 'General'),
+        ('Rayos_x', 'Rayos X'),
+    ]
+    
+    especialidad = models.CharField(max_length=100, choices=AREAS)
     numero_registro_profesional = models.CharField(max_length=50)
     licencia_certificacion = models.BooleanField(default=False)
     fecha_contratacion = models.DateField()
 
     def __str__(self):
         return f"{self.first_name}"
+
 #endregion
 
 

@@ -946,16 +946,42 @@ def confirmar_cita(request, disponibilidad_id):
 
 
 def gestionar_disponibilidad(request):
+
+    try:
+        administrador = request.user.administrador  
+    except Administrador.DoesNotExist:
+        return redirect('error_page')  
+
+    area = None
+    for key in administrador.permisos.keys():
+        area = key  
+        break 
+
     if request.method == 'POST':
         form = DisponibilidadForm(request.POST)
         if form.is_valid():
             disponibilidad = form.save(commit=False)
-            disponibilidad.estado = 'disponible'  
+            
+            # Establecer automáticamente el tipo de cita según el área del administrador
+            if area == 'ODONTOLOGIA':
+                disponibilidad.tipo_cita = 'odontologia'
+            else:
+                disponibilidad.tipo_cita = 'general'
+
+            # Establecer el estado de la disponibilidad
+            disponibilidad.estado = 'disponible'
             disponibilidad.save()
-            return render(request, 'administrador/perfil.html')         
+            
+            return render(request, 'administrador/perfil.html')
     else:
         form = DisponibilidadForm()
-    
+
+        # Filtrar médicos según el área del administrador
+        medicos_area = Medico.objects.filter(especialidad__iexact=area)
+
+        # Limitar las opciones del campo 'medico' en el formulario
+        form.fields['medico'].queryset = medicos_area
+
     return render(request, 'cita/gestionar_disponibilidad.html', {'form': form})
 
 @login_required
