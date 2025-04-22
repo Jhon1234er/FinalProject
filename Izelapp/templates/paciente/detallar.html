@@ -30,8 +30,8 @@
     <tr><th>Tipo de Población:</th><td>{{ usuario.tipo_poblacion }}</td></tr>
     <tr><th>Ocupación:</th><td>{{ usuario.ocupacion }}</td></tr>
     <tr><th>EPS:</th><td>{{ usuario.eps }}</td></tr>
-    <tr><th>Regimen:</th>{{ usuario.paciente.regimen }}</tr>
-    <tr><th>Numero de seguro social:</th>{{ usuario.paciente.numero_seguro_social }}</tr>
+    <tr><th>Regimen:</th><td>{{ usuario.paciente.regimen }}</td></tr>
+    <tr><th>Numero de seguro social:</th><td>{{ usuario.paciente.numero_seguro_social }}</td></tr>
 </table>
 <br>
 <form action="{% url 'actualizar_usuario' id=usuario.id %}" method="get">

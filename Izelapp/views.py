@@ -35,16 +35,17 @@ def home(request):
 
 
 @login_required 
-def consulta_medica(request, paciente_id):
-    paciente = get_object_or_404(Paciente, id=paciente_id)  # Busca al paciente por ID
-    medico = request.user  # El médico es el usuario autenticado
-    
-    # Asegúrate de pasar ambos al contexto de la plantilla
-    return render(request, 'consulta_medica.html', {
-        'paciente': paciente,
-        'medico': medico  # El médico logueado
-    })
+def consulta_medica(request, paciente_id, cita_id):
+    paciente = get_object_or_404(Paciente, id=paciente_id)
+    medico = request.user  
+    cita = get_object_or_404(Cita, id=cita_id)
 
+    return render(request, 'medico/consulta_medica.html', {
+        'paciente': paciente,
+        'medico': medico,
+        'cita': cita
+    })
+    
 def get_form(request, form_name):
     form_classes = {
         'vacuna': VacunaForm,
@@ -71,10 +72,11 @@ def submit_all(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-        except json.JSONDecodeError as e:
+        except json.JSONDecodeError:
             return JsonResponse({"error": "Error en el formato JSON"}, status=400)
 
         paciente_id = data.get("paciente_id")
+        cita_id = data.get("cita_id") 
         formularios = data.get("formularios", [])
 
         if not formularios:
@@ -82,12 +84,9 @@ def submit_all(request):
 
         try:
             paciente = get_object_or_404(Paciente, id=paciente_id)
-            # Filtramos a Medico usando la relación de herencia
-            medico = get_object_or_404(Medico, usuario_ptr=request.user)  # Aquí usamos usuario_ptr
-        except Paciente.DoesNotExist:
-            return JsonResponse({"error": "Paciente no encontrado"}, status=404)
-        except Medico.DoesNotExist:
-            return JsonResponse({"error": "Médico no encontrado"}, status=404)
+            medico = get_object_or_404(Medico, usuario_ptr=request.user)
+        except (Paciente.DoesNotExist, Medico.DoesNotExist):
+            return JsonResponse({"error": "Paciente o Médico no encontrado"}, status=404)
 
         for formulario in formularios:
             form_name = formulario.get("form_name")
@@ -107,11 +106,10 @@ def submit_all(request):
 
             if form_class:
                 form = form_class(campos)
-
                 if form.is_valid():
                     instancia = form.save(commit=False)
-                    instancia.paciente = paciente  # Asignamos el paciente
-                    instancia.medico = medico  # Asignamos el objeto Medico (no Usuario)
+                    instancia.paciente = paciente
+                    instancia.medico = medico
                     instancia.save()
                 else:
                     return JsonResponse({
@@ -119,7 +117,18 @@ def submit_all(request):
                         "errores": form.errors
                     }, status=400)
 
-        return JsonResponse({"message": "Consulta finalizada correctamente"})
+        if cita_id:
+            try:
+                cita = Cita.objects.get(id=cita_id)
+                cita.estado_cita = 'atendida'
+                cita.save()
+            except Cita.DoesNotExist:
+                return JsonResponse({"error": "Cita no encontrada"}, status=404)
+
+        return JsonResponse({
+            "message": "Consulta finalizada correctamente",
+            "redirect_url": reverse('agenda_citas_medico')  # Asegúrate de que este nombre esté correcto
+        })
 
     return JsonResponse({"error": "Método no permitido"}, status=405)
 
@@ -544,9 +553,15 @@ def registrar_consulta(request):
         'formulario_consulta': formulario_consulta,
         'formulario_atp': formulario_atp,
     })
-def lista_consulta(request):
-    consultas = Consulta.objects.all()
-    return render(request, 'consulta/lista.html', {'consultas': consultas})
+
+def lista_consulta(request, paciente_id):
+    paciente = get_object_or_404(Paciente, id=paciente_id)
+    consultas = Consulta.objects.filter(paciente=paciente)
+    return render(request, 'consulta/lista.html', {
+        'consultas': consultas,
+        'paciente': paciente
+    })
+
 
 def actualizar_consulta(request, id):
     consulta = get_object_or_404(Consulta, id=id)
@@ -998,7 +1013,10 @@ def gestionar_disponibilidad(request):
 @login_required
 def agenda_citas_medico(request):
     medico = request.user.medico  
-    citas = Cita.objects.filter(medico=medico).order_by('fecha_cita', 'hora_cita')
+    citas = Cita.objects.filter(
+        medico=medico,
+        estado_cita='agendada'
+    ).order_by('fecha_cita', 'hora_cita')
 
     return render(request, 'medico/agenda.html', {'citas': citas})
 
