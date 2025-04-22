@@ -27,10 +27,6 @@ urlpatterns = [
     #endregion
 
 
-    path('consulta-medica/<int:paciente_id>/', consulta_medica, name='consulta_medica'),
-    path('get-form/<str:form_name>/', get_form, name='get_form'),
-    path('submit-all/', submit_all, name='submit_all'),
-
 
 
     #region Inicio Sesion 
@@ -67,6 +63,9 @@ urlpatterns = [
     path('medico/eliminar/<int:id>/', eliminar_medico, name='eliminar_medico'),
     path('perfil/', login_usuario, name='perfil'),
     path('medico/citas/', agenda_citas_medico, name='agenda_citas_medico'),
+    path('consulta/<int:paciente_id>/<int:cita_id>/',consulta_medica, name='consulta_medica'),
+    path('get-form/<str:form_name>/', get_form, name='get_form'),
+    path('submit-all/', submit_all, name='submit_all'),
     # endregion
 
 
@@ -128,7 +127,7 @@ urlpatterns = [
 
     # region Consulta 
     path('consulta/registrar/', registrar_consulta, name='registrar_consulta'),
-    path('consulta/listar/', lista_consulta, name='listar_consulta'),
+    path('consulta/lista/<int:paciente_id>/', lista_consulta, name='listar_consulta'),
     path('consulta/actualizar/<int:id>/', actualizar_consulta, name='actualizar_consulta'),
     path('consulta/eliminar/<int:id>/', eliminar_consulta, name='eliminar_consulta'),
     # endregion

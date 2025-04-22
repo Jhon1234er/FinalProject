@@ -2,16 +2,21 @@
 
 {% block content %}
 <div class="container">
-    <h2>Consulta Médica - Paciente: {{ paciente.username }}</h2>
+    <h2>Consulta Médica - Paciente: {{ paciente.first_name }} {{ paciente.last_name }}</h2>
 
     <!-- Campo CSRF para acceso desde JS -->
     <form id="csrf-form" style="display: none;">
         {% csrf_token %}
     </form>
+    <form action="{% url 'listar_consulta' paciente.id %}" method="get">
+        <button type="submit" class="btn btn-outline-primary">
+            Consultas anteriores del paciente
+        </button>
+    </form>
 
     <!-- Botones -->
     <div class="btn-group mb-3" role="group">
-        <button class="btn btn-outline-primary" onclick="loadForm('consulta')">Consulta</button>
+        <button class="btn btn-outline-primary" onclick="loadForm('consulta')">Consulta actual</button>
         <button class="btn btn-outline-primary" onclick="loadForm('dato_antropometrico')">Dato Antropométrico</button>
         <button class="btn btn-outline-primary" onclick="loadForm('certificado_incapacidad')">Certificado Incapacidad</button>
         <button class="btn btn-outline-primary" onclick="loadForm('orden_medica')">Orden Médica</button>
@@ -34,6 +39,8 @@
 <script>
     const pacienteId = "{{ paciente.id }}";
     const medicoId = "{{ medico.id }}"; 
+    const citaId = "{{ cita.id }}";
+
     
     // Función para obtener el CSRF token del formulario oculto
     function getCSRFToken() {
@@ -106,53 +113,65 @@
     }
 
     document.getElementById('submit-button').addEventListener('click', function() {
-    let forms = document.querySelectorAll('#form-display form');
-    if (forms.length === 0) {
-        alert("No hay formularios cargados.");
-        return;
-    }
-
-    let formularioData = [];
-
-    forms.forEach(form => {
-        let formName = form.getAttribute('data-form-name');
-        let formData = new FormData(form);
-        let data = {};
-        
-        formData.forEach((value, key) => {
-            data[key] = value;
+        // Confirmación antes de enviar
+        if (!confirm("¿Estás seguro de que deseas finalizar la consulta? Esta acción no se puede deshacer.")) {
+            return;
+        }
+    
+        let forms = document.querySelectorAll('#form-display form');
+        if (forms.length === 0) {
+            alert("No hay formularios cargados.");
+            return;
+        }
+    
+        let formularioData = [];
+    
+        forms.forEach(form => {
+            let formName = form.getAttribute('data-form-name');
+            let formData = new FormData(form);
+            let data = {};
+            
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+    
+            formularioData.push({
+                form_name: formName,
+                data: data
+            });
         });
-
-        formularioData.push({
-            form_name: formName,
-            data: data
-        });
-    });
-
-    console.log("Datos enviados al backend:", formularioData);  // Esto va a mostrar los datos en la consola
-
-    // Aquí se pasa el formulario con todos los datos
-    fetch('/submit-all/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCSRFToken()
-        },
-        body: JSON.stringify({
-            paciente_id: pacienteId,
-            medico_id: medicoId,
-            formularios: formularioData
+    
+        console.log("Datos enviados al backend:", formularioData);
+    
+        fetch('/submit-all/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: JSON.stringify({
+                paciente_id: pacienteId,
+                medico_id: medicoId,
+                cita_id: citaId,
+                formularios: formularioData
+            })
         })
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert(data.message || 'Datos enviados con éxito');
-    })
-    .catch(err => {
-        console.error(err);
-        alert('Error al enviar los datos');
+        .then(response => response.json())
+        .then(json => {
+            if (json.redirect_url) {
+                window.location.href = json.redirect_url;
+            } else if (json.message) {
+                alert(json.message);
+            } else if (json.error) {
+                alert("Error: " + json.error);
+            }
+        })
+        .catch(error => {
+            console.error("Error en el envío:", error);
+            alert("Ocurrió un error al enviar los formularios.");
+        });
     });
-});
+    
 
 </script>
 {% endblock %}

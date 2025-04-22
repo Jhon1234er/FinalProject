@@ -26,7 +26,7 @@
               <td>{{ cita.fecha_cita }}</td>
               <td>{{ cita.hora_cita }}</td>
               <td>{{ cita.especialidad }}</td>
-              <td><a href="{% url 'consulta_medica' cita.paciente.id %}">Comenzar</a></td>
+              <td> <a href="{% url 'consulta_medica' cita.paciente.id cita.id %}">Comenzar</a></td>
             </tr>
           {% endfor %}
         </tbody>

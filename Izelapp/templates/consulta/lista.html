@@ -8,17 +8,19 @@
 
 {% block content %}
 <body>
+    <link rel="stylesheet" href="{% static 'css/consulta/lista.css' %}">
+
     <div class="atenciones__tabla">
-        <h2 class="atenciones__titulo">ULTIMAS ATENCIONES de (NOMBRE DE USUARIO) </h2>
+        <h2 class="atenciones__titulo">Ultimas consultas de <td>{{ paciente.first_name }} {{ paciente.last_name }}</td> </h2>
         <table class="tabla__atenciones">
             <thead>
                 <tr>
-                    <th class="tabla__atenciones--cabecera">FECHA</th>
-                    <th class="tabla__atenciones--cabecera">ESPECIALIDAD</th>
-                    <th class="tabla__atenciones--cabecera">MEDICO</th>
-                    <th class="tabla__atenciones--cabecera">MOTIVO</th>
-                    <th class="tabla__atenciones--cabecera">DIAGNOSTICO PRINCIPAL</th>
-                    <th class="tabla__atenciones--cabecera">DIAGNOSTICOS RELACIONADOS</th>
+                    <th class="tabla__atenciones--cabecera">Fecha</th>
+                    <th class="tabla__atenciones--cabecera">Especialidad</th>
+                    <th class="tabla__atenciones--cabecera">Medico</th>
+                    <th class="tabla__atenciones--cabecera">Motivo</th>
+                    <th class="tabla__atenciones--cabecera">Diagnostico principal</th>
+                    <th class="tabla__atenciones--cabecera">Diagnostico relacionado</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,10 +38,9 @@
         </table>
     </div>
 
-    <div class="contenedor__boton">
-        <a href="/HTML/Medico/recoleccion.html" class="contenedor__boton--enlace">
-            <button class="contenedor__boton--boton">Continuar</button>
-        </a>
+    <div class="contenedor-boton">
+        <button class="contenedor__boton--boton" onclick="history.back()">Volver</button>
     </div>
+    
 {% endblock %}
 
