@@ -34,14 +34,15 @@ def home(request):
 
 
 
-@login_required
+@login_required 
 def consulta_medica(request, paciente_id):
-    paciente = get_object_or_404(Paciente, id=paciente_id)  # Busca al paciente
-    medico = request.user  # Obtiene el usuario autenticado (médico)
-
+    paciente = get_object_or_404(Paciente, id=paciente_id)  # Busca al paciente por ID
+    medico = request.user  # El médico es el usuario autenticado
+    
+    # Asegúrate de pasar ambos al contexto de la plantilla
     return render(request, 'consulta_medica.html', {
         'paciente': paciente,
-        'medico': medico  # Pasamos el médico al contexto
+        'medico': medico  # El médico logueado
     })
 
 def get_form(request, form_name):
@@ -68,14 +69,25 @@ def get_form(request, form_name):
 @csrf_protect
 def submit_all(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError as e:
+            return JsonResponse({"error": "Error en el formato JSON"}, status=400)
 
         paciente_id = data.get("paciente_id")
-        medico_id = data.get("medico_id")
         formularios = data.get("formularios", [])
 
-        paciente = get_object_or_404(Paciente, id=paciente_id)
-        medico = get_object_or_404(Usuario, id=medico_id)
+        if not formularios:
+            return JsonResponse({"error": "No se recibieron formularios"}, status=400)
+
+        try:
+            paciente = get_object_or_404(Paciente, id=paciente_id)
+            # Filtramos a Medico usando la relación de herencia
+            medico = get_object_or_404(Medico, usuario_ptr=request.user)  # Aquí usamos usuario_ptr
+        except Paciente.DoesNotExist:
+            return JsonResponse({"error": "Paciente no encontrado"}, status=404)
+        except Medico.DoesNotExist:
+            return JsonResponse({"error": "Médico no encontrado"}, status=404)
 
         for formulario in formularios:
             form_name = formulario.get("form_name")
@@ -95,12 +107,11 @@ def submit_all(request):
 
             if form_class:
                 form = form_class(campos)
+
                 if form.is_valid():
                     instancia = form.save(commit=False)
-                    if hasattr(instancia, 'paciente'):
-                        instancia.paciente = paciente
-                    if hasattr(instancia, 'medico'):
-                        instancia.medico = medico
+                    instancia.paciente = paciente  # Asignamos el paciente
+                    instancia.medico = medico  # Asignamos el objeto Medico (no Usuario)
                     instancia.save()
                 else:
                     return JsonResponse({
@@ -108,7 +119,7 @@ def submit_all(request):
                         "errores": form.errors
                     }, status=400)
 
-        return JsonResponse({"message": "Todos los formularios fueron guardados correctamente"})
+        return JsonResponse({"message": "Consulta finalizada correctamente"})
 
     return JsonResponse({"error": "Método no permitido"}, status=405)
 

@@ -1,6 +1,7 @@
 <form id="certificado_incapacidad" oninput="saveFormData('certificado_incapacidad')">
   <input type="hidden" name="paciente_id" value="{{ paciente.id }}">
-  {% csrf_token %}
+  <input type="hidden" name="medico_id" value="{{ medico.id }}">
+{% csrf_token %}
   {{ form.as_p }}
 </form>
   

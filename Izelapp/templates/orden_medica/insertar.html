@@ -1,6 +1,7 @@
 <form id="orden_medica" oninput="saveFormData('orden_medica')">
   <input type="hidden" name="paciente_id" value="{{ paciente.id }}">
-  {% csrf_token %}
+  <input type="hidden" name="medico_id" value="{{ medico.id }}">
+{% csrf_token %}
   {{ form.as_p }}
 </form>
   

@@ -435,6 +435,26 @@ class AuxiliarForm(forms.ModelForm):
 
 
 class ConsultaForm(forms.ModelForm):
+    diagnostico_principal = forms.ModelChoiceField(
+        queryset=TablaReferenciaCIE10.objects.all(),
+        empty_label="Seleccione un diagnóstico principal",
+        widget=forms.Select(attrs={
+            'class': 'form-control select2',
+            'data-placeholder': 'Seleccione un diagnóstico principal'
+        }),
+        required=True
+    )
+
+    diagnostico_relacionado = forms.ModelChoiceField(
+        queryset=TablaReferenciaCIE10.objects.all(),
+        empty_label="Seleccione un diagnóstico relacionado",
+        widget=forms.Select(attrs={
+            'class': 'form-control select2',
+            'data-placeholder': 'Seleccione un diagnóstico relacionado'
+        }),
+        required=False  # Puede ser opcional
+    )
+
     class Meta:
         model = Consulta
         fields = [
@@ -449,8 +469,8 @@ class ConsultaForm(forms.ModelForm):
         widgets = {
             'especialidad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Especialidad'}),
             'tratamiento': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Descripción del tratamiento'}),
-            'diagnostico_principal': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Diagnóstico principal'}),
-            'diagnostico_relacionado': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Diagnóstico relacionado'}),
+            'diagnostico_principal': forms.Select(attrs={'class': 'select2', 'placeholder': 'Diagnóstico principal'}),
+            'diagnostico_relacionado': forms.Select(attrs={'class': 'select2', 'placeholder': 'Diagnóstico relacionado'}),
             'motivo_consulta': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Motivo de la consulta'}),
         }
 
@@ -724,13 +744,32 @@ class RecetaMedicaForm(forms.ModelForm):
         'duracion': forms.TextInput(attrs={'class': 'form-control'}),
         'cantidad': forms.TextInput(attrs={'class': 'form-control'}),
         'via_administracion': forms.TextInput(attrs={'class': 'form-control'}),
-        'diagnostico_principal': forms.Textarea(attrs={'class': 'form-control','placeholder':'No especificado'}),
-        'diagnostico_relacionado': forms.Textarea(attrs={'class': 'form-control','placeholder':'No especificado'}),
         'intervalo': forms.TextInput(attrs={'class': 'form-control'}),
         'recomendaciones': forms.TextInput(attrs={'class': 'form-control'}),
         'indicaciones': forms.TextInput(attrs={'class': 'form-control'}),
         'fecha_medicado': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),  # Solo lectura
     }
+
+    diagnostico_principal = forms.ModelChoiceField(
+        queryset=TablaReferenciaCIE10.objects.all(),
+        empty_label="Seleccione un diagnóstico principal",
+        widget=forms.Select(attrs={
+            'class': 'form-control select2',
+            'data-placeholder': 'Seleccione un diagnóstico principal'
+        }),
+        required=True
+    )
+
+    diagnostico_relacionado = forms.ModelChoiceField(
+        queryset=TablaReferenciaCIE10.objects.all(),
+        empty_label="Seleccione un diagnóstico relacionado",
+        widget=forms.Select(attrs={
+            'class': 'form-control select2',
+            'data-placeholder': 'Seleccione un diagnóstico relacionado'
+        }),
+        required=False  # Puede ser opcional
+    )
+
 
 #endregion
 
@@ -742,6 +781,26 @@ class RecetaMedicaForm(forms.ModelForm):
 
 #region OrdeneMedica
 class OrdenMedicaForm(forms.ModelForm):
+    diagnostico_principal = forms.ModelChoiceField(
+        queryset=TablaReferenciaCIE10.objects.all(),
+        empty_label="Seleccione un diagnóstico principal",
+        widget=forms.Select(attrs={
+            'class': 'form-control select2',
+            'data-placeholder': 'Seleccione un diagnóstico principal'
+        }),
+        required=True
+    )
+
+    diagnostico_relacionado = forms.ModelChoiceField(
+        queryset=TablaReferenciaCIE10.objects.all(),
+        empty_label="Seleccione un diagnóstico relacionado",
+        widget=forms.Select(attrs={
+            'class': 'form-control select2',
+            'data-placeholder': 'Seleccione un diagnóstico relacionado'
+        }),
+        required=False  # Puede ser opcional
+    )
+
     class Meta:
         model = OrdenMedica
         fields = ['cups', 'especialidad_referido', 'cantidad', 'diagnostico_principal','diagnostico_relacionado', 'motivo', 'vigencia']
@@ -755,6 +814,45 @@ class OrdenMedicaForm(forms.ModelForm):
             'motivo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Motivo de la orden'}),
             'fecha_ordenado': forms.DateInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
             'vigencia': forms.SelectDateWidget(attrs={'class': 'form-control'}, years=range(2025, 2026)),
+        }
+#endregion
+
+
+
+# region Incapacidad Medica
+class CertificadoIncapacidadForm(forms.ModelForm):
+    diagnostico_principal = forms.ModelChoiceField(
+        queryset=TablaReferenciaCIE10.objects.all(),
+        empty_label="Seleccione un diagnóstico principal",
+        widget=forms.Select(attrs={
+            'class': 'form-control select2',
+            'data-placeholder': 'Seleccione un diagnóstico principal'
+        }),
+        required=True
+    )
+
+    diagnostico_relacionado = forms.ModelChoiceField(
+        queryset=TablaReferenciaCIE10.objects.all(),
+        empty_label="Seleccione un diagnóstico relacionado",
+        widget=forms.Select(attrs={
+            'class': 'form-control select2',
+            'data-placeholder': 'Seleccione un diagnóstico relacionado'
+        }),
+        required=False  # Puede ser opcional
+    )
+
+
+    class Meta:
+        model = CertificadoIncapacidad
+        fields = ['dias_incapacidad', 'motivo_incapacidad', 'fecha_inicio', 'fecha_fin', 
+                  'diagnostico_principal', 'diagnostico_relacionado', 'observaciones']
+        
+        widgets = {
+            'dias_incapacidad': forms.TextInput(attrs={'class': 'form-control'}),
+            'motivo_incapacidad': forms.TextInput(attrs={'class': 'form-control'}),
+            'fecha_inicio': forms.SelectDateWidget(attrs={'class': 'form-control'}, years=range(2025, 2026)),
+            'fecha_fin': forms.SelectDateWidget(attrs={'class': 'form-control'}, years=range(2025, 2026)),
+            'observaciones': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Observaciones'})
         }
 #endregion
 
