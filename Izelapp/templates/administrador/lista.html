@@ -3,6 +3,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/usuario/lista.css' %}">+
+<div class="contenido-citas">
 
   <h2>Lista de Administradores</h2>
   <table>
@@ -28,6 +29,5 @@
       {% endfor %}
     </tbody>
   </table>
-
-  <p><a href="{% url 'registrar_administrador' %}">Crear un nuevo administrador</a></p>
+</div>
 {% endblock %}

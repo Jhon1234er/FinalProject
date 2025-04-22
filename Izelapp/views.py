@@ -4,11 +4,19 @@ from django.contrib.auth import login, logout, authenticate
 from Izelapp.forms import *
 from Izelapp.models import *
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse,JsonResponse
+from django.http import JsonResponse
 from datetime import date
 import locale
 import json
 from django.views.decorators.csrf import csrf_protect
+from Izelapp.utils import *
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
+from django.shortcuts import redirect
+
+Usuario = get_user_model()
 
 
 
@@ -902,6 +910,7 @@ def confirmar_cita(request, disponibilidad_id):
 
     paciente = request.user.paciente
 
+    # Verificar si el paciente ya tiene una cita a esa misma fecha y hora
     ya_tiene_cita = Cita.objects.filter(
         paciente=paciente,
         fecha_cita=disponibilidad.fecha,
@@ -909,11 +918,10 @@ def confirmar_cita(request, disponibilidad_id):
     ).exists()
 
     if ya_tiene_cita:
-        messages.warning(request, "Ya tienes una cita agendada en ese horario.")
-        return render(request, 'paciente/perfil.html')
+        return render(request, 'cita/no_disponible.html', {'disponibilidad': disponibilidad})
 
     if request.method == 'POST':
-        # Creamos directamente la cita sin usar el formulario
+        # Crear la cita
         cita = Cita(
             paciente=paciente,
             medico=disponibilidad.medico,
@@ -925,6 +933,7 @@ def confirmar_cita(request, disponibilidad_id):
         )
         cita.save()
 
+        # Cambiar estado de la disponibilidad
         disponibilidad.estado = 'pendiente'
         disponibilidad.save()
 
@@ -949,18 +958,59 @@ def gestionar_disponibilidad(request):
     
     return render(request, 'cita/gestionar_disponibilidad.html', {'form': form})
 
+@login_required
+def agenda_citas_medico(request):
+    medico = request.user.medico  
+    citas = Cita.objects.filter(medico=medico).order_by('fecha_cita', 'hora_cita')
+
+    return render(request, 'medico/agenda.html', {'citas': citas})
 
 
-def agenda_medico(request):
-    fecha_actual = date.today().strftime("%d-%B-%Y") 
-    pacientes = Paciente.objects.all()  # Obtener todos los pacientes de la BD
-
-    return render(request, 'medico/agenda.html', {
-        'fecha_actual': fecha_actual,
-        'pacientes': pacientes  # Enviar pacientes al template
-    })
 
 #endregion
 
 
 
+#region contraseña
+
+def solicitar_recuperacion(request):
+    if request.method == 'POST':
+        form = RecuperarCuentaForm(request.POST)
+        if form.is_valid():
+            documento = form.cleaned_data['documento']
+            try:
+                usuario = Usuario.objects.get(num_doc=documento)
+                enviar_correo_recuperacion(request, usuario)
+                return render(request, 'correo_enviado.html', {'correo': usuario.email})
+            except Usuario.DoesNotExist:
+                messages.error(request, "No se encontró ningún usuario con ese documento.")
+    else:
+        form = RecuperarCuentaForm()
+
+    return render(request, 'solicitar_recuperacion.html', {'form': form})
+
+
+def resetear_contraseña(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        usuario = Usuario.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, Usuario.DoesNotExist):
+        usuario = None
+
+    if usuario is not None and default_token_generator.check_token(usuario, token):
+        if request.method == 'POST':
+            nueva_contra = request.POST.get('nueva_contrasena')
+            confirmar = request.POST.get('confirmar_contrasena')
+
+            if nueva_contra and nueva_contra == confirmar:
+                usuario.password = make_password(nueva_contra)
+                usuario.save()
+                messages.success(request, 'Tu contraseña ha sido restablecida con éxito.')
+                return redirect('login')  # o la vista de login que tengas
+            else:
+                messages.error(request, 'Las contraseñas no coinciden.')
+        return render(request, 'restablecer_contraseña.html', {'valido': True})
+    else:
+        return render(request, 'restablecer_contraseña.html', {'valido': False})
+
+#endregion

@@ -623,15 +623,7 @@ class HorarioMedicoForm(forms.ModelForm):
 
 
 
-#region AgendaMedico
-class AgendaMedicaForm(forms.ModelForm):
-    class Meta:
-        model = AgendaMedica
-        fields = ['medico', 'hora', 'paciente', 'motivo']
-        widgets = {
-            'hora': forms.TimeInput(attrs={'type': 'time'}),
-        }
-#endregion
+
 
 
 
@@ -658,7 +650,45 @@ class CitaForm(forms.ModelForm):
 
 
 
+#region Disponibilidad
+class DisponibilidadForm(forms.ModelForm):
+    class Meta:
+        model = Disponibilidad
+        fields = ['medico', 'fecha', 'hora_inicio', 'hora_fin', 'tipo_cita', 'estado']
 
+        widgets = {
+            'medico': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+            'fecha': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-control'
+            }),
+            'hora_inicio': forms.TimeInput(attrs={
+                'type': 'time',
+                'class': 'form-control'
+            }),
+            'hora_fin': forms.TimeInput(attrs={
+                'type': 'time',
+                'class': 'form-control'
+            }),
+            'tipo_cita': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+            'estado': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+        }
+
+        labels = {
+            'medico': 'Médico',
+            'fecha': 'Fecha',
+            'hora_inicio': 'Hora de Inicio',
+            'hora_fin': 'Hora de Fin',
+            'tipo_cita': 'Tipo de Cita',
+            'estado': 'Estado',
+        }
+#endregion
 
 
 
@@ -730,7 +760,7 @@ class OrdenMedicaForm(forms.ModelForm):
 
 
 # region Incapacidad Medica
-class DisponibilidadForm(forms.ModelForm):
+class CertificadoIncapacidadForm(forms.ModelForm):
     class Meta:
         model = CertificadoIncapacidad
         fields = ['dias_incapacidad', 'motivo_incapacidad', 'fecha_inicio', 'fecha_fin', 
@@ -746,3 +776,12 @@ class DisponibilidadForm(forms.ModelForm):
             'observaciones': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Observaciones'})
         }
 #endregion
+
+
+
+#region contraseña
+
+class RecuperarCuentaForm(forms.Form):
+    documento = forms.CharField(label="Número de documento", max_length=20)
+
+#endregion  

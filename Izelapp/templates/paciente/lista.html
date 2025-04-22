@@ -4,6 +4,8 @@
 {% block content %}
   <link rel="stylesheet" href="{% static 'css/usuario/lista.css' %}">
 
+  <div class="contenido-citas">
+
   <h2>Lista de Usuarios</h2>
   
   <table>
@@ -23,14 +25,14 @@
     <tbody>
       {% for usuario in usuarios %}
         <tr>
-          <td>{{ usuario.username }}</td>
+          <td>{{ usuario.paciente.username }}</td>
           <td>{{ usuario.tipo_doc }}</td>
           <td>{{ usuario.num_doc }}</td>
-          <td>{{usuario.first_name }}</td>
-          <td>{{usuario.last_name }}</td>
-          <td>{{usuario.email }}</td>
-          <td>{{usuario.telefono }}</td>
-          <td>{{usuario.eps }}</td>
+          <td>{{ usuario.first_name }}</td>
+          <td>{{ usuario.last_name }}</td>
+          <td>{{ usuario.email }}</td>
+          <td>{{ usuario.telefono }}</td>
+          <td>{{ usuario.eps }}</td>
 
           <td>
             <a href="{% url 'actualizar_usuario' usuario.id %}">Actualizar</a> |
@@ -44,9 +46,10 @@
       {% endfor %}
     </tbody>
   </table>
-
+</div>
   <p>Cantidad: {{ conteo }}</p>
 
   <br>
+
 
 {% endblock %}

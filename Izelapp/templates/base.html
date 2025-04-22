@@ -35,8 +35,7 @@
                         {% if request.user.is_authenticated %}
                             <!-- Menú de opciones para usuarios autenticados -->
                             {% if request.user.medico %}
-                                <li class="opcion-menu"><a class="enlace-menu" href="#">Consultar historias clínicas</a></li>
-                                <li class="opcion-menu"><a class="enlace-menu" href="{% url 'listar_medico' %}">Listar Médicos</a></li>
+                                <li class="opcion-menu"><a class="enlace-menu" href="{% url 'agenda_citas_medico' %}">Consultar Agenda</a></li>
                                 <li class="opcion-menu"><a class="enlace-menu" href="{% url 'detallar_usuario' %}">Ver mis datos</a></li>
                             {% endif %}
                             {% if request.user.auxiliar %}
@@ -54,7 +53,6 @@
                             {% if request.user.paciente %}
                                 <li class="opcion-menu"><a class="enlace-menu"  href="{% url 'calendario' %}">Solicitar cita médica</a></li>
                                 <li class="opcion-menu"><a class="enlace-menu" href="{% url 'ver_mi_cita' %}">Mis Citas</a></li>
-                                <li class="opcion-menu"><a class="enlace-menu" href="{% url 'listar_paciente' %}">Listar Pacientes</a></li>
                                 <li class="opcion-menu"><a class="enlace-menu" href="{% url 'detallar_usuario' %}">Mis datos</a></li>
                             {% endif %}
                             <li class="opcion-menu"><a class="enlace-menu" href="{% url 'logout' %}">Cerrar sesión</a></li>
