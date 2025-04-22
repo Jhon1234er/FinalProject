@@ -3,7 +3,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/usuario/lista.css' %}">
-
+<div class="contenido-citas">
 
   <h2>Lista de Médicos</h2>
   <table>
@@ -29,6 +29,5 @@
       {% endfor %}
     </tbody>
   </table>
-
-  <p><a href="{% url 'registrar_medico' %}">Crear un nuevo médico</a></p>
+</div>
 {% endblock %}

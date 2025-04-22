@@ -39,6 +39,9 @@ urlpatterns = [
     path('detallar_usuario/', detallar_usuario, name='detallar_usuario'),
     path('actualizar_usuario/',actualizar_usuario,name='actualizar_usuario'),
     path('mi-cita/', ver_mi_cita, name='ver_mi_cita'),
+    path('recuperar/', solicitar_recuperacion, name='recuperar_cuenta'),
+    path('reset-password/<uidb64>/<token>/', resetear_contraseña, name='reset_password'),  
+
 
 
 
@@ -63,7 +66,7 @@ urlpatterns = [
     path('medico/actualizar/<int:id>/', actualizar_medico, name='actualizar_medico'),
     path('medico/eliminar/<int:id>/', eliminar_medico, name='eliminar_medico'),
     path('perfil/', login_usuario, name='perfil'),
-    # path('medico/agenda/',name='agenda_medico'),
+    path('medico/citas/', agenda_citas_medico, name='agenda_citas_medico'),
     # endregion
 
 
@@ -241,6 +244,5 @@ urlpatterns = [
     path('verificar_disponibilidad/', verificar_disponibilidad, name='verificar_disponibilidad'),
     path('confirmar_cita/<int:disponibilidad_id>/', confirmar_cita, name='confirmar_cita'),
     path('gestionar_disponibilidad/', gestionar_disponibilidad, name='gestionar_disponibilidad'),
-    path('medico/agenda/', agenda_medico, name='agenda_medico')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
