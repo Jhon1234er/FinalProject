@@ -2,6 +2,7 @@ from django import forms
 from Izelapp.models import *
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from datetime import date, datetime, timedelta
 
 
 #region Usuario
@@ -671,33 +672,17 @@ class CitaForm(forms.ModelForm):
 
 
 #region Disponibilidad
+
 class DisponibilidadForm(forms.ModelForm):
     class Meta:
         model = Disponibilidad
         fields = ['medico', 'fecha', 'hora_inicio', 'hora_fin']
 
         widgets = {
-            'medico': forms.Select(attrs={
-                'class': 'form-control'
-            }),
-            'fecha': forms.DateInput(attrs={
-                'type': 'date',
-                'class': 'form-control'
-            }),
-            'hora_inicio': forms.TimeInput(attrs={
-                'type': 'time',
-                'class': 'form-control'
-            }),
-            'hora_fin': forms.TimeInput(attrs={
-                'type': 'time',
-                'class': 'form-control'
-            }),
-            'tipo_cita': forms.Select(attrs={
-                'class': 'form-control'
-            }),
-            'estado': forms.Select(attrs={
-                'class': 'form-control'
-            }),
+            'medico': forms.Select(attrs={'class': 'form-control'}),
+            'fecha': forms.DateInput(attrs={'class':'datepicker','type': 'text','placeholder':'Ingrese la fecha de la cita a agregar'}),
+            'hora_inicio': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+            'hora_fin': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
         }
 
         labels = {
@@ -705,9 +690,25 @@ class DisponibilidadForm(forms.ModelForm):
             'fecha': 'Fecha',
             'hora_inicio': 'Hora de Inicio',
             'hora_fin': 'Hora de Fin',
-            'tipo_cita': 'Tipo de Cita',
-            'estado': 'Estado',
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        fecha = cleaned_data.get('fecha')
+        hora_inicio = cleaned_data.get('hora_inicio')
+        hora_fin = cleaned_data.get('hora_fin')
+
+        # Validación 1: solo permitir fechas futuras (no hoy ni pasadas)
+        if fecha:
+            if fecha <= date.today():
+                raise ValidationError("Solo se pueden agendar disponibilidades en fechas futuras.")
+
+        # Validación 2: diferencia exacta de 30 minutos entre hora_inicio y hora_fin
+        if hora_inicio and hora_fin:
+            diferencia = datetime.combine(date.today(), hora_fin) - datetime.combine(date.today(), hora_inicio)
+            if diferencia != timedelta(minutes=30):
+                raise ValidationError("La hora final debe ser exactamente 30 minutos después de la hora de inicio.")
+
 #endregion
 
 

@@ -9,14 +9,22 @@
   <table>
     <thead>
       <tr>
-        <th>Fecha de Contratación</th>
+        <th>Nombres</th>
+        <th>Apellidos</th>
+        <th>Correo</th>
+        <th>Numero Telefonico</th>
+        <th>Centro de Administracion</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
       {% for administrador in administradores %}
         <tr>
-          <td>{{ administrador.fecha_contratacion }}</td>
+          <td>{{ administrador.first_name }}</td>
+          <td>{{ administrador.last_name }}</td>
+          <td>{{ administrador.email }}</td>
+          <td>{{ administrador.telefono }}</td>
+          <td>{{ administrador.centro_administracion }}</td>
           <td>
             <a href="{% url 'actualizar_administrador' administrador.id %}">Editar</a>
             <a href="{% url 'eliminar_administrador' administrador.id %}" onclick="return confirm('¿Estás seguro de eliminar este administrador?');">Eliminar</a>

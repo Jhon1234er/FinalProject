@@ -7,7 +7,6 @@
 {% endblock %}
 
 {% block content %}
-<body>
     <link rel="stylesheet" href="{% static 'css/consulta/lista.css' %}">
 
     <div class="atenciones__tabla">
@@ -30,8 +29,9 @@
                     <td class="tabla__atenciones--celda-2">{{ consulta.especialidad }}</td>
                     <td class="tabla__atenciones--celda-3">{{ consulta.medico }}</td>
                     <td class="tabla__atenciones--celda-4">{{ consulta.motivo_consulta}}</td>
-                    <td class="tabla__atenciones--celda-5">{{ consulta.diagnostico_principal }}</td>
-                    <td class="tabla__atenciones--celda-5">{{ consulta.diagnostico_relacionado }}</td>
+                    <td class="diagnostico">{{ consulta.diagnostico_principal|capfirst }}</td>
+                    <td class="diagnostico">{{ consulta.diagnostico_relacionado|capfirst }}</td>
+                    
                 {% endfor %}
                 </tr>
             </tbody>

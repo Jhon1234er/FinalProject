@@ -936,16 +936,27 @@ def confirmar_cita(request, disponibilidad_id):
 
     paciente = request.user.paciente
 
-    # Verificar si el paciente ya tiene una cita a esa misma fecha y hora
-    ya_tiene_cita = Cita.objects.filter(
+    inicio_nueva = datetime.combine(disponibilidad.fecha, disponibilidad.hora_inicio)
+    fin_nueva = datetime.combine(disponibilidad.fecha, disponibilidad.hora_fin)
+
+    citas_en_dia = Cita.objects.filter(
         paciente=paciente,
-        fecha_cita=disponibilidad.fecha,
-        hora_cita=disponibilidad.hora_inicio,
-    ).exists()
+        fecha_cita=disponibilidad.fecha
+    )
 
-    if ya_tiene_cita:
+    conflicto = False
+    for cita in citas_en_dia:
+        inicio_existente = datetime.combine(cita.fecha_cita, cita.hora_cita)
+        fin_existente = inicio_existente + timedelta(minutes=30)  
+
+        if inicio_nueva < fin_existente and fin_nueva > inicio_existente:
+            conflicto = True
+            break
+
+    if conflicto:
         return render(request, 'cita/no_disponible.html', {'disponibilidad': disponibilidad})
-
+    
+    
     if request.method == 'POST':
         # Crear la cita
         cita = Cita(

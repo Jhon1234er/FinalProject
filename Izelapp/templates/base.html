@@ -44,9 +44,9 @@
                             {% endif %}
                             {% if request.user.administrador %}
                                 <li class="opcion-menu"><a class="enlace-menu" href="{% url 'gestionar_disponibilidad' %}">Gestionar Disponibilidad</a></li>
-                                <li class="opcion-menu"><a class="enlace-menu" href="{% url 'listar_administrador' %}">Listar Administradores</a></li>
-                                <li class="opcion-menu"><a class="enlace-menu" href="{% url 'listar_usuarios' %}">Listar Usuarios</a></li>
-                                <li class="opcion-menu"><a class="enlace-menu" href="{% url 'listar_medico' %}">Listar Médicos</a></li>
+                                <li class="opcion-menu"><a class="enlace-menu" href="{% url 'listar_administrador' %}">Lista Administradores</a></li>
+                                <li class="opcion-menu"><a class="enlace-menu" href="{% url 'listar_paciente' %}">Lista Pacientes</a></li>
+                                <li class="opcion-menu"><a class="enlace-menu" href="{% url 'listar_medico' %}">Lista Médicos</a></li>
                                 <li class="opcion-menu"><a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a></li>
                             {% endif %}
                             {% if request.user.paciente %}

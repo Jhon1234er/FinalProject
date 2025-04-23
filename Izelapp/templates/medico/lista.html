@@ -9,6 +9,11 @@
   <table>
     <thead>
       <tr>
+        <th>Nombres</th>
+        <th>Apellidos</th>
+        <th>Correo</th>
+        <th>Numero Telefonico</th>
+        <th>Fecha de Contracion</th>
         <th>Especialidad</th>
         <th>Acciones</th>
       </tr>
@@ -16,6 +21,11 @@
     <tbody>
       {% for medico in medicos %}
         <tr>
+          <td>{{ medico.first_name }}</td>
+          <td>{{ medico.last_name }}</td>
+          <td>{{ medico.email }}</td>
+          <td>{{ medico.telefono }}</td>
+          <td>{{ medico.fecha_contratacion }}</td>
           <td>{{ medico.especialidad }}</td>
           <td>
             <a href="{% url 'actualizar_medico' medico.id %}">Editar</a>
