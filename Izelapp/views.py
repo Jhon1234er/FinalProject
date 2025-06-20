@@ -235,7 +235,7 @@ def registrar_usuario(request):
     return render(request, 'usuario/insertar.html', {'formulario': formulario})
 
 
-
+@login_required
 def actualizar_usuario(request, id):
     usuario = get_object_or_404(Usuario, id=id)
     if request.method == 'POST':
@@ -264,16 +264,18 @@ def eliminar_usuario(request, id):
     return redirect('listar_usuarios')
 
 
+
+@login_required
 def eliminar_imagen_usuario(request):
     usuario = request.user
-    if usuario.imagen:
-        usuario.imagen.delete()
-        usuario.imagen = None
+    if request.method == 'POST' and usuario.imagen:
+        # Borra el archivo físico
+        ruta = usuario.imagen.path
+        usuario.imagen.delete(save=False)
+        if os.path.exists(ruta):
+            os.remove(ruta)
         usuario.save()
-        messages.success(request, 'Imagen eliminada exitosamente')
-    else:
-        messages.error(request, 'No hay imagen para eliminar')
-    return redirect('detallar_usuario')
+    return redirect('detallar_usuario')  
 
 
 #endregion
@@ -432,6 +434,7 @@ def eliminar_ti(request, id):
 
 
 #region  Medicos 
+
 def registrar_medico(request):
     if request.method == 'POST':
         formulario = MedicoForm(request.POST)
@@ -448,25 +451,28 @@ def registrar_medico(request):
 
     return render(request, 'medico/insertar.html', {'formulario': formulario})
 
+@login_required
 
 def lista_medico(request):
     medicos = Medico.objects.all()
     return render(request, 'medico/lista.html', {'medicos': medicos})
-
+@login_required
 def actualizar_medico(request, id):
     medico = get_object_or_404(Medico, id=id)
     if request.method == 'POST':
-        formulario = MedicoForm(request.POST, instance=medico)
+        formulario = MedicoUpdateForm(request.POST, instance=medico)
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Médico actualizado exitosamente.')
-            return redirect('listar_medico')
+            return redirect('detallar_usuario')
         else:
             messages.error(request, 'Por favor, revisa los campos.')
     else:
-        formulario = MedicoForm(instance=medico)
-    return render(request, 'medico/actualizar.html', {'formulario': formulario})
-
+        formulario = MedicoUpdateForm(instance=medico)
+    return render(request, 'medico/actualizar.html', {
+        'formulario': formulario,
+        'usuario': medico  
+    })
 def eliminar_medico(request, id):
     medico = get_object_or_404(Medico, id=id)
     medico.delete()

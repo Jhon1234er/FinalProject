@@ -362,6 +362,16 @@ class MedicoForm(forms.ModelForm):
             if fecha_contratacion < timezone.now().date():
                 raise ValidationError("La fecha de contratación no puede ser una fecha pasada.")
         return fecha_contratacion
+    
+
+class MedicoUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Medico
+        fields = ['email', 'telefono', 'tipo_poblacion']
+
+    email = forms.EmailField(label='Correo', required=True)
+    telefono = forms.CharField(label='Teléfono', required=False)
+    tipo_poblacion = forms.CharField(label='Tipo de Población', required=False)
 #endregion
 
 

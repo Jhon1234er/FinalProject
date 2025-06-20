@@ -1,0 +1,224 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+}
+
+.imagen-perfil-contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.imagen-wrapper img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+.acciones-imagen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.texto-cambiar {
+    background-color: #e0e0e0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #333;
+}
+
+.form-eliminar button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    width: 70px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.form-eliminar button:hover {
+    background-color: #c0392b;
+}
+
+.form-eliminar svg {
+    pointer-events: none;
+}
+
+#id_imagen {
+    display: none;
+}
+
+.form-imagen button {
+    margin-top: 15px;
+    background-color: #3498db;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-imagen button:hover {
+    background-color: #2980b9;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-contenido {
+    background-color: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-contenido h3 {
+    margin-bottom: 10px;
+}
+
+.modal-botones {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.modal-botones button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#cancelar-btn {
+    background-color: #bdc3c7;
+    color: #2c3e50;
+}
+
+#cancelar-btn:hover {
+    background-color: #95a5a6;
+}
+
+#confirmar-btn {
+    background-color: #e74c3c;
+    color: white;
+}
+
+#confirmar-btn:hover {
+    background-color: #c0392b;
+}
+
+table {
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+table th {
+    background-color: #f0f0f0;
+    color: #555;
+    width: 40%;
+}
+
+/* Botón de actualizar */
+#actualizar-btn {
+    margin-top: 20px;
+    padding: 12px 28px;
+    background-color: #2ecc71;
+    border: none;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+}
+
+#actualizar-btn:hover {
+    background-color: #27ae60;
+    transform: translateY(-2px);
+}
+
+/* Estilos para los mensajes de error */
+form .form-row .error {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 5px;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.error-messages {
+    background-color: #ffe6e6;
+    border-left: 4px solid red;
+    padding: 8px;
+    margin: 5px 0;
+}
+
+.messages {
+    margin-bottom: 15px;
+}
+
+.message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-left: 4px solid #28a745;
+}
+
+
+.footer{
+    color: #f5f5f5;
+}
