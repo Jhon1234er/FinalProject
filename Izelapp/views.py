@@ -663,7 +663,615 @@ def cancelar_cita(request, cita_id):
 
 # endregion
 
+<<<<<<< HEAD
 # region Incapacidad
+=======
+def logout_usuario(request):
+    logout(request)
+    messages.success(request, 'Has cerrado sesión exitosamente.')
+    return redirect('home')
+
+
+
+#endregion
+
+
+
+
+
+
+# region Usuario
+def registrar_usuario(request):
+    if request.method == 'POST':
+        formulario = UsuarioForm(request.POST)
+        if formulario.is_valid():
+            usuario = formulario.save(commit=False)
+            usuario.set_password(formulario.cleaned_data['password'])
+            usuario.save()
+            messages.success(request, 'Usuario creado exitosamente.')
+        else:
+            messages.error(request, 'Hay algunos errores en el registro. Vuelva a intentar...')
+    else:
+        formulario = UsuarioForm()
+
+    return render(request, 'usuario/insertar.html', {'formulario': formulario})
+
+
+@login_required
+def actualizar_usuario(request, id):
+    usuario = get_object_or_404(Usuario, id=id)
+    if request.method == 'POST':
+        formulario = UsuarioForm(request.POST, instance=usuario)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Usuario actualizado exitosamente.')
+            return redirect('listar_usuarios')
+        else:
+            messages.error(request, 'Por favor, revisa los campos del formulario.')
+    else:
+        formulario = UsuarioForm(instance=usuario)
+    return render(request, 'usuario/actualizar.html', {'formulario': formulario})
+
+
+def lista_usuario(request):
+    usuarios = Usuario.objects.all().order_by('tipo_doc')  
+    conteo = usuarios.count()  
+    return render(request, 'usuario/lista.html', {'usuarios': usuarios, 'conteo': conteo})
+
+
+def eliminar_usuario(request, id):
+    usuario = get_object_or_404(Usuario, id=id)
+    usuario.delete()
+    messages.success(request, 'Usuario eliminado exitosamente.')
+    return redirect('listar_usuarios')
+
+
+
+@login_required
+def eliminar_imagen_usuario(request):
+    usuario = request.user
+    if request.method == 'POST' and usuario.imagen:
+        # Borra el archivo físico
+        ruta = usuario.imagen.path
+        usuario.imagen.delete(save=False)
+        if os.path.exists(ruta):
+            os.remove(ruta)
+        usuario.save()
+    return redirect('detallar_usuario')  
+
+
+#endregion
+
+
+
+
+
+
+# region Paciente
+def registrar_paciente(request):
+    if request.method == 'POST':
+        formulario = PacienteForm(request.POST, request.FILES)
+        if formulario.is_valid():
+            paciente = formulario.save(commit=False)
+            # Cifra la contraseña utilizando set_password()
+            paciente.set_password(formulario.cleaned_data['password'])
+            paciente.save()
+            messages.success(request, 'Paciente creado exitosamente.')
+            return redirect('registrar_paciente')
+        else:
+            messages.error(request, 'Hay algunos errores en el registro. Vuelva a intentar...')
+    else:
+        formulario = PacienteForm()
+    return render(request, 'paciente/insertar.html', {'formulario': formulario})
+
+
+
+def lista_paciente(request):
+    pacientes = Paciente.objects.all()
+    return render(request, 'paciente/lista.html', {'pacientes': pacientes})
+
+def actualizar_paciente(request, id):
+    paciente = get_object_or_404(Paciente, id=id)
+    if request.method == 'POST':
+        formulario = PacienteForm(request.POST, instance=paciente)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Paciente actualizado exitosamente.')
+            return redirect('detallar_usuario')
+        else:
+            messages.error(request, 'Por favor, revisa los campos del formulario.')
+    else:
+        formulario = PacienteForm(instance=paciente)
+    return render(request, 'paciente/actualizar.html', {'formulario': formulario})
+
+def eliminar_paciente(request, id):
+    paciente = get_object_or_404(Paciente, id=id)
+    paciente.delete()
+    messages.success(request, 'Paciente eliminado exitosamente.')
+    return redirect('listar_paciente')
+#endregion
+
+
+
+
+
+
+
+#region Administrador 
+def registrar_administrador(request):
+    if request.method == 'POST':
+        formulario = AdministradorForm(request.POST, request.FILES)
+        if formulario.is_valid():
+            administrador = formulario.save(commit=False)
+            administrador.set_password(formulario.cleaned_data['password'])
+            administrador.save()
+            messages.success(request, 'Administrador creado exitosamente.')
+            return redirect('registrar_administrador')      
+        else:
+            messages.error(request, 'Por favor, corrija los errores en el formulario.')
+    else:
+        formulario = AdministradorForm()
+    return render(request, 'administrador/insertar.html', {'formulario': formulario})
+
+
+def lista_administrador(request):
+    administradores = Administrador.objects.all()
+    return render(request, 'administrador/lista.html', {'administradores': administradores})
+
+def actualizar_administrador(request, id):
+    administrador = get_object_or_404(Administrador, id=id)
+    if request.method == 'POST':
+        formulario = AdministradorForm(request.POST, instance=administrador)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Administrador actualizado exitosamente.')
+            return redirect('listar_administrador')
+        else:
+            messages.error(request, 'Por favor, revisa los campos.')
+    else:
+        formulario = AdministradorForm(instance=administrador)
+    return render(request, 'administrador/actualizar.html', {'formulario': formulario})
+
+def eliminar_administrador(request, id):
+    administrador = get_object_or_404(Administrador, id=id)
+    administrador.delete()
+    messages.success(request, 'Administrador eliminado exitosamente.')
+    return redirect('listar_administrador')
+#endregion
+
+
+
+
+
+
+
+#region TI 
+def registrar_ti(request):
+    if request.method == 'POST':
+        formulario = TIForm(request.POST)
+        if formulario.is_valid():
+            ti = formulario.save(commit=False)
+            ti.set_password(formulario.cleaned_data['password'])
+            ti.save()
+            messages.success(request, 'TI registrado exitosamente.')
+            return redirect('listar_ti')  # Redirigir a la lista de TI
+        else:
+            messages.error(request, 'Por favor, corrija los errores en el formulario.')
+    else:
+        formulario = TIForm()
+    return render(request, 'ti/insertar.html', {'formulario': formulario})
+
+
+def lista_ti(request):
+    its = TI.objects.all()
+    return render(request, 'ti/lista.html', {'its': its})
+
+def actualizar_ti(request, id):
+    ti = get_object_or_404(TI, id=id)
+    if request.method == 'POST':
+        formulario = TIForm(request.POST, instance=ti)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'TI actualizado exitosamente.')
+            return redirect('listar_ti')
+        else:
+            messages.error(request, 'Por favor, revisa los campos.')
+    else:
+        formulario = TIForm(instance=ti)
+
+    return render(request, 'ti/actualizar.html', {'formulario': formulario})
+
+def eliminar_ti(request, id):
+    ti= get_object_or_404(TI, id=id)
+    ti.delete()
+    messages.success(request, 'TI eliminado exitosamente.')
+    return redirect('listar_ti')
+#endregion
+
+
+
+
+
+
+
+
+#region  Medicos 
+
+def registrar_medico(request):
+    if request.method == 'POST':
+        formulario = MedicoForm(request.POST)
+        if formulario.is_valid():
+            medico = formulario.save(commit=False)
+            medico.set_password(formulario.cleaned_data['password'])
+            medico.save()
+            messages.success(request, 'Médico registrado exitosamente.')
+            return redirect('login')  # Redirigir a la lista de médicos
+        else:
+            messages.error(request, 'Por favor, corrija los errores en el formulario.')
+    else:
+        formulario = MedicoForm()
+
+    return render(request, 'medico/insertar.html', {'formulario': formulario})
+
+@login_required
+
+def lista_medico(request):
+    medicos = Medico.objects.all()
+    return render(request, 'medico/lista.html', {'medicos': medicos})
+@login_required
+def actualizar_medico(request, id):
+    medico = get_object_or_404(Medico, id=id)
+    if request.method == 'POST':
+        formulario = MedicoUpdateForm(request.POST, instance=medico)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Médico actualizado exitosamente.')
+            return redirect('detallar_usuario')
+        else:
+            messages.error(request, 'Por favor, revisa los campos.')
+    else:
+        formulario = MedicoUpdateForm(instance=medico)
+    return render(request, 'medico/actualizar.html', {
+        'formulario': formulario,
+        'usuario': medico  
+    })
+def eliminar_medico(request, id):
+    medico = get_object_or_404(Medico, id=id)
+    medico.delete()
+    messages.success(request, 'Médico eliminado exitosamente.')
+    return redirect('listar_medico')
+#endregion
+
+
+
+
+
+#region Auxiliar
+def registrar_auxiliar(request):
+    if request.method == 'POST':
+        formulario = AuxiliarForm(request.POST)
+        if formulario.is_valid():
+            auxiliar = formulario.save(commit=False)
+            auxiliar.save()
+            messages.success(request, 'Auxiliar registrado exitosamente.')
+            return render(request,'auxiliar/insertar.html')
+        else:
+            messages.error(request, 'Por favor, corrija los errores del formulario.')
+    else:
+        formulario = AuxiliarForm()
+
+    return render(request, 'auxiliar/insertar.html', {'formulario': formulario})
+
+
+
+def lista_auxiliar(request):
+    auxiliares = Auxiliar.objects.all()  
+    return render(request, 'auxiliar/lista.html', {'auxiliares': auxiliares})
+
+
+def actualizar_auxiliar(request, id):
+    auxiliar = get_object_or_404(Auxiliar, id=id)
+    if request.method == 'POST':
+        formulario = AuxiliarForm(request.POST, instance=auxiliar)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('listar_auxiliares')  
+    else:
+        formulario = AuxiliarForm(instance=auxiliar)
+    return render(request, 'auxiliar/actualizar.html', {'formulario': formulario})
+
+
+def eliminar_auxiliar(request, id):
+    auxiliar = get_object_or_404(Auxiliar, id=id)
+    auxiliar.delete()
+    return redirect('listar_auxiliares')
+#endregion
+
+
+
+
+
+
+
+
+
+
+
+
+#region Consulta 
+
+def registrar_consulta(request):
+    if request.method == 'POST':
+        formulario_consulta = ConsultaForm(request.POST)
+        formulario_atp = DatoAntropometricoForm(request.POST)
+        
+        # Si ambos formularios son válidos
+        if formulario_consulta.is_valid() and formulario_atp.is_valid():
+            formulario_consulta.save()
+            formulario_atp.save()  # Guarda los datos antropométricos
+            messages.success(request, 'Consulta y datos antropométricos registrados exitosamente.')
+            return redirect('registrar_consulta')
+        else:
+            messages.error(request, 'Por favor, llena todos los campos correctamente.')
+    else:
+        formulario_consulta = ConsultaForm()
+        formulario_atp = DatoAntropometricoForm()
+
+    return render(request, 'consulta/insertar.html', {
+        'formulario_consulta': formulario_consulta,
+        'formulario_atp': formulario_atp,
+    })
+
+def lista_consulta(request, paciente_id):
+    paciente = get_object_or_404(Paciente, id=paciente_id)
+    consultas = Consulta.objects.filter(paciente=paciente)
+    return render(request, 'consulta/lista.html', {
+        'consultas': consultas,
+        'paciente': paciente
+    })
+
+
+def actualizar_consulta(request, id):
+    consulta = get_object_or_404(Consulta, id=id)
+    if request.method == 'POST':
+        formulario = ConsultaForm(request.POST, instance=consulta)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Consulta actualizada exitosamente.')
+            return redirect('listar_consulta')
+        else:
+            messages.error(request, 'Por favor, revisa los campos del formulario.')
+    else:
+        formulario = ConsultaForm(instance=consulta)
+    return render(request, 'consulta/actualizar.html', {'formulario': formulario})
+
+def eliminar_consulta(request, id):
+    consulta = get_object_or_404(Consulta, id=id)
+    consulta.delete()
+    messages.success(request, 'Consulta eliminada exitosamente.')
+    return redirect('listar_consulta')
+#endregion
+
+
+
+
+
+
+
+#region PerfilPaciente 
+def registrar_perfil_paciente(request):
+    if request.method == 'POST':
+        formulario = PerfilPacienteForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Perfil de paciente creado exitosamente.')
+            return redirect('crear_perfil_paciente')
+        else:
+            messages.error(request, 'Por favor, llena todos los campos.')
+    else:
+        formulario = PerfilPacienteForm()
+    return render(request, 'perfil_paciente/crear.html', {'formulario': formulario})
+
+def lista_perfil_paciente(request):
+    perfiles = PerfilPaciente.objects.all()
+    return render(request, 'perfil_paciente/lista.html', {'perfiles': perfiles})
+#endregion
+
+
+
+
+
+
+
+#region Vacuna 
+def registrar_vacuna(request):
+    if request.method == 'POST':
+        formulario = VacunaForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Vacuna registrada exitosamente.')
+            return redirect('crear_vacuna')
+        else:
+            messages.error(request, 'Por favor, llena todos los campos.')
+    else:
+        formulario = VacunaForm()
+    return render(request, 'vacuna/crear.html', {'formulario': formulario})
+
+def lista_vacuna(request):
+    vacunas = Vacuna.objects.all()
+    return render(request, 'vacuna/lista.html', {'vacunas': vacunas})
+
+def eliminar_vacuna(request, id):
+    vacuna = get_object_or_404(Vacuna, id=id)
+    vacuna.delete()
+    messages.success(request, 'Vacuna eliminada exitosamente.')
+    return redirect('listar_vacuna')
+#endregion
+
+
+
+
+
+
+
+#region RecetaMedica 
+def registrar_receta_medica(request):
+    if request.method == 'POST':
+        formulario = RecetaMedicaForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Receta médica registrada exitosamente.')
+            return redirect('crear_receta_medica')
+        else:
+            messages.error(request, 'Por favor, llena todos los campos.')
+    else:
+        formulario = RecetaMedicaForm()
+    return render(request, 'receta_medica/insertar.html', {'formulario': formulario})
+
+def lista_receta_medica(request):
+    recetas = RecetaMedica.objects.all()
+    return render(request, 'receta_medica/lista.html', {'recetas': recetas})
+
+def eliminar_receta_medica(request, id):
+    receta = get_object_or_404(RecetaMedica, id=id)
+    receta.delete()
+    messages.success(request, 'Receta médica eliminada exitosamente.')
+    return redirect('listar_receta_medica')
+#endregion
+
+
+
+
+
+
+
+#region Antecedentes
+def crear_antecedente(request):
+    if request.method == 'POST':
+        formulario = AntecedenteForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Antecedente creado exitosamente.')
+            return redirect('crear_antecedente')
+        else:
+            messages.error(request, 'Por favor, llena todos los campos.')
+    else:
+        formulario = AntecedenteForm()
+    return render(request, 'antecedente/crear.html', {'formulario': formulario})
+
+def lista_antecedente(request):
+    antecedentes = Antecedente.objects.all()
+    return render(request, 'antecedente/lista.html', {'antecedentes': antecedentes})
+#endregion
+
+
+
+
+
+
+
+#region Quirurgico
+def registrar_dato_quirurgico(request):
+    if request.method == 'POST':
+        formulario = DatoQuirurgicoForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Dato quirúrgico creado exitosamente.')
+            return redirect('crear_dato_quirurgico')
+        else:
+            messages.error(request, 'Por favor, llena todos los campos.')
+    else:
+        formulario = DatoQuirurgicoForm()
+    return render(request, 'dato_quirurgico/crear.html', {'formulario': formulario})
+
+def lista_dato_quirurgico(request):
+    datos_quirurgicos = DatoQuirurgico.objects.all()
+    return render(request, 'dato_quirurgico/lista.html', {'datos_quirurgicos': datos_quirurgicos})
+#endregion
+
+
+
+
+
+
+
+#region Historial
+def registrar_historia_clinica(request):
+    if request.method == 'POST':
+        formulario = HistoriaClinicaForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Historia clínica creada exitosamente.')
+            return redirect('crear_historia_clinica')
+        else:
+            messages.error(request, 'Por favor, llena todos los campos.')
+    else:
+        formulario = HistoriaClinicaForm()
+    return render(request, 'historia_clinica/crear.html', {'formulario': formulario})
+
+def lista_historia_clinica(request):
+    historias_clinicas = HistoriaClinica.objects.all()
+    return render(request, 'historia_clinica/lista.html', {'historias_clinicas': historias_clinicas})
+#endregion
+
+
+
+
+
+
+
+#region Antropometrico
+def registrar_dato_antropometrico(request):
+    if request.method == 'POST':
+        formulario = DatoAntropometricoForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Dato antropométrico creado exitosamente.')
+            return redirect('crear_dato_antropometrico')
+        else:
+            messages.error(request, 'Por favor, llena todos los campos.')
+    else:
+        formulario = DatoAntropometricoForm()
+    return render(request, 'dato_antropometrico/insertar.html', {'formulario': formulario})
+
+def lista_dato_antropometrico(request):
+    datos_antropometricos = DatoAntropometrico.objects.all()
+    return render(request, 'dato_antropometrico/lista.html', {'datos_antropometricos': datos_antropometricos})
+#endregion
+
+
+
+
+
+
+
+#region Cita
+def registrar_cita(request):
+    if request.method == 'POST':
+        formulario = CitaForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Cita creada exitosamente.')
+            return redirect('registrar_cita')
+        else:
+            messages.error(request, 'Por favor, llena todos los campos.')
+    else:
+        formulario = CitaForm()
+    return render(request, 'cita/insertar.html', {'formulario': formulario})
+
+def lista_cita(request):
+    citas = Cita.objects.all()
+    return render(request, 'cita/lista.html', {'citas': citas})
+#endregion
+
+
+
+
+
+
+
+#region Incapacidad
+>>>>>>> 3d282208a053c1d79ac47834f68ac06ecc72fd28
 def registrar_certificado_incapacidad(request):
     if request.method == 'POST':
         formulario = CertificadoIncapacidadForm(request.POST)

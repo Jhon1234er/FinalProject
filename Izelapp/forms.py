@@ -73,14 +73,143 @@ class MedicoForm(forms.ModelForm):
     class Meta:
         model = Medico
         fields = [
-            'username', 'password', 'first_name', 'last_name', 'email',
-            'tipo_doc', 'num_doc', 'genero', 'rh', 'telefono',
-            'fecha_nacimiento', 'tipo_poblacion', 'ocupacion', 'eps',
-            'especialidad', 'numero_registro_profesional', 'licencia_certificacion', 'fecha_contratacion'
+            # USUARIO
+            'username',
+            'password',
+            'first_name', 
+            'last_name', 
+            'email',
+            'tipo_doc',
+            'num_doc',
+            'genero',
+            'rh',
+            'telefono',
+            'fecha_nacimiento',
+            'tipo_poblacion',
+            'eps',
+            'ocupacion',
+            # MEDICO
+            'especialidad',
+            'numero_registro_profesional',
+            'licencia_certificacion',
+            'fecha_contratacion' 
         ]
-# endregion
+        widgets = {
+            'fecha_contratacion': forms.DateInput(attrs={'class':'datepicker','type':'text','placeholder':'Ingrese la fecha de contratacion del medico'}),
+            'fecha_nacimiento': forms.DateInput(attrs={'class':'datepicker','type': 'text','placeholder':'Ingrese la fecha de nacimiento del medico'}),
+            'especialidad': forms.Select(attrs={'class': 'select2'}),
+            'numero_registro_profesional': forms.TextInput(attrs={'placeholder': 'Número de registro profesional'}),
+        }
+    
+    tipo_doc = forms.ChoiceField(label='Tipo de documento', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_TIPODOC, widget=forms.Select(attrs={'class': 'select2'}))
+    genero = forms.ChoiceField(label='Género', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_GENERO, widget=forms.Select(attrs={'class': 'select2'}))
+    rh=forms.ChoiceField(label='RH',choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_RH, widget=forms.Select(attrs={'class': 'select2'}))
+    num_doc = forms.CharField(label='Número de documento')
+    tipo_poblacion = forms.CharField(label='Tipo de población')
+    username = forms.CharField(label='Nombre de Usuario')
+    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
+    first_name = forms.CharField(label='Primer Nombre')
+    last_name = forms.CharField(label='Apellido')
+    email = forms.CharField(label='Correo')
 
-# region Consulta
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.Select):
+                field.widget.attrs.update({'class': 'select2'})
+
+    def clean_fecha_nacimiento(self):
+        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        if fecha_nacimiento:
+            if fecha_nacimiento > timezone.now().date():
+                raise ValidationError("NO SE PERMITEN FECHAS FUTURAS")
+            edad = timezone.now().date().year - fecha_nacimiento.year
+            if (timezone.now().date().month, timezone.now().date().day) < (fecha_nacimiento.month, fecha_nacimiento.day):
+                edad -= 1 
+            if edad < 18:
+                raise ValidationError("DEBES SER MAYOR A 18 AÑOS")
+        return fecha_nacimiento
+
+    def clean_fecha_contratacion(self):
+        fecha_contratacion = self.cleaned_data['fecha_contratacion']
+        if fecha_contratacion:
+            # Verifica que la fecha de contratación no sea una fecha pasada
+            if fecha_contratacion < timezone.now().date():
+                raise ValidationError("La fecha de contratación no puede ser una fecha pasada.")
+        return fecha_contratacion
+#endregion
+
+
+
+
+
+
+
+
+
+#region Auxiliar
+class AuxiliarForm(forms.ModelForm):
+    class Meta:
+        model = Auxiliar
+        fields = [
+            # USUARIO
+            'username',
+            'password',
+            'tipo_doc',
+            'num_doc',
+            'genero',
+            'rh',
+            'telefono',
+            'fecha_nacimiento',
+            'tipo_poblacion',
+            'eps',
+            'ocupacion',
+            # AUXILIAR
+            'departamento',  
+            'supervisor',  
+        ]
+        widgets = {
+            'fecha_nacimiento': forms.DateInput(attrs={'class': 'datepicker', 'type': 'text','placeholder':'Seleccione la fecha de nacimiento'}),
+            'departamento': forms.TextInput(attrs={'placeholder': 'Área de trabajo del auxiliar'}),
+            'supervisor': forms.TextInput(attrs={'placeholder': 'Nombre del supervisor'}),
+        }
+        
+    tipo_doc = forms.ChoiceField(label='Tipo de documento', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_TIPODOC, widget=forms.Select(attrs={'class': 'select2'}))
+    genero = forms.ChoiceField(label='Género', choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_GENERO, widget=forms.Select(attrs={'class': 'select2'}))
+    rh=forms.ChoiceField(label='RH',choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_RH, widget=forms.Select(attrs={'class': 'select2'}))
+    num_doc = forms.CharField(label='Número de documento')
+    tipo_poblacion = forms.CharField(label='Tipo de población')
+    username = forms.CharField(label='Nombre de Usuario')
+    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
+    first_name = forms.CharField(label='Primer Nombre')
+    last_name = forms.CharField(label='Apellido')
+    email = forms.CharField(label='Correo')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.Select):
+                field.widget.attrs.update({'class': 'select2'})
+
+
+    def clean_fecha_nacimiento(self):
+        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        if fecha_nacimiento:
+            # Verifica que la fecha no sea una fecha futura
+            if fecha_nacimiento > timezone.now().date():
+                raise ValidationError("ERROR DE INGRESO DE FECHA DE NACIMIENTO")
+            
+            # Verifica que la edad sea mayor a 18 años
+            edad = timezone.now().date().year - fecha_nacimiento.year
+            if (timezone.now().date().month, timezone.now().date().day) < (fecha_nacimiento.month, fecha_nacimiento.day):
+                edad -= 1 
+            if edad < 18:
+                raise ValidationError("LA EDAD INGRESADA DEBE SER MAYOR A 18")
+        return fecha_nacimiento
+
+
+
+
 class ConsultaForm(forms.ModelForm):
     class Meta:
         model = Consulta
