@@ -1,57 +1,53 @@
-{% load static %} 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar sesión - Izel</title>
-    <link rel="stylesheet" href="{% static 'css/usuario/login.css' %}">
-</head>
-<body>
+{% extends 'componentes/Base.html' %}
+{% load static %}
 
-    <header class="Titulo">
-        <h1><a href="{% url 'home' %}">IZEL</a></h1>
-    </header>
+{% block title %}Iniciar sesión - Izel{% endblock %}
 
-    <div class="Ingresar">
-        <div class="Ingresar__formulario">
-            <h2 class="Ingresar__titulo">Iniciar Sesión</h2>
+{% block content %}
 
-            <!-- Mostrar mensajes de error -->
-            {% if mensaje_error %}
-                <div class="error">{{ mensaje_error }}</div>
-            {% endif %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
 
-            {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-            <form action="{% url 'login' %}" method="POST">
-                {% csrf_token %}
-                <div class="Ingresar__campo">
-                    <input type="text" id="username" name="username" required class="Ingresar__campo-input" placeholder="Ingrese su usuario" />
-                    <label for="username" class="Ingresar__campo-label">Usuario</label>
-                </div>
-            
-                <div class="Ingresar__campo">
-                    <input type="password" id="password" name="password" required class="Ingresar__campo-input" placeholder="Ingrese su contraseña" />
-                    <label for="password" class="Ingresar__campo-label">Contraseña</label>
-                </div>
-            
-                <div>
-                    <button type="submit" class="Ingresar__submit">Iniciar sesión</button>
-                </div>
-            </form>
-            
-            <ul>
-                <li><a href="{% url 'registrar_paciente' %}" class="Ingresar__registro-enlace">Crear Cuenta</a></li>
-                <li><a href="{% url 'recuperar_cuenta' %}" class="Ingresar__olvido-enlace">¿Olvidaste tu contraseña?</a></li>
+<div class="Ingresar">
+    <div class="Ingresar__formulario">
+        <h2 class="Ingresar__titulo">Iniciar Sesión</h2>
+
+        {% if mensaje_error %}
+            <div class="error">{{ mensaje_error }}</div>
+        {% endif %}
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
             </ul>
-        </div>
-    </div>
+        {% endif %}
 
-</body>
-</html>
+        <form action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+            <div class="Ingresar__campo">
+                <input type="text" id="username" name="username"
+                    class="Ingresar__campo-input"
+                    placeholder=" " required />
+                <label for="username" class="Ingresar__campo-label">Ingrese su usuario</label>
+            </div>
+
+            <div class="Ingresar__campo">
+                <input type="password" id="password" name="password"
+                    class="Ingresar__campo-input"
+                    placeholder=" " required />
+                <label for="password" class="Ingresar__campo-label">Ingrese su contraseña</label>
+            </div>
+
+            <div>
+                <button type="submit" class="Ingresar__submit">Iniciar sesión</button>
+            </div>
+
+            <div class="Ingresar__opciones">
+            <a href="{% url 'registrar_paciente' %}" class="Ingresar__registro-enlace">¿No tienes cuenta? Regístrate</a>
+            <a href="{% url 'recuperar_contrasena' %}" class="Ingresar__olvido-enlace">¿Olvidaste tu contraseña?</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'componentes/Base.html' %}
+{% load static %}
+
+{% block title %}Sobre Nosotros - EPS Izel{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/paginas/sobrenosotros.css' %}">
+
+
+{% include 'componentes/banner_carrusel.html' with titulo_banner="Sobre Nosotros" texto_banner="Comprometidos con tu salud, tu bienestar y tu futuro." %}
+
+<section class="seccion-informacion" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+  <div class="contenedor-info">
+    <h2>Nuestra Historia</h2>
+    <p>EPS Izel nace con la misión de ofrecer servicios médicos integrales a toda la comunidad colombiana. Desde nuestros inicios, trabajamos con pasión y compromiso por brindar atención de calidad, humana y oportuna.</p>
+
+    <h2>Misión</h2>
+    <p>Proteger y promover la salud de nuestros afiliados mediante servicios accesibles, eficientes y centrados en la persona.</p>
+
+    <h2>Visión</h2>
+    <p>Ser líderes en el sistema de salud por nuestra innovación, humanización y calidad en la atención.</p>
+
+    <h2>Valores</h2>
+    <ul>
+      <li>Compromiso</li>
+      <li>Calidad</li>
+      <li>Respeto</li>
+      <li>Ética</li>
+      <li>Empatía</li>
+    </ul>
+  </div>
+</section>
+
+<section class="seccion-imagen" data-aos="zoom-in-up" data-aos-duration="1000" data-aos-delay="400">
+  <img src="{% static 'img/equipo_salud.jpg' %}" alt="Equipo médico de EPS Izel">
+</section>
+{% endblock %}

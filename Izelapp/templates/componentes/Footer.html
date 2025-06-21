@@ -1,0 +1,46 @@
+{% load static %}
+<footer class="footer-izel" data-aos="fade-up">
+  <div class="footer-container">
+
+    <!-- Columna 1: Información institucional -->
+    <div class="footer-column" data-aos="fade-up" data-aos-delay="100">
+      <h3 class="footer-title">EPS Izel</h3>
+      <p class="footer-desc">
+        Somos un hospital comprometido con la salud de nuestra comunidad. Ofrecemos atención médica integral con calidad, empatía y tecnología.
+      </p>
+      <div class="social-icons">
+        <a href="#"><img src="{% static 'img/facebook.png' %}" alt="Facebook"></a>
+        <a href="#"><img src="{% static 'img/instagram.png' %}" alt="Instagram"></a>
+        <a href="#"><img src="{% static 'img/youtube.png' %}" alt="YouTube"></a>
+      </div>
+    </div>
+
+    <!-- Columna 2: Contacto -->
+    <div class="footer-column" data-aos="fade-up" data-aos-delay="200">
+      <h3 class="footer-title">Contacto</h3>
+      <ul class="footer-list">
+        <li>📍 Carrera 10a #13b-74s, Soacha</li>
+        <li>📞 Tel: 3125278094</li>
+        <li>📧 contacto@epsizel.com</li>
+        <li>🕐 Lunes a Sábado: 8:00am - 5:00pm</li>
+      </ul>
+    </div>
+
+    <!-- Columna 3: Enlaces rápidos -->
+    <div class="footer-column" data-aos="fade-up" data-aos-delay="300">
+      <h3 class="footer-title">Servicios</h3>
+      <ul class="footer-list">
+        <li><a href="#">Consulta General</a></li>
+        <li><a href="#">Especialistas</a></li>
+        <li><a href="#">Urgencias 24/7</a></li>
+        <li><a href="#">Vacunación</a></li>
+        <li><a href="#">Laboratorio Clínico</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom" data-aos="fade-up" data-aos-delay="400">
+    © {{ now|date:"Y" }} EPS Izel. Todos los derechos reservados.
+  </div>
+</footer>

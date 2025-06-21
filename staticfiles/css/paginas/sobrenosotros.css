@@ -1,0 +1,142 @@
+/* --- Sobre Nosotros Profesional Izel --- */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #F5F5F5;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.banner-nosotros {
+  background: linear-gradient(135deg, #011f30, #013857);
+  color: #ffffff;
+  padding: 100px 20px 80px;
+  text-align: center;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  box-shadow: 0 6px 24px rgba(1, 31, 48, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-nosotros::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -50px;
+  width: 120px;
+  height: 100%;
+  background: radial-gradient(#A8D8B9 0%, transparent 70%);
+  opacity: 0.08;
+  transform: rotate(-20deg);
+}
+
+.contenido-banner h1 {
+  font-size: 2.8rem;
+  margin-bottom: 16px;
+  animation: fadeInDown 1s ease forwards;
+}
+
+.contenido-banner p {
+  font-size: 1.25rem;
+  opacity: 0.95;
+  animation: fadeInUp 1s ease 0.3s forwards;
+}
+
+.seccion-informacion {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(1, 31, 48, 0.1);
+  margin: 60px auto;
+  max-width: 960px;
+  padding: 40px 50px;
+  transition: box-shadow 0.3s ease;
+}
+
+.seccion-informacion:hover {
+  box-shadow: 0 6px 32px rgba(1, 31, 48, 0.15);
+}
+
+.contenedor-info h2 {
+  color: #013857;
+  font-size: 1.5rem;
+  margin-top: 28px;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.contenedor-info h2::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  background: #A8D8B9;
+  margin-top: 6px;
+  border-radius: 2px;
+}
+
+.contenedor-info p {
+  font-size: 1.1rem;
+  margin-bottom: 18px;
+  line-height: 1.7;
+}
+
+.contenedor-info ul {
+  list-style-type: disc;
+  padding-left: 24px;
+  font-size: 1.05rem;
+  color: #013857;
+  margin-top: 14px;
+}
+
+.seccion-imagen {
+  text-align: center;
+  margin: 60px 0 40px;
+}
+
+.seccion-imagen img {
+  width: 85%;
+  max-width: 960px;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.seccion-imagen img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Animaciones personalizadas */
+@keyframes fadeInDown {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .banner-nosotros {
+    padding: 60px 20px;
+  }
+
+  .contenido-banner h1 {
+    font-size: 2rem;
+  }
+
+  .contenido-banner p {
+    font-size: 1rem;
+  }
+
+  .seccion-informacion {
+    padding: 30px 24px;
+  }
+
+  .seccion-imagen img {
+    width: 95%;
+  }
+}

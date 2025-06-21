@@ -1,0 +1,70 @@
+{% extends 'componentes/Base.html' %}
+{% load static %}
+
+{% block title %}Cancelar Cita{% endblock %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{% static 'css/cita/cancelar_cita.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container cancelar-cita-container">
+  <h2>Cancelar Cita</h2>
+
+  <div class="detalle-cita">
+    <p><strong>🩺 Especialidad:</strong> {{ cita.especialidad }}</p>
+    <p><strong>👨‍⚕️ Médico:</strong> {{ cita.medico }}</p>
+    <p><strong>📅 Fecha:</strong> {{ cita.fecha_cita }}</p>
+    <p><strong>⏰ Hora:</strong> {{ cita.hora_cita }}</p>
+    <p><strong>📌 Estado actual:</strong> {{ cita.estado_cita|title }}</p>
+  </div>
+
+  {% if not puede_cancelar %}
+    <div class="alerta">
+      No puedes cancelar esta cita porque queda menos de 1 hora para su inicio.
+    </div>
+    <div class="acciones-cancelar">
+      <a href="{% url 'ver_mi_cita' %}" class="btn-volver">Volver</a>
+    </div>
+  {% endif %}
+</div>
+
+{% if puede_cancelar %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+      title: '¿Estás seguro de cancelar esta cita?',
+      text: 'Una vez cancelada, no podrás recuperarla.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cancelar',
+      cancelButtonText: 'No, volver',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "{% url 'cancelar_cita' cita.id %}";
+      } else {
+        window.location.href = "{% url 'ver_mi_cita' %}";
+      }
+    });
+  });
+</script>
+{% endif %}
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<script>
+  setTimeout(() => {
+    const mensaje = document.querySelector('.alert');
+    if (mensaje) mensaje.style.display = 'none';
+  }, 2000);
+</script>
+{% endblock %}

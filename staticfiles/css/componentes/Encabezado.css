@@ -1,0 +1,83 @@
+/* Estilos para el Encabezado de Izelapp */
+
+header {
+  background-color: #011f30; /* Azul oscuro */
+  border-bottom: 3px solid #013857; /* Azul más oscuro */
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  animation: fadeInDown 1s ease forwards;
+}
+
+.contenedor-header {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo img {
+  height: 50px;
+  transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+  transform: scale(1.1);
+}
+
+.lista-menu {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+.opcion-menu {
+  position: relative;
+}
+
+.enlace-menu {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.enlace-menu:hover,
+.enlace-menu.activo {
+  background-color: #ffffff;
+  color: #013857;
+  box-shadow: 0 0 8px #6ac1b8;
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .contenedor-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .lista-menu {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

@@ -1,0 +1,54 @@
+/* === ESTILOS PARA LA LISTA DE CITAS === */
+
+.contenedor-citas {
+    padding: 30px 20px;
+    max-width: 1000px;
+    margin: 120px auto 40px auto; /* espacio superior por encabezado fijo */
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(1, 31, 48, 0.08);
+}
+
+.titulo-citas {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #011f30;
+}
+
+.grid-citas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.card-cita {
+    background-color: #f4f8ff;
+    border-left: 6px solid #3498db;
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+    transition: transform 0.2s ease-in-out;
+}
+
+.card-cita:hover {
+    transform: translateY(-5px);
+}
+
+.card-cita p {
+    margin: 6px 0;
+    font-size: 0.95rem;
+    color: #34495e;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .titulo-citas {
+        font-size: 1.5rem;
+    }
+
+    .card-cita {
+        padding: 12px 15px;
+    }
+}

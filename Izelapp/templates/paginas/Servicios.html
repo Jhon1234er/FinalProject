@@ -1,0 +1,47 @@
+{% extends 'componentes/Base.html' %}
+{% load static %}
+
+{% block title %}Servicios - EPS Izel{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/paginas/servicios.css' %}">
+
+{% include 'componentes/banner_carrusel.html' with titulo_banner="Servicios Médicos" texto_banner="Conoce toda la oferta de atención que EPS Izel tiene para ti." %}
+
+
+
+<section class="seccion-servicios">
+  <div class="contenedor-grid">
+    <div class="servicio" data-aos="zoom-in" data-aos-delay="100">
+      <img src="{% static 'img/consulta_general.jpg' %}" alt="Consulta general">
+      <h3>Consulta General</h3>
+      <p>Evaluación y orientación médica primaria. Incluye exámenes físicos y recetas básicas.</p>
+    </div>
+    <div class="servicio" data-aos="zoom-in" data-aos-delay="200">
+      <img src="{% static 'img/especialistas.jpg' %}" alt="Especialistas">
+      <h3>Especialistas</h3>
+      <p>Accede a especialistas en pediatría, ginecología, medicina interna, y más.</p>
+    </div>
+    <div class="servicio" data-aos="zoom-in" data-aos-delay="300">
+      <img src="{% static 'img/urgencias.jpg' %}" alt="Urgencias 24 horas">
+      <h3>Urgencias 24/7</h3>
+      <p>Atención inmediata disponible todo el año para situaciones médicas críticas.</p>
+    </div>
+    <div class="servicio" data-aos="zoom-in" data-aos-delay="400">
+      <img src="{% static 'img/laboratorio.jpg' %}" alt="Laboratorios">
+      <h3>Laboratorios</h3>
+      <p>Análisis clínicos, pruebas rápidas y exámenes especializados con entrega ágil de resultados.</p>
+    </div>
+    <div class="servicio" data-aos="zoom-in" data-aos-delay="500">
+      <img src="{% static 'img/diagnostico.jpg' %}" alt="Diagnóstico por imágenes">
+      <h3>Diagnóstico por Imágenes</h3>
+      <p>Rayos X, ecografías, tomografías y más, con equipos de última tecnología.</p>
+    </div>
+    <div class="servicio" data-aos="zoom-in" data-aos-delay="600">
+      <img src="{% static 'img/prevencion.jpg' %}" alt="Programas de prevención">
+      <h3>Programas de Prevención</h3>
+      <p>Vacunación, salud mental, nutrición y actividades físicas para promover el bienestar.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,90 @@
+/* --- Servicios EPS Izel --- */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #F5F5F5;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.banner-servicios {
+  background: linear-gradient(90deg, #011f30 60%, #013857 100%);
+  color: #ffffff;
+  padding: 70px 20px;
+  text-align: center;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  box-shadow: 0 4px 24px rgba(1,31,48,0.1);
+}
+
+.banner-servicios h1 {
+  font-size: 2.4rem;
+  margin-bottom: 12px;
+}
+
+.banner-servicios p {
+  font-size: 1.1rem;
+  opacity: 0.95;
+}
+
+.seccion-servicios {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.contenedor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+.servicio {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px rgba(1,31,48,0.07);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.servicio:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 6px 24px rgba(1,31,48,0.12);
+}
+
+.servicio img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 4px solid #A8D8B9;
+}
+
+.servicio h3 {
+  font-size: 1.25rem;
+  color: #013857;
+  margin: 16px;
+}
+
+.servicio p {
+  font-size: 1rem;
+  padding: 0 16px 20px;
+  color: #37474f;
+}
+
+@media (max-width: 600px) {
+  .banner-servicios {
+    padding: 40px 16px;
+  }
+
+  .banner-servicios h1 {
+    font-size: 1.6rem;
+  }
+
+  .banner-servicios p {
+    font-size: 0.95rem;
+  }
+
+  .servicio img {
+    height: 160px;
+  }
+}

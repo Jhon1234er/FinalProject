@@ -1,43 +1,23 @@
+{% extends 'componentes/Base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Calendario de Citas</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- CSS de FullCalendar v5 -->
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
+{% block title %}Calendario de Citas{% endblock %}
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-    }
-    h1 {
-      text-align: center;
-      margin-top: 20px;
-      color: #2c3e50;
-    }
-    #calendar {
-      max-width: 900px;
-      margin: 40px auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-  </style>
-</head>
-<body>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cita/calendario.css' %}">
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
+{% endblock %}
 
-<h1>Calendario de Citas Médicas</h1>
-<div id="calendar"></div>
+{% block content %}
+<div class="contenedor-calendario">
+  <h2 class="titulo-calendario">Calendario de Citas Médicas</h2>
+  <div id="calendar"></div>
+</div>
+{% endblock %}
 
-<!-- JS de FullCalendar v5 -->
+{% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/locales-all.min.js"></script>
-
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
@@ -51,7 +31,6 @@
         right: 'dayGridMonth,timeGridWeek,timeGridDay'
       },
       events: "{% url 'obtener_disponibilidad' %}",
-
       eventClick: function (info) {
         const disponibilidadId = info.event.id;
         if (disponibilidadId) {
@@ -65,6 +44,4 @@
     calendar.render();
   });
 </script>
-
-</body>
-</html>
+{% endblock %}

@@ -1,32 +1,64 @@
-{% extends 'base.html' %}
+{% extends 'componentes/Base.html' %}
 {% load static %}
 
 {% block title %}Mis Citas{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-  <h2 class="mb-4">📅 Mis Citas Agendadas</h2>
+<link rel="stylesheet" href="{% static 'css/cita/ver_mi_cita.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  {% if citas %}
-    <div class="row">
+<div class="container">
+  <div class="encabezado-citas">
+    <h2 class="titulo-citas">📅 Mis Citas Agendadas</h2>
+    <button id="toggle-citas" class="boton-toggle">Ver Citas Perdidas</button>
+  </div>
+
+  {% if messages %}
+    <div class="mensajes" id="flash-message">
+      {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if citas or citas_canceladas %}
+    <!-- Citas agendadas -->
+    <div id="citas-agendadas" class="grid-citas">
       {% for cita in citas %}
-        <div class="col-md-6">
-          <div class="card shadow-sm mb-4">
-            <div class="card-body">
-              <h5 class="card-title">{{ cita.especialidad }}</h5>
-              <p class="card-text"><strong>Médico:</strong> {{ cita.medico }}</p>
-              <p class="card-text"><strong>Fecha:</strong> {{ cita.fecha_cita }}</p>
-              <p class="card-text"><strong>Hora:</strong> {{ cita.hora_cita }}</p>
-              <p class="card-text"><strong>Estado:</strong> {{ cita.estado_cita|title }}</p>
-            </div>
+        <div class="card-cita">
+          <p><strong>📅 Fecha:</strong> {{ cita.fecha_cita }}</p>
+          <p><strong>⏰ Hora:</strong> {{ cita.hora_cita }}</p>
+          <p><strong>🩺 Especialidad:</strong> {{ cita.especialidad }}</p>
+
+          <div class="acciones">
+            <a href="{% url 'detalle_cita' cita.id %}" class="boton-cita">Ver detalles</a>
+            <a href="{% url 'cancelar_cita' cita.id %}" class="boton-cita cancelar-btn">Cancelar</a>
           </div>
         </div>
       {% endfor %}
     </div>
-  {% else %}
-    <div class="alert alert-info" role="alert">
-      No tienes citas agendadas.
+
+    <!-- Citas canceladas -->
+    <div id="citas-canceladas" class="grid-citas" style="display: none;">
+      {% if citas_canceladas %}
+        {% for cita in citas_canceladas %}
+          <div class="card-cita perdida">
+            <p><strong>📅 Fecha:</strong> {{ cita.fecha_cita }}</p>
+            <p><strong>⏰ Hora:</strong> {{ cita.hora_cita }}</p>
+            <p><strong>🩺 Especialidad:</strong> {{ cita.especialidad }}</p>
+            <p><strong>📌 Estado:</strong> Cancelada</p>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="alert alert-info text-center mt-4">
+          No tienes citas perdidas.
+        </div>
+      {% endif %}
     </div>
   {% endif %}
 </div>
+
+<script src="{% static 'js/ver_mi_cita.js' %}"></script>
 {% endblock %}

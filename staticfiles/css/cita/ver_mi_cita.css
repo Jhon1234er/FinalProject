@@ -1,0 +1,107 @@
+/* === ESTILOS GENERALES DE PÁGINA === */
+
+body {
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+main, .container, .contenedor-citas {
+    flex: 1;
+}
+
+/* Espacio general del contenido */
+.container {
+    padding-top: 140px; /* margen superior mayor para que no se solape con el header */
+    padding-bottom: 60px; /* espacio para que el footer no se pegue */
+}
+
+/* === ESTILOS PARA LA LISTA DE CITAS === */
+
+.titulo-citas {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #011f30;
+}
+
+.grid-citas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.card-cita {
+    background-color: #f4f8ff;
+    border-left: 6px solid #3498db;
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+    transition: transform 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-cita:hover {
+    transform: translateY(-5px);
+}
+
+.card-cita p {
+    margin: 6px 0;
+    font-size: 0.95rem;
+    color: #34495e;
+}
+
+/* Botones dentro de cada tarjeta */
+.acciones {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.boton-cita {
+    flex: 1;
+    text-align: center;
+    padding: 8px 12px;
+    background-color: #013857;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.boton-cita:hover {
+    background-color: #6AC1B8;
+    color: #011f30;
+}
+
+/* Alert mensaje */
+.alert {
+    background-color: #eaf4ff;
+    border: 1px solid #b3d7f3;
+    color: #0f3e61;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .titulo-citas {
+        font-size: 1.5rem;
+    }
+
+    .card-cita {
+        padding: 12px 15px;
+    }
+
+    .boton-cita {
+        font-size: 0.85rem;
+        padding: 6px 10px;
+    }
+}

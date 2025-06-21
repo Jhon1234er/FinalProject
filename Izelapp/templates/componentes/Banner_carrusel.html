@@ -1,0 +1,33 @@
+{# templates/componentes/banner_carrusel.html #}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/componentes/banner_carrusel.css' %}">
+<div class="banner-principal">
+  <div id="carouselIzel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'img/Carrusel 1.jpg' %}" alt="Salud y bienestar">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'img/Carrusel 2.jpg' %}" alt="Atención médica">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'img/Carrusel 3.jpg' %}" alt="Prevención y campañas">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselIzel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselIzel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselIzel" data-bs-slide-to="0" class="active"></button>
+      <button type="button" data-bs-target="#carouselIzel" data-bs-slide-to="1"></button>
+      <button type="button" data-bs-target="#carouselIzel" data-bs-slide-to="2"></button>
+    </div>
+  </div>
+  <div class="texto-banner" data-aos="fade-up">
+    <h1>{{ titulo_banner|default:"Tu salud, nuestra prioridad" }}</h1>
+    <p>{{ texto_banner|default:"En EPS Izel cuidamos de ti y tu familia con calidad, calidez y confianza." }}</p>
+  </div>
+</div>

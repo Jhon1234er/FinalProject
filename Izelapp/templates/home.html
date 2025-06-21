@@ -1,70 +1,78 @@
-{% extends 'base.html' %}
+{% extends 'componentes/Base.html' %}
 {% load static %}
 
 {% block title %}Bienvenido a EPS Izel{% endblock %}
 
 {% block content %}
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
+<script src="{% static 'js/counter.js' %}"></script>
+<script src="{% static 'js/aos-init.js' %}"></script>
 
+{% include 'componentes/banner_carrusel.html' with titulo_banner="Tu salud, nuestra prioridad" texto_banner="En EPS Izel cuidamos de ti y tu familia con calidad, calidez y confianza." %}
 
-<div class="banner-principal">
-    <div class="texto-banner">
-        <h1>Tu salud, nuestra prioridad</h1>
-        <p>En EPS Izel cuidamos de ti y tu familia con los mejores servicios médicos.</p>
+<!-- 👨‍⚕️ Sobre EPS Izel -->
+<section class="seccion-sobre-nosotros" data-aos="fade-left">
+  <h2 class="titulo-principal">¿Qué es Izel?</h2>
+  <div class="sobre-nosotros-contenido">
+    <div class="imagen-sobre-nosotros">
+      <img src="{% static 'img/hospital_equipo.jpg' %}" alt="Equipo humano de Izel">
     </div>
-</div>
-
-<section class="seccion-noticias">
-    <h2 class="titulo-principal">📰 Últimas noticias de salud</h2>
-    <ul class="lista-noticias">
-        <li><a href="#">🩺 Nuevo servicio de telemedicina disponible</a></li>
-        <li><a href="#">💉 Campaña de vacunación contra la influenza</a></li>
-        <li><a href="#">😷 Recomendaciones para prevenir enfermedades respiratorias</a></li>
-    </ul>
-</section>
-
-<section class="seccion-servicios">
-    <h2 class="titulo-principal">🌟 Servicios que ofrecemos</h2>
-    <p class="texto-parrafo">En EPS Izel ofrecemos atención médica integral con enfoque humano, calidad y cercanía.</p>
-</section>
-
-<section class="seccion-grid">
-    <div class="tarjeta-servicio">
-        <h3>👨‍⚕️ Atención médica general</h3>
-        <p>Consultas con médicos generales altamente capacitados para orientarte en tu salud.</p>
+    <div class="texto-sobre-nosotros">
+      <p>EPS Izel es una institución hospitalaria comprometida con la salud integral de los colombianos. Trabajamos con empatía, tecnología y enfoque humano.</p>
+      <ul>
+        <li>Atención centrada en el paciente</li>
+        <li>Profesionales altamente calificados</li>
+        <li>Equipamiento moderno y seguro</li>
+      </ul>
+      <a href="#" class="btn-conocer-mas">Conocer más</a>
     </div>
-    <div class="tarjeta-servicio">
-        <h3>🧑‍⚕️ Consultas especializadas</h3>
-        <p>Accede a especialistas en diversas áreas médicas para un diagnóstico preciso.</p>
+  </div>
+</section>
+
+<!-- 💬 Testimonios reales -->
+<section class="seccion-testimonios" data-aos="zoom-in">
+  <h2>Lo que dicen nuestros pacientes</h2>
+  <div class="testimonios-grid">
+    <div class="testimonio-card">
+      <p>"Gracias a Izel logré controlar mi diabetes. Me escucharon, me orientaron y me ayudaron a mejorar mi vida."</p>
+      <span>— María G., 52 años <div class="estrellas">★★★★★</div></span>
     </div>
-    <div class="tarjeta-servicio">
-        <h3>🚑 Urgencias 24/7</h3>
-        <p>Estamos listos para atenderte en cualquier momento del día, con tecnología de punta.</p>
+    <div class="testimonio-card">
+      <p>"Mi hijo fue atendido de urgencia con mucha rapidez y profesionalismo. ¡Recomiendo totalmente!"</p>
+      <span>— Andrés L., 36 años <div class="estrellas">★★★★★</div></span>
     </div>
+    <div class="testimonio-card">
+      <p>"Excelente atención en ginecología. El trato fue respetuoso, claro y humano."</p>
+      <span>— Paola R., 29 años <div class="estrellas">★★★★★</div></span>
+    </div>
+  </div>
 </section>
 
-<section class="seccion-detalle">
-    <h2 class="titulo-principal">💡 Programas de Prevención</h2>
-    <p class="texto-parrafo">Prevención para una vida saludable. Participa en nuestros programas y mejora tu calidad de vida.</p>
-
-    <ul class="lista-enlaces">
-        <li><strong>✔ Chequeos preventivos:</strong> para detectar enfermedades a tiempo.</li>
-        <li><strong>✔ Vacunación:</strong> protección efectiva contra múltiples enfermedades.</li>
-        <li><strong>✔ Salud mental:</strong> apoyo emocional con psicólogos y psiquiatras.</li>
-        <li><strong>✔ Nutrición y actividad física:</strong> asesorías para un estilo de vida saludable.</li>
-    </ul>
+<!-- Estadísticas con contador -->
+<section class="seccion-estadisticas" data-aos="fade-up">
+  <div class="estadisticas-flex">
+    <div class="estadistica-item">
+      <h3 class="contador" data-count="12000">+0</h3>
+      <p>Pacientes atendidos</p>
+    </div>
+    <div class="estadistica-item">
+      <h3 class="contador" data-count="98">98%</h3>
+      <p>Satisfacción del usuario</p>
+    </div>
+    <div class="estadistica-item">
+      <h3 class="contador" data-count="15">15</h3>
+      <p>Años de experiencia</p>
+    </div>
+    <div class="estadistica-item">
+      <h3 class="contador" data-count="30">+30</h3>
+      <p>Especialistas disponibles</p>
+    </div>
+  </div>
 </section>
-
-<section class="seccion-beneficios">
-    <h2 class="titulo-principal">🎁 Beneficios para nuestros afiliados</h2>
-    <ul class="lista-beneficios">
-        <li>Descuentos en farmacias y laboratorios</li>
-        <li>Consultas médicas accesibles</li>
-        <li>Acceso a programas de bienestar</li>
-        <li>Red médica de calidad</li>
-    </ul>
+<!-- 📞 CTA final -->
+<section class="seccion-contacto-home" data-aos="fade-up">
+  <h2>¿Necesitas ayuda médica o quieres más información?</h2>
+  <p class="texto-parrafo">Contáctanos o agenda tu cita en menos de 3 minutos.</p>
+  <a class="btn-conocer-mas">Contáctanos</a>
 </section>
-
 {% endblock %}

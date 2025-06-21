@@ -1,8 +1,19 @@
-{% extends 'base.html' %}
-
+{% extends 'componentes/Base.html' %}
 {% load static %}
 
+{% block title %}Perfil de Paciente{% endblock %}
+
 {% block content %}
-    <h1>Bienvenido,<td>{{ usuario.first_name }} {{ usuario.last_name }}</td></h1>
-    <p>Este es tu perfil. Puedes ver y editar tu información básica.</p>
+<link rel="stylesheet" href="{% static 'css/paciente/perfil.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/perfil-chart.js' %}" defer></script>
+
+<div class="perfil-contenedor">
+    <h1 class="perfil-titulo">Bienvenido, {{ usuario.first_name }} {{ usuario.last_name }}</h1>
+    <p class="perfil-descripcion">Este es tu perfil. Aquí puedes ver tus estadísticas y desempeño en tus citas.</p>
+
+    <div class="perfil-grafico-contenedor">
+        <canvas id="citasChart"></canvas>
+    </div>
+</div>
 {% endblock %}

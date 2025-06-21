@@ -1,0 +1,135 @@
+/* --- Servicios Médicos Profesional Izel --- */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #F5F5F5;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.banner-servicios {
+  background: linear-gradient(135deg, #011f30, #013857);
+  color: #ffffff;
+  padding: 90px 20px 70px;
+  text-align: center;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  box-shadow: 0 6px 24px rgba(1, 31, 48, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-servicios::after {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 60%;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(#6AC1B8 0%, transparent 70%);
+  opacity: 0.08;
+  transform: rotate(25deg);
+}
+
+.banner-servicios h1 {
+  font-size: 2.6rem;
+  margin-bottom: 16px;
+  animation: fadeInDown 1s ease forwards;
+}
+
+.banner-servicios p {
+  font-size: 1.2rem;
+  opacity: 0.95;
+  animation: fadeInUp 1s ease 0.3s forwards;
+}
+
+.seccion-servicios {
+  padding: 60px 20px;
+  max-width: 1240px;
+  margin: auto;
+}
+
+.contenedor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+}
+
+.servicio {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 2px 16px rgba(1, 31, 48, 0.07);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.servicio::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(to right, #A8D8B9, #6AC1B8);
+  transition: height 0.3s ease;
+}
+
+.servicio:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 12px 32px rgba(1, 31, 48, 0.15);
+}
+
+.servicio:hover::before {
+  height: 6px;
+}
+
+.servicio img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.servicio h3 {
+  font-size: 1.3rem;
+  color: #013857;
+  margin: 20px 20px 10px;
+}
+
+.servicio p {
+  font-size: 1rem;
+  padding: 0 20px 24px;
+  color: #37474f;
+  flex-grow: 1;
+}
+
+@keyframes fadeInDown {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .banner-servicios {
+    padding: 50px 16px;
+  }
+
+  .banner-servicios h1 {
+    font-size: 1.8rem;
+  }
+
+  .banner-servicios p {
+    font-size: 1rem;
+  }
+
+  .servicio img {
+    height: 170px;
+  }
+}

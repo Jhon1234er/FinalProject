@@ -24,25 +24,17 @@ urlpatterns = [
     #region Home
     path('admin/', admin.site.urls),
     path('', home, name='home'),
+    path('sobre-nosotros/', sobre_nosotros, name='sobre_nosotros'),
+    path('servicios/', servicios, name='servicios'),
     #endregion
-
-
-
 
     #region Inicio Sesion 
     path('login/', login_usuario, name='login'), 
     path('logout/', logout_usuario, name='logout'),
     path('detallar_usuario/', detallar_usuario, name='detallar_usuario'),
     path('actualizar_usuario/',actualizar_usuario,name='actualizar_usuario'),
-    path('mi-cita/', ver_mi_cita, name='ver_mi_cita'),
-    path('recuperar/', solicitar_recuperacion, name='recuperar_cuenta'),
-    path('reset-password/<uidb64>/<token>/', resetear_contraseña, name='reset_password'),  
-
-
-
-
-
-
+    path('recuperar/', recuperar_contrasena, name='recuperar_contrasena'),
+    #endregion
 
     # region Usuario 
     path('usuario/insertar/', registrar_usuario, name='registrar_usuario'),
@@ -51,10 +43,6 @@ urlpatterns = [
     path('usuario/actualizar/<int:id>/', actualizar_usuario, name='actualizar_usuario'),
     path('usuario/eliminar_imagen/', eliminar_imagen_usuario, name='eliminar_imagen_usuario'),
     # endregion
-
-
-
-
 
     # region Medicos
     path('medico/registrar/', registrar_medico, name='registrar_medico'),
@@ -68,50 +56,21 @@ urlpatterns = [
     path('submit-all/', submit_all, name='submit_all'),
     # endregion
 
-
-
-
-    # region IT 
-    path('ti/registrar/', registrar_ti, name='registrar_ti'),
-    path('ti/listar/', lista_ti, name='listar_ti'),
-    path('ti/actualizar/<int:id>/', actualizar_ti, name='actualizar_ti'),
-    path('ti/eliminar/<int:id>/', eliminar_ti, name='eliminar_ti'),
-    # endregion
-
-
-
-
-
     # region Administrador 
+    path('perfil/administrador/', perfil_administrador, name='perfil_administrador'),
     path('administrador/registrar/', registrar_administrador, name='registrar_administrador'),
     path('administrador/listar/', lista_administrador, name='listar_administrador'),
     path('administrador/actualizar/<int:id>/', actualizar_administrador, name='actualizar_administrador'),
     path('administrador/eliminar/<int:id>/', eliminar_administrador, name='eliminar_administrador'),
     # endregion
 
-
-
     # region Paciente 
+    path('paciente/perfil/', perfil_paciente, name='perfil_paciente'),
     path('paciente/registrar/', registrar_paciente, name='registrar_paciente'),
     path('paciente/listar/', lista_paciente, name='listar_paciente'),
     path('paciente/actualizar/<int:id>/', actualizar_paciente, name='actualizar_paciente'),
     path('paciente/eliminar/<int:id>/', eliminar_paciente, name='eliminar_paciente'),
     # endregion
-
-
-
-
-    #region Auxiliar
-    path('auxiliar/registrar/', registrar_auxiliar, name='registrar_auxiliar'),
-    path('auxiliar/lista/', lista_auxiliar, name='listar_auxiliares'),
-    path('auxiliar/actualizar/<int:id>/', actualizar_auxiliar, name='actualizar_auxiliar'),
-    path('auxiliar/eliminar/<int:id>/', eliminar_auxiliar, name='eliminar_auxiliar'),
-    #endregion
-
-
-
-
-
 
     # region HorarioMedico 
     path('horario/registrar/', registrar_horario_medico, name='registrar_horario_medico'),
@@ -120,11 +79,6 @@ urlpatterns = [
     path('horario/eliminar/<int:id>/', eliminar_horario_medico, name='eliminar_horario_medico'),
     # endregion
 
-
-
-
-
-
     # region Consulta 
     path('consulta/registrar/', registrar_consulta, name='registrar_consulta'),
     path('consulta/lista/<int:paciente_id>/', lista_consulta, name='listar_consulta'),
@@ -132,29 +86,15 @@ urlpatterns = [
     path('consulta/eliminar/<int:id>/', eliminar_consulta, name='eliminar_consulta'),
     # endregion
 
-
-
-
-
     # region PerfilPaciente 
     path('perfil/registrar/', registrar_perfil_paciente, name='registrar_perfil_paciente'),
     path('perfil/listar/', lista_perfil_paciente, name='listar_perfil_paciente'),
     # endregion
 
-
-
-
-
-
     # region Antecedente 
     path('antecedente/registrar/', crear_antecedente, name='registrar_antecedente'),
     path('antecedente/listar/', lista_antecedente, name='listar_antecedente'),
     # endregion
-
-
-
-
-
 
     # region Vacuna 
     path('vacuna/registrar/', registrar_vacuna, name='registrar_vacuna'),
@@ -162,60 +102,33 @@ urlpatterns = [
     path('vacuna/eliminar/<int:id>/', eliminar_vacuna, name='eliminar_vacuna'),
     # endregion
 
-
-
-
-
-
     # region DatoQuirurgico 
     path('quirurgico/registrar/', registrar_dato_quirurgico, name='registrar_dato_quirurgico'),
     path('quirurgico/listar/', lista_dato_quirurgico, name='listar_dato_quirurgico'),
     # endregion
-
-
-
-
-
 
     # region HistoriaClinica 
     path('historia/registrar/', registrar_historia_clinica, name='registrar_historia_clinica'),
     path('historia/listar/', lista_historia_clinica, name='listar_historia_clinica'),
     # endregion
 
-
-
-
-
-
     # region DatoAntropometrico 
     path('antropometrico/registrar/', registrar_dato_antropometrico, name='registrar_dato_antropometrico'),
     path('antropometrico/listar/', lista_dato_antropometrico, name='listar_dato_antropometrico'),
     # endregion
 
-
-
-
-
-
     # region Cita 
     path('cita/registrar/', registrar_cita, name='registrar_cita'),
     path('cita/listar/', lista_cita, name='listar_cita'),
+    path('mi-cita/', ver_mi_cita, name='ver_mi_cita'),
+    path('cita/<int:cita_id>/detalle/', detalle_cita, name='detalle_cita'),
+    path('cita/<int:cita_id>/cancelar/', cancelar_cita, name='cancelar_cita'),
     # endregion
-
-
-
-
-
 
     # region CertificadoIncapacidad 
     path('certificado/registrar/', registrar_certificado_incapacidad, name='registrar_certificado_incapacidad'),
     path('certificado/listar/', lista_certificado_incapacidad, name='listar_certificado_incapacidad'),
     # endregion
-
-
-
-
-
 
     # region RecetaMedica 
     path('receta/registrar/', registrar_receta_medica, name='registrar_receta_medica'),
@@ -223,25 +136,15 @@ urlpatterns = [
     path('receta/eliminar/<int:id>/', eliminar_receta_medica, name='eliminar_receta_medica'),
     # endregion
 
-
-
-
-
-
     # region OrdenMedica 
     path('orden/registrar/', registrar_orden_medica, name='registrar_orden_medica'),
     path('orden/listar/', lista_orden_medica, name='listar_orden_medica'),
     # endregion
 
-
-
-
     #region Disponibilidad
-
     path('calendario/', calendario, name='calendario'),
     path('obtener_disponibilidad/', obtener_disponibilidad, name='obtener_disponibilidad'),
     path('verificar_disponibilidad/', verificar_disponibilidad, name='verificar_disponibilidad'),
     path('confirmar_cita/<int:disponibilidad_id>/', confirmar_cita, name='confirmar_cita'),
     path('gestionar_disponibilidad/', gestionar_disponibilidad, name='gestionar_disponibilidad'),
-
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

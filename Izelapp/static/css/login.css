@@ -1,0 +1,205 @@
+/** === LOGIN CSS MEJORADO === */
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #F5F5F5;
+    font-family: 'Poppins', Arial, sans-serif;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* Contenedor principal */
+.Ingresar {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 0.15rem; /* aumentado para evitar que se pegue al encabezado */
+    padding-bottom: 3rem;
+    margin-top: 5rem; /* agregado para compensar el header fijo */
+    background: #F5F5F5;
+}
+
+/* Tarjeta del formulario */
+.Ingresar__formulario {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(1, 31, 48, 0.08);
+    padding: 2.2rem;
+    text-align: center;
+    animation: slideIn 0.7s ease-out;
+    margin-top: 2rem; /* adicional para bajar aún más el formulario */
+}
+
+.Ingresar__titulo {
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #011f30;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+/* Campos de entrada */
+.Ingresar__campo {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.Ingresar__campo-input {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    background-color: #FAFAFA;
+    color: #333;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.Ingresar__campo-input:focus {
+    border-color: #A8D8B9;
+    background-color: #ffffff;
+    outline: none;
+}
+
+.Ingresar__campo-label {
+    position: absolute;
+    top: 50%;
+    left: 0.75rem;
+    transform: translateY(-50%);
+    font-size: 0.95rem;
+    color: #607d8b;
+    pointer-events: none;
+    transition: all 0.2s ease;
+}
+
+.Ingresar__campo-input:focus + .Ingresar__campo-label,
+.Ingresar__campo-input:not(:placeholder-shown) + .Ingresar__campo-label {
+    top: -0.7rem;
+    left: 0.5rem;
+    font-size: 0.75rem;
+    background-color: #fff;
+    padding: 0 6px;
+    color: #013857;
+}
+
+/* Botón */
+.Ingresar__submit {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #011f30;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.Ingresar__submit:hover {
+    background-color: #013857;
+    transform: scale(1.02);
+}
+
+.Ingresar__submit:focus-visible {
+    outline: 3px solid #A8D8B9;
+    outline-offset: 2px;
+}
+
+/* Enlaces secundarios ajustados visualmente */
+.Ingresar__opciones {
+    display: flex;
+    justify-content: center; /* centrado horizontal */
+    align-items: center;
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+
+.Ingresar__registro-enlace,
+.Ingresar__olvido-enlace {
+    color: #013857;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.8rem;
+    transition: color 0.3s ease;
+}
+
+.Ingresar__registro-enlace:hover,
+.Ingresar__olvido-enlace:hover {
+    color: #A8D8B9;
+    text-decoration: underline;
+}
+
+.Separador {
+    color: #ccc;
+    font-size: 1rem;
+    font-weight: 400;
+}
+/* Mensajes */
+.error,
+ul.messages li {
+    color: #b00020;
+    background-color: #ffe5e5;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid #b00020;
+    border-radius: 6px;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+ul.messages {
+    list-style: none;
+    padding: 0;
+}
+
+/* Cargando texto */
+.Ingresar__cargando {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #013857;
+    font-weight: 500;
+    display: none;
+}
+
+/* Animación */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .Ingresar__formulario {
+        padding: 1.5rem;
+    }
+
+    .Ingresar__titulo {
+        font-size: 1.5rem;
+    }
+
+    .Ingresar__opciones {
+        flex-direction: column;
+        align-items: center;
+    }
+}
