@@ -3,15 +3,28 @@ body {
     background-color: #f5f7fa;
     color: #333;
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
+/* Evita que el contenido quede oculto tras el header fijo */
+main, .main-content {
+    flex: 1;
+    margin-top: 100px; /* Ajusta según la altura de tu header */
+    margin-bottom: 40px;
+    padding: 0 20px;
+}
+
+/* Título */
 h2 {
     text-align: center;
     color: #2c3e50;
     margin-bottom: 30px;
 }
 
+/* Imagen de perfil */
 .imagen-perfil-contenedor {
     display: flex;
     flex-direction: column;
@@ -28,6 +41,7 @@ h2 {
     cursor: pointer;
 }
 
+/* Acciones debajo de imagen */
 .acciones-imagen {
     display: flex;
     align-items: center;
@@ -44,6 +58,7 @@ h2 {
     color: #333;
 }
 
+/* Botón eliminar imagen */
 .form-eliminar button {
     background-color: #e74c3c;
     color: white;
@@ -62,14 +77,12 @@ h2 {
     background-color: #c0392b;
 }
 
-.form-eliminar svg {
-    pointer-events: none;
-}
-
+/* Oculta input de imagen */
 #id_imagen {
     display: none;
 }
 
+/* Botón subir imagen */
 .form-imagen button {
     margin-top: 15px;
     background-color: #3498db;
@@ -144,6 +157,7 @@ h2 {
     background-color: #c0392b;
 }
 
+/* Tabla de información */
 table {
     width: 90%;
     max-width: 800px;
@@ -167,9 +181,9 @@ table th {
     width: 40%;
 }
 
-/* Botón de actualizar */
+/* Botón actualizar */
 #actualizar-btn {
-    margin-top: 20px;
+    margin: 40px auto 0;
     padding: 12px 28px;
     background-color: #2ecc71;
     border: none;
@@ -178,6 +192,7 @@ table th {
     font-weight: bold;
     border-radius: 10px;
     cursor: pointer;
+    display: block;
     transition: background-color 0.3s ease, transform 0.2s ease;
     box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
 }
@@ -187,7 +202,7 @@ table th {
     transform: translateY(-2px);
 }
 
-/* Estilos para los mensajes de error */
+/* Mensajes de error */
 form .form-row .error {
     color: #e74c3c;
     font-size: 0.875rem;
@@ -218,7 +233,7 @@ form .form-row .error {
     border-left: 4px solid #28a745;
 }
 
-
-.footer{
+/* Footer color solo si hace falta personalizar */
+.footer {
     color: #f5f5f5;
 }

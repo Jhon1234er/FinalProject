@@ -1,156 +1,83 @@
-/* === Sobre Nosotros - Diseño Moderno e Integrado === */
 body {
   font-family: 'Poppins', sans-serif;
-  background: #F5F5F5;
-  color: #333;
+  background-color: #f0f6fa;
   margin: 0;
   padding: 0;
+  color: #011f30;
 }
 
-/* Banner (si usas uno arriba de esta sección) */
-.banner-nosotros {
-  background: linear-gradient(135deg, #011f30, #013857);
-  color: #ffffff;
-  padding: 100px 20px 80px;
-  text-align: center;
-  border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px;
-  box-shadow: 0 6px 24px rgba(1, 31, 48, 0.15);
-  position: relative;
-  overflow: hidden;
+.sobre-nosotros-integrado {
+  padding: 60px 0 80px;
+  background-color: #f0f6fa;
 }
 
-.banner-nosotros::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: -50px;
-  width: 120px;
-  height: 100%;
-  background: radial-gradient(#A8D8B9 0%, transparent 70%);
-  opacity: 0.08;
-  transform: rotate(-20deg);
-}
-
-.contenido-banner h1 {
-  font-size: 2.8rem;
-  margin-bottom: 16px;
-  animation: fadeInDown 1s ease forwards;
-}
-
-.contenido-banner p {
-  font-size: 1.25rem;
-  opacity: 0.95;
-  animation: fadeInUp 1s ease 0.3s forwards;
-}
-
-/* === Sección Principal - Diseño Mejorado === */
-.sobre-nosotros-elegante {
-  background: linear-gradient(130deg, #ffffff 60%, #f0f6f9 100%);
-  padding: 80px 60px;
-  border-radius: 24px;
-  max-width: 1300px;
-  margin: 80px auto;
-  box-shadow: 0 12px 48px rgba(1, 31, 48, 0.05);
-  position: relative;
-  overflow: hidden;
-}
-
-.contenido-elegante {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 80px;
-}
-
-.columna.texto {
-  flex: 1 1 55%;
-}
-
-.columna.imagen {
-  flex: 1 1 45%;
-  display: flex;
-  justify-content: center;
-}
-
-.fondo-imagen {
-  background: #fff;
-  padding: 20px;
-  border-radius: 28px;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
-  position: relative;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-
-.fondo-imagen::after {
-  content: '';
-  position: absolute;
-  top: -40px;
-  right: -40px;
-  width: 160px;
-  height: 160px;
-  background: radial-gradient(circle, #A8D8B9 20%, transparent 70%);
-  opacity: 0.1;
-  border-radius: 50%;
-  z-index: -1;
-}
-
-.fondo-imagen img {
-  width: 100%;
-  max-width: 460px;
-  height: auto;
+.contenedor-nosotros-integrado {
+  max-width: 1100px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 50px 60px;
   border-radius: 20px;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-.fondo-imagen:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+.bloque-texto {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 50px 40px;
 }
 
-/* === Estilo del contenido textual === */
-.texto h2 {
+.bloque-item h2 {
+  font-size: 1.5rem;
   color: #013857;
-  font-size: 1.6rem;
-  margin-top: 26px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   position: relative;
 }
 
-.texto h2::after {
+.bloque-item h2::after {
   content: '';
   display: block;
-  width: 50px;
+  width: 40px;
   height: 3px;
-  background: #A8D8B9;
+  background: #6AC1B8;
   margin-top: 6px;
   border-radius: 2px;
 }
 
-.texto p {
-  font-size: 1.1rem;
-  margin-bottom: 16px;
-  line-height: 1.7;
-  color: #444;
+.bloque-item p {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
 }
 
-.texto ul {
-  list-style-type: disc;
-  padding-left: 22px;
-  font-size: 1.05rem;
+.bloque-item ul {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  column-gap: 20px;
+  row-gap: 8px;
+  padding-left: 20px;
+  margin-top: 0;
+}
+
+.bloque-item ul li {
+  font-size: 1rem;
   color: #013857;
-  margin-top: 14px;
 }
 
-/* === Animaciones (opcional si usas AOS o similares) === */
-@keyframes fadeInDown {
-  0% { opacity: 0; transform: translateY(-20px); }
-  100% { opacity: 1; transform: translateY(0); }
+.bloque-ilustracion {
+  margin-top: 50px;
+  text-align: center;
 }
 
-@keyframes fadeInUp {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
+.bloque-ilustracion img {
+  max-width: 650px;
+  width: 90%;
+  height: auto;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.bloque-ilustracion img:hover {
+  transform: scale(1.02);
 }

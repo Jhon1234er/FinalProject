@@ -197,7 +197,7 @@ def actualizar_usuario(request, id):
             messages.error(request, 'Por favor, revisa los campos del formulario.')
     else:
         formulario = UsuarioForm(instance=usuario)
-    return render(request, 'usuario/actualizar.html', {'formulario': formulario})
+    return render(request, 'paciente/actualizar.html', {'formulario': formulario})
 
 def lista_usuario(request):
     usuarios = Usuario.objects.all().order_by('tipo_doc')  
@@ -372,20 +372,23 @@ def lista_medico(request):
     return render(request, 'medico/lista.html', {
         'medicos': medicos
     })
+@login_required
 def actualizar_medico(request, id):
     medico = get_object_or_404(Medico, id=id)
     if request.method == 'POST':
-        formulario = MedicoForm(request.POST, instance=medico)
+        formulario = MedicoUpdateForm(request.POST, instance=medico)
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Médico actualizado exitosamente.')
-            return redirect('listar_medico')
+            return redirect('detallar_usuario')
         else:
             messages.error(request, 'Por favor, revisa los campos.')
     else:
-        formulario = MedicoForm(instance=medico)
-    return render(request, 'medico/actualizar.html', {'formulario': formulario})
-
+        formulario = MedicoUpdateForm(instance=medico)
+    return render(request, 'medico/actualizar.html', {
+        'formulario': formulario,
+        'usuario': medico  
+    })
 def eliminar_medico(request, id):
     medico = get_object_or_404(Medico, id=id)
     medico.delete()

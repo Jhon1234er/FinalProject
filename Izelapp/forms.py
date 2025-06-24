@@ -210,7 +210,7 @@ class AdministradorForm(forms.ModelForm):
         labels = {
             'username': 'Nombre de Usuario',
             'password': 'Contraseña',
-            'first_name': 'Primer Nombre',
+            'first_name': 'Nombre',
             'last_name': 'Apellido',
             'email': 'Correo',
             'tipo_doc': 'Tipo de documento',
@@ -277,20 +277,21 @@ class MedicoForm(forms.ModelForm):
                 'class': 'form-control'
             }),
         }
-
-    tipo_doc = forms.ChoiceField(
+    num_doc = forms.CharField(label='Número de documento')
+    tipo_doc = forms.ChoiceField(label='Tipo de documento',
         choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_TIPODOC,
         widget=forms.Select(attrs={'class': 'select2'})
     )
+    eps = forms.CharField(label='EPS')
     genero = forms.ChoiceField(
         choices=[('', 'Selecciona una opción')] + Usuario.GENERO_OPCIONES,
         widget=forms.Select(attrs={'class': 'select2'})
     )
-    rh = forms.ChoiceField(
+    rh = forms.ChoiceField(label='RH',
         choices=[('', 'Selecciona una opción')] + Usuario.RH_OPCIONES,
         widget=forms.Select(attrs={'class': 'select2'})
     )
-    password = forms.CharField(widget=forms.PasswordInput())
+    password = forms.CharField(label='Contraseña',widget=forms.PasswordInput())
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -317,6 +318,15 @@ class MedicoForm(forms.ModelForm):
             if fecha_contratacion < hoy:
                 raise ValidationError("La fecha de contratación debe ser hoy o posterior.")
         return fecha_contratacion
+
+class MedicoUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Medico
+        fields = ['email', 'telefono', 'tipo_poblacion']
+
+    email = forms.EmailField(label='Correo', required=True)
+    telefono = forms.CharField(label='Teléfono', required=False)
+    tipo_poblacion = forms.CharField(label='Tipo de Población', required=False)
 #endregion
 
 # region Consulta

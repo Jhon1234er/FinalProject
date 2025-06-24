@@ -1,0 +1,154 @@
+.dashboard-container {
+  background: #F5F5F5;
+  padding: 100px 20px 40px; /* Top padding para no tapar el header */
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  min-height: 100vh;
+}
+
+/* Bienvenida */
+.bienvenida-mensaje {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.bienvenida-mensaje p {
+  font-size: 20px;
+  font-weight: 600;
+  color: #013857;
+  margin-bottom: 30px;
+}
+
+/* Estadísticas */
+.stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  padding: 25px;
+  text-align: center;
+  flex: 1 1 200px;
+  max-width: 300px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.card h2 {
+  font-size: 1.1em;
+  margin-bottom: 10px;
+  color: #013857;
+}
+
+.card p {
+  font-size: 24px;
+  font-weight: bold;
+  color: #6AC1B8;
+}
+
+/* Botones de acción */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin: 40px 0;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 22px;
+  border: 1px solid transparent;
+  border-radius: 40px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: #013857;
+  color: #fff;
+  border-color: #013857;
+}
+
+.btn-primary:hover {
+  background: #fff;
+  color: #013857;
+}
+
+.btn-secondary {
+  background: #A8D8B9;
+  color: #fff;
+  border-color: #A8D8B9;
+}
+
+.btn-secondary:hover {
+  background: #6AC1B8;
+  color: #fff;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Contenido dinámico */
+.contenido-dinamico {
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* Animación al cambiar contenido */
+.animate-slide {
+  animation: slideIn 0.4s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ajuste para tablas internas */
+.contenido-dinamico table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.contenido-dinamico th,
+.contenido-dinamico td {
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  text-align: left;
+  font-size: 14px;
+}
+
+.contenido-dinamico th {
+  background-color: #013857;
+  color: #fff;
+}
+
+.contenido-dinamico tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.contenido-dinamico h2 {
+  color: #013857;
+  margin-bottom: 20px;
+}

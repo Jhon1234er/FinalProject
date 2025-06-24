@@ -1,0 +1,75 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+main, .main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Contenedor principal de la agenda */
+.container {
+  margin: 120px auto 300px; /* ← aumentamos el margen inferior de 60px a 100px */
+  max-width: 1000px;
+  padding: 0 20px;
+  font-family: 'Poppins', sans-serif;
+  flex-grow: 1;
+}
+
+h2 {
+  text-align: center;
+  font-size: 28px;
+  color: #013857;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.table {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(1, 31, 48, 0.15);
+  background-color: white;
+}
+
+.table th, .table td {
+  text-align: center;
+  vertical-align: middle;
+  font-size: 15px;
+}
+
+.table th {
+  background-color: #011f30;
+  color: white;
+  font-weight: 600;
+}
+
+.table td a {
+  background-color: #6AC1B8;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.table td a:hover {
+  background-color: #52a9a1;
+}
+
+.alert-info {
+  background-color: #e9f7f6;
+  color: #013857;
+  text-align: center;
+  padding: 20px;
+  border-radius: 12px;
+  font-size: 16px;
+  margin-top: 30px;
+}

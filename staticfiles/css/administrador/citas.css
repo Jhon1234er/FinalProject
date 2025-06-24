@@ -1,0 +1,39 @@
+.contenedor-citas-admin {
+  padding: 40px;
+  background-color: #F5F5F5;
+  font-family: 'Poppins', sans-serif;
+}
+
+.titulo-citas {
+  color: #013857;
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.tabla-citas {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.tabla-citas th {
+  background-color: #013857;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+.tabla-citas td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  color: #333;
+}
+
+.tabla-citas tr:hover {
+  background-color: #A8D8B9;
+  color: #013857;
+}
