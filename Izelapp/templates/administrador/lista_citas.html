@@ -1,0 +1,35 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/usuario/listas.css' %}">
+
+<div class="contenido-citas animate-fade">
+  <h2>Todas las Citas Agendadas</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Paciente</th>
+        <th>Médico</th>
+        <th>Especialidad</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cita in citas %}
+        <tr>
+          <td>{{ cita.paciente.first_name }} {{ cita.paciente.last_name }}</td>
+          <td>{{ cita.medico.first_name }} {{ cita.medico.last_name }}</td>
+          <td>{{ cita.especialidad }}</td>
+          <td>{{ cita.fecha_cita }}</td>
+          <td>{{ cita.hora_cita }}</td>
+          <td>{{ cita.estado_cita }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6">No hay citas registradas.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

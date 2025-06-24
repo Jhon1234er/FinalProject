@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'componentes/Base.html' %}
 {% load static %}
     datos del Administrador
 {% block content %}
@@ -64,7 +64,6 @@
     <tr><th>Ocupación:</th><td>{{ usuario.ocupacion }}</td></tr>
     <tr><th>EPS:</th><td>{{ usuario.eps }}</td></tr>
     <tr><th>Rol de acceso</th><td>{{ usuario.administrador.rol_acceso }}</td></tr>
-    <tr><th>Centro de administracion</th><td>{{ usuario.administrador.centro_administracion }}</td></tr>
 
 </table>
 

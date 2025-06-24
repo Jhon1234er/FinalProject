@@ -22,6 +22,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # La sesión se elimina al cerrar el na
 SESSION_SAVE_EVERY_REQUEST = True  # Reinicia el contador de tiempo con cada solicitud
 
 
+
 AUTH_USER_MODEL = 'Izelapp.Usuario'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -147,3 +148,12 @@ STATIC_ROOT = BASE_DIR / "staticfiles"  # Esta línea es la clave para producci�
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Configuración para enviar correos (SMTP - Gmail)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'EPSIzel@gmail.com'  # 🔁 Cambia esto por tu correo Gmail
+EMAIL_HOST_PASSWORD = '1234'  # 🔁 Debe ser una contraseña de aplicación (no tu clave normal)
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

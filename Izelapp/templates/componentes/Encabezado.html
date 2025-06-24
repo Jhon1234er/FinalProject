@@ -3,7 +3,7 @@
   <nav>
     <div class="contenedor-header">
       <a class="logo" href="{% url 'home' %}">
-        <img src="{% static 'img/logo1.png' %}" alt="Logo de Izel">
+        <img src="{% static 'img/Logo.png' %}" alt="Logo de Izel">
       </a>
       <ul class="lista-menu">
 
@@ -17,10 +17,31 @@
         {# Administrador autenticado #}
         {% if tipo_usuario == 'administrador' %}
           <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'gestionar_disponibilidad' %}activo{% endif %}" href="{% url 'gestionar_disponibilidad' %}">Crear Cita</a>
+            <a class="enlace-menu {% if request.resolver_match.url_name == 'gestionar_disponibilidad' %}activo{% endif %}" href="{% url 'gestionar_disponibilidad' %}">Gestionar Agenda</a>
           </li>
           <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'perfil_administrador' %}activo{% endif %}" href="{% url 'perfil_administrador' %}">Perfil</a>
+            <a class="enlace-menu {% if request.resolver_match.url_name == 'registrar_administrador' %}activo{% endif %}" href="{% url 'registrar_administrador' %}">Crear Cuenta Administrador</a>
+          </li>
+          <li class="opcion-menu">
+            <a class="enlace-menu {% if request.resolver_match.url_name == 'registrar_medico' %}activo{% endif %}" href="{% url 'registrar_medico' %}">Crear Cuenta Medico</a>
+          </li>
+          <li class="opcion-menu">
+            <a class="enlace-menu {% if request.resolver_match.url_name == 'perfil_administrador' %}activo{% endif %}" href="{% url 'perfil_administrador' %}">Inicio</a>
+          </li>
+          <li class="opcion-menu">
+            <a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a>
+          </li>
+          <li class="opcion-menu">
+            <a class="enlace-menu" href="{% url 'logout' %}">Cerrar Sesión</a>
+          </li>
+
+        {# Medico autenticado #}
+        {% elif tipo_usuario == 'medico' %}
+          <li class="opcion-menu">
+            <a class="enlace-menu {% if request.resolver_match.url_name == 'perfil_medico' %}activo{% endif %}" href="{% url 'perfil_medico' %}">Inicio</a>
+          </li>
+          <li class="opcion-menu">
+            <a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a>
           </li>
           <li class="opcion-menu">
             <a class="enlace-menu" href="{% url 'logout' %}">Cerrar Sesión</a>
@@ -39,6 +60,9 @@
           </li>
           <li class="opcion-menu">
             <a class="enlace-menu" href="#">Historia Clínica</a>
+          </li>
+          <li class="opcion-menu">
+            <a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a>
           </li>
           <li class="opcion-menu">
             <a class="enlace-menu" href="{% url 'logout' %}">Cerrar sesión</a>

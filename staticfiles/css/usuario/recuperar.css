@@ -1,0 +1,81 @@
+/* Estructura de página especial centrada */
+.page-special {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 20px;
+  background-color: #f5f5f5;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Formulario centrado */
+.form-container {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(1, 31, 48, 0.15);
+  max-width: 500px;
+  width: 100%;
+}
+
+/* Títulos */
+.Recuperar__titulo {
+  color: #013857;
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.Recuperar__descripcion {
+  color: #333;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Campos */
+.Recuperar__campo {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.Recuperar__campo-label {
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #013857;
+}
+
+.Recuperar__campo-input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+}
+
+/* Botón */
+.restablecer-boton {
+  background-color: #013857;
+  color: white;
+  padding: 14px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.restablecer-boton:hover {
+  background-color: #02567f;
+}
+
+/* Mensaje */
+.Recuperar__mensaje {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: bold;
+}

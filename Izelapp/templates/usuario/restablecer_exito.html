@@ -1,0 +1,19 @@
+{% extends 'componentes/Base.html' %}
+{% load static %}
+
+{% block title %}Contraseña restablecida - Izel{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/componentes/pages-special.css' %}">
+<link rel="stylesheet" href="{% static 'css/usuario/restablecer_exito.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="page-special">
+  <div class="form-container" style="text-align: center;">
+    <h2 class="Restablecer__titulo">¡Contraseña restablecida con éxito!</h2>
+    <p>Puedes iniciar sesión con tu nueva contraseña.</p>
+    <a href="{% url 'login' %}" class="Restablecer__boton">Iniciar sesión</a>
+  </div>
+</div>
+{% endblock %}

@@ -2,15 +2,22 @@
 {% load static %}
 
 {% block title %}
-    Registro de Médico
+  Registro de Médico
 {% endblock %}
 
 {% block content %}
-  <link rel="stylesheet" href="{% static 'css/usuario/insertar.css' %}">
+  <link rel="stylesheet" href="{% static 'css/paciente/insertar.css' %}">
 
-  <h2>Registro de Médico</h2>
+  <!-- Select2 -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-  <!-- Mostrar mensajes de éxito o error -->
+  <!-- intlTelInput -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.min.css"/>
+
+  <!-- Flatpickr -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+
+
   {% if messages %}
     <div class="messages">
       {% for message in messages %}
@@ -19,7 +26,6 @@
     </div>
   {% endif %}
 
-  <!-- Mostrar errores generales del formulario -->
   {% if formulario.non_field_errors %}
     <div class="error-messages">
       {% for error in formulario.non_field_errors %}
@@ -28,17 +34,15 @@
     </div>
   {% endif %}
 
-  <!-- Formulario de Registro -->
   <form method="POST">
     {% csrf_token %}
-    
-    <!-- Iterar sobre los campos del formulario -->
+    <h2 class="form-title">Registro de Médico</h2>
+
     {% for field in formulario %}
       <div class="form-row">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
         {{ field }}
         
-        <!-- Mostrar errores debajo del campo -->
         {% if field.errors %}
           <div class="error-messages">
             {% for error in field.errors %}
@@ -53,7 +57,23 @@
       </div>
     {% endfor %}
 
-    <!-- Botón para enviar el formulario -->
     <button type="submit">Registrar</button>
   </form>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Select2 -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <!-- intlTelInput -->
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/intlTelInput.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/utils.js"></script>
+
+  <!-- Flatpickr -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+  <!-- Script personalizado -->
+  <script src="{% static 'js/activar.js' %}"></script>
 {% endblock %}

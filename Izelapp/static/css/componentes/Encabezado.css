@@ -14,19 +14,29 @@ header {
 .contenedor-header {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 10px 20px;
+  padding: 6px 20px; /* Ajustado para reducir altura del header */
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
 .logo img {
-  height: 50px;
-  transition: transform 0.3s ease;
+  max-height: 80px; /* Más grande pero sin exceder el header */
+  width: auto;
+  display: block;
+  transition: transform 0.4s ease, filter 0.3s ease;
+  filter: drop-shadow(0 0 5px rgba(106, 193, 184, 0.5)); /* Brillo verde menta */
 }
 
 .logo img:hover {
-  transform: scale(1.1);
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
 }
 
 .lista-menu {
@@ -76,8 +86,13 @@ header {
     flex-direction: column;
     gap: 10px;
   }
+
   .lista-menu {
     flex-direction: column;
     gap: 10px;
+  }
+
+  .logo img {
+    max-height: 70px; /* Ajuste para pantallas pequeñas */
   }
 }

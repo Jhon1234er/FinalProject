@@ -20,7 +20,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding-top: 0.15rem; /* aumentado para evitar que se pegue al encabezado */
+    padding-top: 0.35rem; /* aumentado para evitar que se pegue al encabezado */
     padding-bottom: 3rem;
     margin-top: 5rem; /* agregado para compensar el header fijo */
     background: #F5F5F5;
@@ -36,7 +36,7 @@ body {
     padding: 2.2rem;
     text-align: center;
     animation: slideIn 0.7s ease-out;
-    margin-top: 2rem; /* adicional para bajar aún más el formulario */
+    margin-top: 0.10rem; /* adicional para bajar aún más el formulario */
 }
 
 .Ingresar__titulo {

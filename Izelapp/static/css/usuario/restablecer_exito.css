@@ -1,0 +1,31 @@
+/* css/usuario/restablecer_exitoso.css */
+.Exito__titulo {
+  text-align: center;
+  font-size: 22px;
+  color: #013857;
+  margin-bottom: 20px;
+}
+
+.Exito__mensaje {
+  text-align: center;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.Exito__boton {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background-color: #013857;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.Exito__boton:hover {
+  background-color: #02567f;
+}

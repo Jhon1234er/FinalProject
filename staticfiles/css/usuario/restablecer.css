@@ -1,0 +1,102 @@
+/* Estilos generales para centrar y controlar ancho */
+.Restablecer__contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  background-color: #f0f6f9;
+  font-family: 'Poppins', sans-serif;
+}
+
+.Restablecer__formulario {
+  background-color: #ffffff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(1, 31, 48, 0.15);
+  max-width: 420px;
+  width: 100%;
+}
+
+/* Título */
+.Restablecer__titulo {
+  text-align: center;
+  font-size: 24px;
+  color: #013857;
+  margin-bottom: 30px;
+}
+
+.Restablecer__campo {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+/* Input */
+.Restablecer__campo input {
+  width: 100%;
+  padding: 16px 14px 16px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: border 0.2s ease;
+}
+
+/* Input en foco */
+.Restablecer__campo input:focus {
+  outline: none;
+  border-color: #013857;
+}
+
+/* Label */
+.Restablecer__campo label {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  background: white;
+  padding: 0 6px;
+  font-size: 15px;
+  color: #999;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+/* Flotante cuando input tiene texto o está en foco */
+.Restablecer__campo input:focus + label,
+.Restablecer__campo input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 12px;
+  font-size: 13px;
+  color: #013857;
+}
+
+
+/* Error */
+.Restablecer__error {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* Botón */
+.Restablecer__boton {
+  width: 100%;
+  padding: 14px;
+  background-color: #013857;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.Restablecer__boton:hover {
+  background-color: #02567f;
+}

@@ -1,7 +1,44 @@
 {% extends 'componentes/Base.html' %}
-
 {% load static %}
 
 {% block content %}
-    <h1>Bienvenido administrador, <td>{{ usuario.first_name }} {{ usuario.last_name }}</td></h1>
+<link rel="stylesheet" href="{% static 'css/administrador/perfil.css' %}">
+
+<div class="dashboard-container">
+
+  <!-- Bienvenida persistente -->
+  <div id="bienvenida-mensaje" class="bienvenida-mensaje animate-fade">
+    <p>Bienvenido, <strong>{{ request.user.first_name|upper }} {{ request.user.last_name|upper }}</strong></p>
+
+    <div class="stats-grid">
+      <div class="card">
+        <h2>Usuarios Registrados</h2>
+        <p>124</p>
+      </div>
+      <div class="card">
+        <h2>Citas Totales</h2>
+        <p>53</p>
+      </div>
+      <div class="card">
+        <h2>Médicos Activos</h2>
+        <p>12</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botones de navegación -->
+  <div class="actions">
+    <a href="#" class="btn btn-primary" onclick="mostrarPanel('pacientes')">Gestionar Pacientes</a>
+    <a href="#" class="btn btn-primary" onclick="mostrarPanel('citas')">Gestionar Citas</a>
+    <a href="#" class="btn btn-secondary" onclick="mostrarPanel('medicos')">Gestionar Médicos</a>
+    <a href="#" class="btn btn-secondary" onclick="mostrarPanel('crear')">Agregar Bloque de Atención</a>
+  </div>
+
+  <!-- Contenido dinámico -->
+  <div id="contenido-dinamico" class="contenido-dinamico animate-fade">
+    <h3>Selecciona una opción para comenzar</h3>
+  </div>
+</div>
+
+<script src="{% static 'js/admin.js' %}"></script>
 {% endblock %}

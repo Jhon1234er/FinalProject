@@ -1,8 +1,34 @@
 {% extends 'componentes/Base.html' %}
-
 {% load static %}
 
-{% block content %}
-    <h1>Bienvenido, <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>!</h1>
+{% block title %}
+  Inicio Médico
+{% endblock %}
 
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/medico/perfil.css' %}">
+
+<div class="dashboard-medico" data-aos="fade-up">
+  <h1 class="bienvenida">¡Bienvenido, Dr. {{ usuario.first_name }} {{ usuario.last_name }}!</h1>
+
+  <div class="resumen-contenedor">
+    <div class="card-dashboard">
+      <h3>Citas de Hoy</h3>
+      <p><strong>{{ total_citas_hoy }}</strong> pacientes agendados</p>
+      <a href="{% url 'agenda_citas_medico' %}" class="btn-ver">Ver agenda</a>
+    </div>
+
+    <div class="card-dashboard">
+      <h3>Historia Clínica</h3>
+      <p>Consulta los antecedentes y evolución de tus pacientes.</p>
+      <a href='#' class="btn-ver">Acceder</a>
+    </div>
+
+    <div class="card-dashboard">
+      <h3>Órdenes Médicas</h3>
+      <p>Genera fórmulas, exámenes y órdenes diagnósticas.</p>
+      <a href='#' class="btn-ver">Nueva orden</a>
+    </div>
+  </div>
+</div>
 {% endblock %}

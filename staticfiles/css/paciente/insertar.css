@@ -1,0 +1,140 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #F5F5F5;
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  text-align: center;
+  color: #013857;
+  margin-top: 20px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+form {
+  max-width: 600px;
+  margin: 120px auto 50px auto;  /* separación superior e inferior */
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(1, 31, 48, 0.1);
+}
+.iti {
+  width: 100%;
+}
+
+#telefono-input {
+  width: 100%;
+  padding-left: 100px !important;  /* espacio suficiente para bandera y código */
+  font-size: 16px;
+  height: 45px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+.form-title {
+  text-align: center;
+  font-size: 30px;
+  color: #011f30;
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+.form-row {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: 500;
+  color: #013857;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+select,
+.select2-container--default .select2-selection--single,
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 16px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+input:focus,
+select:focus,
+/* Contenedor del select2: alineación y estilo */
+.select2-container--default .select2-selection--single {
+  height: 45px !important;
+  padding: 0 12px;
+  font-size: 16px;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between; /* separa el texto del ícono */
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background-color: white;
+}
+
+/* Texto dentro del select2 centrado verticalmente */
+.select2-selection__rendered {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: normal !important;
+  width: 100% !important;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+/* Ícono de flecha centrado verticalmente */
+.select2-selection__arrow {
+  height: 100% !important;
+  display: flex;
+  align-items: center;
+}
+
+
+button[type="submit"] {
+  width: 100%;
+  background-color: #013857;       /* Azul principal */
+  color: #ffffff;
+  padding: 14px;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(1, 31, 48, 0.3);  /* Sombra azul oscura */
+}
+
+button[type="submit"]:hover {
+  background-color: #011f30;       /* Azul más oscuro al pasar el mouse */
+  box-shadow: 0 6px 18px rgba(1, 31, 48, 0.4);  /* Más profundidad */
+}
+.error-messages {
+  color: #d9534f;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.message {
+  color: green;
+  font-weight: 600;
+}
+
+.help-text {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}

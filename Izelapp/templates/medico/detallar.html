@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'componentes/Base.html' %}
 {% load static %}
 
 {% block content %}
@@ -65,8 +65,6 @@
     <tr><th>Ocupación:</th><td>{{ usuario.ocupacion }}</td></tr>
     <tr><th>EPS:</th><td>{{ usuario.eps }}</td></tr>
     <tr><th>Especialidad:</th><td>{{ usuario.medico.especialidad }}</td></tr>
-    <tr><th>Registro profesional:</th><td>{{ usuario.medico.numero_registro_profesional }}</td></tr>
-    <tr><th>Licencia:</th><td>{{ usuario.medico.licencia_certificacion }}</td></tr>
     <tr><th>Fecha de contratación:</th><td>{{ usuario.medico.fecha_contratacion }}</td></tr>
 </table>
 

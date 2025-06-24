@@ -1,19 +1,77 @@
 {% extends 'componentes/Base.html' %}
-    
 {% load static %}
-
-{% block title %}
-    Creacion de Agenda 
-{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/cita/disponibilidad.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-<h1>Gestionar Disponibilidad</h1>
-<form method="POST">
+<div class="form-container">
+  <h2>Generar Disponibilidad Médica</h2>
+
+  <form method="POST" id="disponibilidad-form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Registrar Disponibilidad</button>
-</form>
 
+    <!-- Selección visual de médicos -->
+    <div>
+      <label>Selecciona los médicos:</label>
+      <div id="medico-buttons">
+        {% for medico in form.fields.medicos.queryset %}
+          <button type="button" class="medico-btn" data-id="{{ medico.id }}">{{ medico }}</button>
+        {% endfor %}
+      </div>
+      <input type="hidden" name="medicos_seleccionados" id="medicos_seleccionados">
+    </div>
+
+    <label for="fecha_inicio">Fecha inicio:</label>
+    <input type="text" name="fecha_inicio" class="datepicker form-control" required>
+
+    <label for="fecha_fin">Fecha fin:</label>
+    <input type="text" name="fecha_fin" class="datepicker form-control" required>
+
+    <label>Días de la semana:</label>
+    <div class="checkbox-group">
+      {% for valor, dia in form.fields.dias.choices %}
+        <label>
+          <input type="checkbox" name="dias" value="{{ valor }}"> {{ dia }}
+        </label>
+      {% endfor %}
+    </div>
+
+    <label for="hora_inicio">Hora inicio diaria:</label>
+    <input type="time" name="hora_inicio" class="form-control" required>
+
+    <label for="hora_fin">Hora fin diaria:</label>
+    <input type="time" name="hora_fin" class="form-control" required>
+
+    <label>Duración por cita:</label>
+    <select name="duracion" class="form-control" required>
+  <option value="">Selecciona duración</option>
+  <option value="15">15 minutos</option>
+  <option value="30">30 minutos</option>
+  <option value="45">45 minutos</option>
+  <option value="60">60 minutos</option>
+</select>
+
+    <!-- Contenedor de bloques horarios generados -->
+    <div id="bloques-container">
+      <label>Bloques horarios:</label>
+      <div id="bloques-horarios"></div>
+    </div>
+
+    <input type="submit" value="Generar Disponibilidad">
+  </form>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+<script>console.log("Flatpickr cargado correctamente");</script>
+
+<script src="{% static 'js/activar.js' %}"></script>
+<script src="{% static 'js/generar_disponibilidad.js' %}"></script>
 {% endblock %}

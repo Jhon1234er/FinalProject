@@ -1,0 +1,48 @@
+{% extends 'componentes/Base.html' %}
+{% load static %}
+
+{% block title %}Restablecer contraseña - Izel{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/usuario/restablecer.css' %}">
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+<div class="Restablecer__contenedor" data-aos="fade-up">
+  <div class="Restablecer__formulario">
+    <h2 class="Restablecer__titulo">Establecer nueva contraseña</h2>
+    <form method="post">
+    {% csrf_token %}
+
+    <div class="Restablecer__campo">
+        <input type="password" id="nueva_password" name="password" required placeholder=" ">
+        <label for="nueva_password">Nueva contraseña</label>
+    </div>
+
+    <div class="Restablecer__campo">
+        <input type="password" id="confirmar_password" name="confirm_password" required placeholder=" ">
+        <label for="confirmar_password">Confirmar contraseña</label>
+    </div>
+
+    <p id="error-texto" class="Restablecer__error"></p>
+
+    <button type="submit" class="Restablecer__boton">Guardar contraseña</button>
+    </form>
+
+  </div>
+</div>
+
+<script>
+  AOS.init();
+  document.querySelector('form').addEventListener('submit', function (e) {
+    const pass = document.getElementById("nueva_password").value;
+    const confirm = document.getElementById("confirmar_password").value;
+    const errorText = document.getElementById("error-texto");
+
+    if (pass !== confirm) {
+      e.preventDefault();
+      errorText.textContent = "Las contraseñas no coinciden.";
+    }
+  });
+</script>
+{% endblock %}

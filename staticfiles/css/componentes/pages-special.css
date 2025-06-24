@@ -1,0 +1,19 @@
+/* css/componentes/pages-special.css */
+.page-special {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 20px 40px; /* evita que el header y el footer lo tapen */
+  background-color: #f5f5f5;
+  font-family: 'Poppins', sans-serif;
+}
+
+.page-special .form-container {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(1, 31, 48, 0.15);
+  max-width: 500px;
+  width: 100%;
+}

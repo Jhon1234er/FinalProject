@@ -34,6 +34,8 @@ urlpatterns = [
     path('detallar_usuario/', detallar_usuario, name='detallar_usuario'),
     path('actualizar_usuario/',actualizar_usuario,name='actualizar_usuario'),
     path('recuperar/', recuperar_contrasena, name='recuperar_contrasena'),
+    path('api/buscar-usuario/', buscar_usuario, name='buscar_usuario'),
+    path('restablecer/<int:id>/', restablecer_contrasena, name='restablecer_contrasena'), 
     #endregion
 
     # region Usuario 
@@ -45,6 +47,7 @@ urlpatterns = [
     # endregion
 
     # region Medicos
+    path('perfil/medico/', perfil_medico, name='perfil_medico'),
     path('medico/registrar/', registrar_medico, name='registrar_medico'),
     path('medico/listar/', lista_medico, name='listar_medico'),
     path('medico/actualizar/<int:id>/', actualizar_medico, name='actualizar_medico'),
@@ -62,6 +65,7 @@ urlpatterns = [
     path('administrador/listar/', lista_administrador, name='listar_administrador'),
     path('administrador/actualizar/<int:id>/', actualizar_administrador, name='actualizar_administrador'),
     path('administrador/eliminar/<int:id>/', eliminar_administrador, name='eliminar_administrador'),
+    path('admin/citas/', lista_citas_admin, name='admin_citas'),
     # endregion
 
     # region Paciente 
@@ -146,5 +150,5 @@ urlpatterns = [
     path('obtener_disponibilidad/', obtener_disponibilidad, name='obtener_disponibilidad'),
     path('verificar_disponibilidad/', verificar_disponibilidad, name='verificar_disponibilidad'),
     path('confirmar_cita/<int:disponibilidad_id>/', confirmar_cita, name='confirmar_cita'),
-    path('gestionar_disponibilidad/', gestionar_disponibilidad, name='gestionar_disponibilidad'),
+    path('gestionar_disponibilidad/', generar_disponibilidad, name='gestionar_disponibilidad'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

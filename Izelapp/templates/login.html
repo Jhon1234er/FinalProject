@@ -26,10 +26,8 @@
         <form action="{% url 'login' %}" method="POST">
             {% csrf_token %}
             <div class="Ingresar__campo">
-                <input type="text" id="username" name="username"
-                    class="Ingresar__campo-input"
-                    placeholder=" " required />
-                <label for="username" class="Ingresar__campo-label">Ingrese su usuario</label>
+                <input type="text" id="num_doc" name="username" class="Ingresar__campo-input" placeholder=" " required />
+                <label for="num_doc" class="Ingresar__campo-label">Ingrese su número de documento</label>
             </div>
 
             <div class="Ingresar__campo">

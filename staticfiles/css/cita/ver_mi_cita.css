@@ -14,19 +14,45 @@ main, .container, .contenedor-citas {
 
 /* Espacio general del contenido */
 .container {
-    padding-top: 140px; /* margen superior mayor para que no se solape con el header */
-    padding-bottom: 60px; /* espacio para que el footer no se pegue */
+    padding-top: 140px;
+    padding-bottom: 60px;
 }
 
-/* === ESTILOS PARA LA LISTA DE CITAS === */
+/* === ENCABEZADO Y BOTÓN CAMBIAR VISTA === */
+
+.encabezado-citas {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
 
 .titulo-citas {
-    text-align: center;
-    margin-bottom: 30px;
     font-size: 2rem;
     font-weight: 600;
     color: #011f30;
+    margin: 0;
+    text-align: left;
 }
+
+.toggle-citas-boton {
+    background-color: #013857;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.toggle-citas-boton:hover {
+    background-color: #6AC1B8;
+    color: #011f30;
+}
+
+/* === ESTILOS PARA LA LISTA DE CITAS === */
 
 .grid-citas {
     display: grid;
@@ -81,7 +107,19 @@ main, .container, .contenedor-citas {
     color: #011f30;
 }
 
-/* Alert mensaje */
+/* === ESTILO PARA CITA PERDIDA === */
+.card-cita.perdida {
+    border-left: 5px solid #e74c3c;
+    background-color: #fdf1f0;
+    opacity: 0.95;
+    pointer-events: none;
+}
+
+.card-cita.perdida p {
+    color: #b03e3e;
+}
+
+/* === ALERTAS === */
 .alert {
     background-color: #eaf4ff;
     border: 1px solid #b3d7f3;
@@ -90,10 +128,31 @@ main, .container, .contenedor-citas {
     border-radius: 8px;
 }
 
+.boton-toggle {
+  background-color: #013857;
+  color: #ffffff;
+  border: 2px solid #013857;
+  padding: 10px 22px;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.boton-toggle:hover {
+  background-color: #6AC1B8;
+  color: #011f30;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(1, 31, 48, 0.2);
+}
 /* Responsive */
 @media (max-width: 600px) {
     .titulo-citas {
         font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: 15px;
     }
 
     .card-cita {
@@ -103,5 +162,15 @@ main, .container, .contenedor-citas {
     .boton-cita {
         font-size: 0.85rem;
         padding: 6px 10px;
+    }
+
+    .encabezado-citas {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .toggle-citas-boton {
+        align-self: center;
+        margin-top: 10px;
     }
 }

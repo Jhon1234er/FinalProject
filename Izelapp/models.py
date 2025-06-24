@@ -14,7 +14,9 @@ def ruta_directorio_usuario(instance, filename):
 
 logger = logging.getLogger(__name__)
 
-# region Usuario
+def ruta_directorio_usuario(instance, filename):
+    return f'usuarios/{instance.username}/{filename}'
+
 class Usuario(AbstractUser):
     """
     Modelo base de usuario extendido.
@@ -34,7 +36,7 @@ class Usuario(AbstractUser):
     ]
 
     tipo_doc = models.CharField(max_length=20, choices=OPCIONES_TIPODOC)
-    num_doc = models.CharField(max_length=10, unique=True)
+    num_doc = models.CharField(max_length=10, unique=True)  # USADO COMO LOGIN
     email = models.EmailField(unique=True, blank=False)
     genero = models.CharField(max_length=20, choices=GENERO_OPCIONES)
     rh = models.CharField(max_length=3, choices=RH_OPCIONES)
@@ -45,8 +47,12 @@ class Usuario(AbstractUser):
     eps = models.CharField(max_length=20)
     imagen = models.ImageField(upload_to=ruta_directorio_usuario, blank=True, null=True, verbose_name='Imagen')
 
+    # 👇 CAMBIO CLAVE
+    USERNAME_FIELD = 'num_doc'  # Ahora el login se hará con el número de documento
+    REQUIRED_FIELDS = ['username', 'email']  # Campos obligatorios adicionales
+
     def __str__(self):
-        return self.username
+        return f"{self.num_doc} - {self.username}"
 
     def delete(self, *args, **kwargs):
         if self.imagen and self.imagen.name:
@@ -384,6 +390,7 @@ class CertificadoIncapacidad(models.Model):
 # endregion
 
 # region RecetaMedica
+# region RecetaMedica
 class RecetaMedica(models.Model):
     """
     Modelo que representa una receta médica.
@@ -395,10 +402,28 @@ class RecetaMedica(models.Model):
     duracion = models.CharField(max_length=100)
     cantidad = models.CharField(max_length=100)
     via_administracion = models.CharField(max_length=20)
-    diagnostico_principal = models.TextField(max_length=255, null=False)
+    intervalo = models.CharField(max_length=100, null=True, blank=True)
+    recomendaciones = models.CharField(max_length=255, null=True, blank=True)
+    indicaciones = models.TextField(null=True, blank=True)
+    fecha_medicado = models.DateField(null=True, blank=True)
+
+    diagnostico_principal = models.ForeignKey(
+        'TablaReferenciaCIE10',
+        on_delete=models.CASCADE,
+        related_name='receta_diagnostico_principal'
+    )
+
+    diagnostico_relacionado = models.ForeignKey(
+        'TablaReferenciaCIE10',
+        on_delete=models.SET_NULL,
+        related_name='receta_diagnostico_relacionado',
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return f"Receta para {self.paciente}: {self.medicamento}"
+# endregion
 
 # endregion
 

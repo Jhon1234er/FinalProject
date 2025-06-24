@@ -1,0 +1,240 @@
+/* === ESTILOS GENERALES DE PÁGINA === */
+
+body {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+main, .container {
+  flex: 1;
+}
+
+.container {
+  padding-top: 140px;
+  padding-bottom: 60px;
+}
+
+/* === ENCABEZADO Y NAVEGACIÓN DE CITAS === */
+
+.titulo-citas {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #011f30;
+}
+
+.encabezado-citas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
+
+.toggle-citas-boton {
+  background-color: #013857;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-citas-boton:hover {
+  background-color: #6AC1B8;
+  color: #011f30;
+}
+
+/* === LISTA DE CITAS === */
+
+.grid-citas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card-cita {
+  background-color: #f4f8ff;
+  border-left: 6px solid #3498db;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-cita:hover {
+  transform: translateY(-5px);
+}
+
+.card-cita p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  color: #34495e;
+}
+
+.card-cita.perdida {
+  border-left: 5px solid #e74c3c;
+  background-color: #fdf1f0;
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+.card-cita.perdida p {
+  color: #b03e3e;
+}
+
+/* === BOTONES EN LAS TARJETAS === */
+
+.acciones {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.boton-cita {
+  flex: 1;
+  text-align: center;
+  padding: 8px 12px;
+  background-color: #013857;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.boton-cita:hover {
+  background-color: #6AC1B8;
+  color: #011f30;
+}
+
+/* === MENSAJES Y ALERTAS === */
+
+.alert {
+  background-color: #eaf4ff;
+  border: 1px solid #b3d7f3;
+  color: #0f3e61;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.alerta {
+  background-color: #fdecea;
+  color: #c0392b;
+  border: 1px solid #e74c3c;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* === CANCELAR CITA y CONFIRMAR CANCELACIÓN === */
+
+.cancelar-cita-container,
+.cancelar-container {
+  max-width: 600px;
+  margin: 140px auto 60px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.cancelar-cita-container h2,
+.cancelar-container h2 {
+  text-align: center;
+  color: #011f30;
+  margin-bottom: 25px;
+}
+
+.detalle-cita p {
+  margin: 10px 0;
+  font-size: 1rem;
+  color: #34495e;
+}
+
+.acciones-cancelar,
+.cancelar-container form {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.btn-cancelar, .btn-volver, .btn-confirmar {
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.btn-cancelar {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btn-cancelar:hover {
+  background-color: #c0392b;
+}
+
+.btn-volver {
+  background-color: #013857;
+  color: white;
+}
+
+.btn-volver:hover {
+  background-color: #6AC1B8;
+  color: #011f30;
+}
+
+.btn-confirmar {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btn-confirmar:hover {
+  background-color: #c0392b;
+}
+
+/* === RESPONSIVE === */
+
+@media (max-width: 600px) {
+  .titulo-citas {
+    font-size: 1.5rem;
+  }
+
+  .card-cita {
+    padding: 12px 15px;
+  }
+
+  .boton-cita {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+
+  .opciones-citas a {
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+
+  .acciones-cancelar, .cancelar-container form {
+    flex-direction: column;
+    align-items: center;
+  }
+}
