@@ -1,0 +1,27 @@
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/historial_clinico.css' %}">
+
+<div class="historial-container">
+  <h2 class="titulo-seccion">Órdenes Médicas</h2>
+
+  {% if ordenes %}
+    <div class="tarjetas-contenedor">
+      {% for orden in ordenes %}
+        <div class="tarjeta">
+          <h3>Orden emitida el {{ orden.fecha }}</h3>
+          <p><strong>Médico tratante:</strong> {{ orden.medico.get_full_name }}</p>
+          <p><strong>Tipo de orden:</strong> {{ orden.tipo }}</p>
+          <p><strong>Descripción:</strong> {{ orden.descripcion }}</p>
+          {% if orden.archivo %}
+            <p><a href="{{ orden.archivo.url }}" target="_blank" class="btn-descargar">Ver archivo adjunto</a></p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="mensaje-vacio">No se encontraron órdenes médicas registradas.</p>
+  {% endif %}
+</div>
+{% endblock %}

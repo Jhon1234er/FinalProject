@@ -1,0 +1,25 @@
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/paciente/historial_clinico.css' %}">
+
+<div class="historial-container">
+  <h2 class="titulo-seccion">Historial de Vacunas</h2>
+
+  {% if vacunas %}
+    <div class="tarjetas-contenedor">
+      {% for vacuna in vacunas %}
+        <div class="tarjeta">
+          <h3>{{ vacuna.nombre }}</h3>
+          <p><strong>Fecha de aplicación:</strong> {{ vacuna.fecha_aplicacion }}</p>
+          <p><strong>Dosis:</strong> {{ vacuna.dosis }}</p>
+          <p><strong>Lugar de aplicación:</strong> {{ vacuna.lugar }}</p>
+          <p><strong>Observaciones:</strong> {{ vacuna.observaciones }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="mensaje-vacio">No se encontraron vacunas registradas.</p>
+  {% endif %}
+</div>
+{% endblock %}

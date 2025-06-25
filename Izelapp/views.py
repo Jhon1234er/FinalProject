@@ -306,13 +306,61 @@ def actualizar_paciente(request, id):
         formulario = PacienteUpdateForm(instance=paciente)
     return render(request, 'paciente/actualizar.html', {'formulario': formulario,
     'usuario': paciente})
-
+@login_required
 def eliminar_paciente(request, id):
     paciente = get_object_or_404(Paciente, id=id)
     paciente.delete()
     messages.success(request, 'Paciente eliminado exitosamente.')
     return redirect('listar_paciente')
 # endregion
+
+
+# region Historial Clinico paciente
+@login_required
+def historial_clinico(request):
+    return render(request, 'paciente/historial_clinico.html')
+
+def cargar_historial_modulo(request, modulo):
+    paciente = request.user.paciente
+    contexto = {}
+    template = ''
+
+    if modulo == 'citas':
+        contexto['citas'] = Cita.objects.filter(paciente=paciente)
+        template = 'cita/historial.html'
+
+    elif modulo == 'antecedentes':
+        contexto['antecedentes'] = Antecedente.objects.filter(paciente=paciente)
+        template = 'antecedente/historial.html'
+
+    elif modulo == 'vacunas':
+        contexto['vacunas'] = Vacuna.objects.filter(paciente=paciente)
+        template = 'vacuna/historial.html'
+
+    elif modulo == 'datos_quirurgicos':
+        contexto['datos_quirurgicos'] = DatoQuirurgico.objects.filter(paciente=paciente)
+        template = 'dato_quirurgico/historial.html'
+
+    elif modulo == 'datos_antropometricos':
+        contexto['datos_antropometricos'] = DatoAntropometrico.objects.filter(paciente=paciente)
+        template = 'dato_antropometrico/historial.html'
+
+    elif modulo == 'incapacidades':
+        contexto['incapacidades'] = CertificadoIncapacidad.objects.filter(paciente=paciente)
+        template = 'certificado_incapacidad/historial.html'
+
+    elif modulo == 'formulas_medicas':
+        contexto['formulas'] = RecetaMedica.objects.filter(paciente=paciente)
+        template = 'receta_medica/historial.html'
+
+    elif modulo == 'ordenes_medicas':
+        contexto['ordenes'] = OrdenMedica.objects.filter(paciente=paciente)
+        template = 'orden_medica/historial.html'
+
+    return render(request, template, contexto)
+# endregion
+
+
 
 # region Administrador 
 @login_required
@@ -493,6 +541,7 @@ def lista_perfil_paciente(request):
 # endregion
 
 # region Vacuna 
+@login_required
 def registrar_vacuna(request):
     if request.method == 'POST':
         formulario = VacunaForm(request.POST)
@@ -506,10 +555,12 @@ def registrar_vacuna(request):
         formulario = VacunaForm()
     return render(request, 'vacuna/crear.html', {'formulario': formulario})
 
+@login_required
 def lista_vacuna(request):
     vacunas = Vacuna.objects.all()
     return render(request, 'vacuna/lista.html', {'vacunas': vacunas})
 
+@login_required
 def eliminar_vacuna(request, id):
     vacuna = get_object_or_404(Vacuna, id=id)
     vacuna.delete()
@@ -518,6 +569,7 @@ def eliminar_vacuna(request, id):
 # endregion
 
 # region RecetaMedica 
+@login_required
 def registrar_receta_medica(request):
     if request.method == 'POST':
         formulario = RecetaMedicaForm(request.POST)
@@ -543,6 +595,7 @@ def eliminar_receta_medica(request, id):
 # endregion
 
 # region Antecedentes
+@login_required
 def crear_antecedente(request):
     if request.method == 'POST':
         formulario = AntecedenteForm(request.POST)
@@ -556,12 +609,14 @@ def crear_antecedente(request):
         formulario = AntecedenteForm()
     return render(request, 'antecedente/crear.html', {'formulario': formulario})
 
+@login_required
 def lista_antecedente(request):
     antecedentes = Antecedente.objects.all()
     return render(request, 'antecedente/lista.html', {'antecedentes': antecedentes})
 # endregion
 
 # region Quirurgico
+@login_required
 def registrar_dato_quirurgico(request):
     if request.method == 'POST':
         formulario = DatoQuirurgicoForm(request.POST)
@@ -581,6 +636,7 @@ def lista_dato_quirurgico(request):
 # endregion
 
 # region Historial
+@login_required
 def registrar_historia_clinica(request):
     if request.method == 'POST':
         formulario = RegistroClinicoForm(request.POST)
@@ -594,12 +650,14 @@ def registrar_historia_clinica(request):
         formulario = RegistroClinicoForm()
     return render(request, 'historia_clinica/crear.html', {'formulario': formulario})
 
+@login_required
 def lista_historia_clinica(request):
     historias_clinicas = HistoriaClinica.objects.all()
     return render(request, 'historia_clinica/lista.html', {'historias_clinicas': historias_clinicas})
 # endregion
 
 # region Antropometrico
+@login_required
 def registrar_dato_antropometrico(request):
     if request.method == 'POST':
         formulario = DatoAntropometricoForm(request.POST)
@@ -613,12 +671,14 @@ def registrar_dato_antropometrico(request):
         formulario = DatoAntropometricoForm()
     return render(request, 'dato_antropometrico/insertar.html', {'formulario': formulario})
 
+@login_required
 def lista_dato_antropometrico(request):
     datos_antropometricos = DatoAntropometrico.objects.all()
     return render(request, 'dato_antropometrico/lista.html', {'datos_antropometricos': datos_antropometricos})
 # endregion
 
 # region Cita
+@login_required
 def registrar_cita(request):
     if request.method == 'POST':
         formulario = CitaForm(request.POST)
@@ -632,6 +692,7 @@ def registrar_cita(request):
         formulario = CitaForm()
     return render(request, 'cita/insertar.html', {'formulario': formulario})
 
+@login_required
 def lista_cita(request):
     citas = Cita.objects.all()
     return render(request, 'cita/lista.html', {'citas': citas})
@@ -648,6 +709,7 @@ def consulta_medica(request, paciente_id, cita_id):
         'cita': cita
     })
 
+@login_required
 def get_form(request, form_name):
     form_classes = {
         'vacuna': VacunaForm,
@@ -756,6 +818,7 @@ def cancelar_cita(request, cita_id):
 # endregion
 
 # region Incapacidad
+@login_required
 def registrar_certificado_incapacidad(request):
     if request.method == 'POST':
         formulario = CertificadoIncapacidadForm(request.POST)
@@ -769,12 +832,14 @@ def registrar_certificado_incapacidad(request):
         formulario = CertificadoIncapacidadForm()
     return render(request, 'certificado_incapacidad/insertar.html', {'formulario': formulario})
 
+@login_required
 def lista_certificado_incapacidad(request):
     certificados = CertificadoIncapacidad.objects.all()
     return render(request, 'certificado_incapacidad/lista.html', {'certificados': certificados})
 # endregion
 
 # region OrdenMedica
+@login_required
 def registrar_orden_medica(request):
     if request.method == 'POST':
         formulario = OrdenMedicaForm(request.POST)
@@ -788,12 +853,14 @@ def registrar_orden_medica(request):
         formulario = OrdenMedicaForm()
     return render(request, 'orden_medica/insertar.html', {'formulario': formulario})
 
+@login_required
 def lista_orden_medica(request):
     ordenes = OrdenMedica.objects.all()
     return render(request, 'orden_medica/lista.html', {'ordenes': ordenes})
 # endregion
 
 # region Horario 
+@login_required
 def registrar_horario_medico(request):
     if request.method == 'POST':
         formulario = HorarioMedicoForm(request.POST)
@@ -807,10 +874,12 @@ def registrar_horario_medico(request):
         formulario = HorarioMedicoForm()
     return render(request, 'horario_medico/crear.html', {'formulario': formulario})
 
+@login_required
 def lista_horario_medico(request):
     horarios = HorarioMedico.objects.all()
     return render(request, 'horario_medico/lista.html', {'horarios': horarios})
 
+@login_required
 def actualizar_horario_medico(request, id):
     horario = get_object_or_404(HorarioMedico, id=id)
     if request.method == 'POST':
@@ -825,6 +894,7 @@ def actualizar_horario_medico(request, id):
         formulario = HorarioMedicoForm(instance=horario)
     return render(request, 'horario_medico/actualizar.html', {'formulario': formulario})
 
+@login_required
 def eliminar_horario_medico(request, id):
     horario = get_object_or_404(HorarioMedico, id=id)
     horario.delete()
@@ -833,9 +903,11 @@ def eliminar_horario_medico(request, id):
 # endregion
 
 # region AGENDA
+@login_required
 def calendario(request):
     return render(request, 'cita/calendario.html')
 
+@login_required
 def obtener_disponibilidad(request):
     eventos = []
     for disponibilidad in Disponibilidad.objects.filter(estado='disponible'):
@@ -847,6 +919,7 @@ def obtener_disponibilidad(request):
         })
     return JsonResponse(eventos, safe=False)
 
+@login_required
 def verificar_disponibilidad(request):
     fecha = request.GET.get('fecha')
     disponibilidad = Disponibilidad.objects.filter(fecha=fecha)
@@ -854,6 +927,7 @@ def verificar_disponibilidad(request):
         return JsonResponse({'disponible': True})
     return JsonResponse({'disponible': False})
 
+@login_required
 def confirmar_cita(request, disponibilidad_id):
     disponibilidad = get_object_or_404(Disponibilidad, pk=disponibilidad_id)
     if disponibilidad.estado != 'disponible':
@@ -901,7 +975,7 @@ def confirmar_cita(request, disponibilidad_id):
     })
 
 
-
+@login_required
 def generar_disponibilidad(request):
     if not request.user.is_authenticated or not hasattr(request.user, 'administrador'):
         return redirect('login')

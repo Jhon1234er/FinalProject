@@ -1,0 +1,25 @@
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/historial_clinico.css' %}">
+
+<div class="historial-container">
+  <h2 class="titulo-seccion">Incapacidades</h2>
+
+  {% if incapacidades %}
+    <div class="tarjetas-contenedor">
+      {% for incapacidad in incapacidades %}
+        <div class="tarjeta">
+          <h3>Incapacidad emitida el {{ incapacidad.fecha_emision }}</h3>
+          <p><strong>Diagnóstico:</strong> {{ incapacidad.diagnostico }}</p>
+          <p><strong>Días otorgados:</strong> {{ incapacidad.dias }}</p>
+          <p><strong>Desde:</strong> {{ incapacidad.fecha_inicio }} <strong>hasta:</strong> {{ incapacidad.fecha_fin }}</p>
+          <p><strong>Observaciones:</strong> {{ incapacidad.observaciones }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="mensaje-vacio">No se encontraron incapacidades registradas.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/historial_clinico.css' %}">
+
+<div class="historial-container">
+  <h2 class="titulo-seccion">Antecedentes Médicos</h2>
+
+  {% if antecedentes %}
+    <div class="tarjetas-contenedor">
+      {% for antecedente in antecedentes %}
+        <div class="tarjeta">
+          <h3>{{ antecedente.get_tipo_display }}</h3>
+          <p><strong>Descripción:</strong> {{ antecedente.descripcion }}</p>
+          <p><strong>Fecha registrada:</strong> {{ antecedente.fecha }}</p>
+          {% if antecedente.archivo %}
+            <p><a href="{{ antecedente.archivo.url }}" target="_blank" class="btn-descargar">Ver archivo adjunto</a></p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="mensaje-vacio">No se encontraron antecedentes médicos registrados.</p>
+  {% endif %}
+</div>
+{% endblock %}

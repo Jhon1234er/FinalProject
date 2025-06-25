@@ -79,6 +79,11 @@ urlpatterns = [
     path('paciente/actualizar/<int:id>/', actualizar_paciente, name='actualizar_paciente'),
     path('paciente/eliminar/<int:id>/', eliminar_paciente, name='eliminar_paciente'),
     # endregion
+    
+    # region Historial Clinico Paciente
+    path('historial-clinico/', historial_clinico, name='historial_clinico'),
+    path('historial/<str:modulo>/', cargar_historial_modulo, name='cargar_historial_modulo'),
+    # endregion
 
     # region HorarioMedico 
     path('horario/registrar/', registrar_horario_medico, name='registrar_horario_medico'),

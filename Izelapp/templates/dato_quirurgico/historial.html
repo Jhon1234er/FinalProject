@@ -1,0 +1,25 @@
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/historial_clinico.css' %}">
+
+<div class="historial-container">
+  <h2 class="titulo-seccion">Historial Quirúrgico</h2>
+
+  {% if datos_quirurgicos %}
+    <div class="tarjetas-contenedor">
+      {% for dato in datos_quirurgicos %}
+        <div class="tarjeta">
+          <h3>{{ dato.nombre_procedimiento }}</h3>
+          <p><strong>Fecha:</strong> {{ dato.fecha }}</p>
+          <p><strong>Tipo de procedimiento:</strong> {{ dato.tipo_procedimiento }}</p>
+          <p><strong>Institución:</strong> {{ dato.institucion }}</p>
+          <p><strong>Observaciones:</strong> {{ dato.observaciones }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="mensaje-vacio">No se encontraron datos quirúrgicos registrados.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/historial_clinico.css' %}">
+
+<div class="historial-container">
+  <h2 class="titulo-seccion">Fórmulas Médicas</h2>
+
+  {% if formulas %}
+    <div class="tarjetas-contenedor">
+      {% for formula in formulas %}
+        <div class="tarjeta">
+          <h3>Fórmula emitida el {{ formula.fecha }}</h3>
+          <p><strong>Médico tratante:</strong> {{ formula.medico.get_full_name }}</p>
+          <p><strong>Medicamentos:</strong></p>
+          <ul>
+            {% for item in formula.items.all %}
+              <li>{{ item.nombre }} - {{ item.dosis }} - {{ item.frecuencia }} - {{ item.duracion }}</li>
+            {% endfor %}
+          </ul>
+          <p><strong>Observaciones:</strong> {{ formula.observaciones }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="mensaje-vacio">No se encontraron fórmulas médicas registradas.</p>
+  {% endif %}
+</div>
+{% endblock %}

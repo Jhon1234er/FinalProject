@@ -1,0 +1,47 @@
+{% extends 'componentes/Base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/paciente/historial_clinico.css' %}">
+
+<div class="historial-wrapper">
+  <!-- Panel lateral -->
+  <div class="sidebar">
+    <h2 class="sidebar-title">Historial Clínico</h2>
+    <ul class="sidebar-menu">
+      <li><button onclick="cargarModulo('citas')">Citas médicas</button></li>
+      <li><button onclick="cargarModulo('antecedentes')">Antecedentes</button></li>
+      <li><button onclick="cargarModulo('vacunas')">Vacunas</button></li>
+      <li><button onclick="cargarModulo('datos_quirurgicos')">Datos quirúrgicos</button></li>
+      <li><button onclick="cargarModulo('datos_antropometricos')">Datos antropométricos</button></li>
+      <li><button onclick="cargarModulo('incapacidades')">Incapacidades</button></li>
+      <li><button onclick="cargarModulo('formulas_medicas')">Fórmulas médicas</button></li>
+      <li><button onclick="cargarModulo('ordenes_medicas')">Órdenes médicas</button></li>
+    </ul>
+  </div>
+
+  <!-- Contenido dinámico -->
+  <div class="content" id="contenido-modulo">
+    <p class="placeholder-text">Selecciona un módulo del historial clínico en el panel izquierdo.</p>
+  </div>
+</div>
+
+<script>
+  function cargarModulo(modulo) {
+    fetch(`/historial/${modulo}/`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Error al cargar módulo.");
+        }
+        return response.text();
+      })
+      .then(html => {
+        document.getElementById('contenido-modulo').innerHTML = html;
+      })
+      .catch(error => {
+        document.getElementById('contenido-modulo').innerHTML = "<p>Error al cargar el módulo.</p>";
+        console.error(error);
+      });
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/historial_clinico.css' %}">
+
+<div class="historial-container">
+  <h2 class="titulo-seccion">Historial de Citas Médicas</h2>
+
+  {% if citas %}
+    <div class="tarjetas-contenedor">
+      {% for cita in citas %}
+        <div class="tarjeta">
+          <h3>Cita con {{ cita.medico }}</h3>
+          <p><strong>Fecha:</strong> {{ cita.fecha|date:"d/m/Y" }}</p>
+          <p><strong>Hora:</strong> {{ cita.hora }}</p>
+          <p><strong>Motivo:</strong> {{ cita.motivo }}</p>
+          <p><strong>Estado:</strong> {{ cita.estado }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="mensaje-vacio">No hay citas médicas registradas.</p>
+  {% endif %}
+</div>
+{% endblock %}

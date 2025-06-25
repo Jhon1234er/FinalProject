@@ -123,7 +123,7 @@ class PacienteForm(forms.ModelForm):
         ]
         widgets = {
             'fecha_nacimiento': forms.DateInput(attrs={
-                'class': 'datepicker', 'type': 'text', 'placeholder': 'Selecciona tu fecha de nacimiento'
+                'class': 'datepicker1', 'type': 'text', 'placeholder': 'Selecciona tu fecha de nacimiento'
             }),
             'telefono': forms.TextInput(attrs={
                 'placeholder': 'Ej. 3001234567',
@@ -199,7 +199,7 @@ class AdministradorForm(forms.ModelForm):
         ]
         widgets = {
             'fecha_nacimiento': forms.DateInput(attrs={
-                'class': 'datepicker',
+                'class': 'datepicker1',
                 'type': 'text',
                 'placeholder': 'Seleccione la fecha de nacimiento'
             }),
@@ -286,7 +286,7 @@ class MedicoForm(forms.ModelForm):
                 'class': 'datepicker', 'placeholder': 'Fecha de contratación'
             }),
             'fecha_nacimiento': forms.DateInput(attrs={
-                'class': 'datepicker', 'placeholder': 'Fecha de nacimiento'
+                'class': 'datepicker1', 'placeholder': 'Fecha de nacimiento'
             }),
             'telefono': forms.TextInput(attrs={
                 'placeholder': 'Ej. 3001234567',

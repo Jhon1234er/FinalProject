@@ -59,7 +59,7 @@
             <a class="enlace-menu {% if request.resolver_match.url_name == 'ver_mi_cita' %}activo{% endif %}" href="{% url 'ver_mi_cita' %}">Mis citas</a>
           </li>
           <li class="opcion-menu">
-            <a class="enlace-menu" href="#">Historia Clínica</a>
+            <a class="enlace-menu" href="{% url 'historial_clinico' %}">Historial Clinico</a>
           </li>
           <li class="opcion-menu">
             <a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a>

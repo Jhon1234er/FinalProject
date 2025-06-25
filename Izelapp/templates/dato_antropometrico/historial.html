@@ -1,0 +1,25 @@
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/historial_clinico.css' %}">
+
+<div class="historial-container">
+  <h2 class="titulo-seccion">Datos Antropométricos</h2>
+
+  {% if datos_antropometricos %}
+    <div class="tarjetas-contenedor">
+      {% for dato in datos_antropometricos %}
+        <div class="tarjeta">
+          <h3>Registro del {{ dato.fecha }}</h3>
+          <p><strong>Peso:</strong> {{ dato.peso }} kg</p>
+          <p><strong>Estatura:</strong> {{ dato.estatura }} cm</p>
+          <p><strong>IMC:</strong> {{ dato.imc }}</p>
+          <p><strong>Observaciones:</strong> {{ dato.observaciones }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="mensaje-vacio">No se encontraron datos antropométricos registrados.</p>
+  {% endif %}
+</div>
+{% endblock %}
