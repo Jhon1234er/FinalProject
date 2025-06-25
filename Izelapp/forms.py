@@ -370,14 +370,28 @@ class ConsultaForm(forms.ModelForm):
 
     class Meta:
         model = Consulta
-        fields = ['especialidad', 'tratamiento', 'diagnostico_principal', 'diagnostico_relacionado', 'motivo_consulta',
+        fields = [
+            'especialidad',
+            'tratamiento',
+            'diagnostico_principal',
+            'diagnostico_relacionado',
+            'motivo_consulta',
         ]
         widgets = {
-            'especialidad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Especialidad'}),
-            'tratamiento': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Descripción del tratamiento'}),
-            'diagnostico_principal': forms.Select(attrs={'class': 'select2', 'placeholder': 'Diagnóstico principal'}),
-            'diagnostico_relacionado': forms.Select(attrs={'class': 'select2', 'placeholder': 'Diagnóstico relacionado'}),
-            'motivo_consulta': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Motivo de la consulta'}),
+            'especialidad': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Especialidad'
+            }),
+            'tratamiento': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Descripción del tratamiento'
+            }),
+            'motivo_consulta': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Motivo de la consulta'
+            }),
         }
         labels = {
             'especialidad': 'Especialidad',
@@ -502,7 +516,7 @@ class DisponibilidadForm(forms.ModelForm):
 class AntecedenteForm(forms.ModelForm):
     class Meta:
         model = Antecedente
-        fields = ['descripcion', 'tipo_antecedente', 'paciente'
+        fields = ['descripcion', 'tipo_antecedente'
         ]
         widgets = {
             'descripcion': forms.Textarea(attrs={'rows': 4}),
@@ -513,7 +527,7 @@ class AntecedenteForm(forms.ModelForm):
 class VacunaForm(forms.ModelForm):
     class Meta:
         model = Vacuna
-        fields = ['nombre_vacuna', 'fecha_aplicacion', 'dosis', 'paciente'
+        fields = ['nombre_vacuna', 'fecha_aplicacion', 'dosis'
         ]
         widgets = {
             'fecha_aplicacion': forms.DateInput(attrs={'type': 'date'}),
@@ -525,7 +539,7 @@ class VacunaForm(forms.ModelForm):
 class DatoQuirurgicoForm(forms.ModelForm):
     class Meta:
         model = DatoQuirurgico
-        fields = ['tipo_cirugia', 'fecha_cirugia', 'complicaciones', 'paciente', 'medico'
+        fields = ['tipo_cirugia', 'fecha_cirugia', 'complicaciones'
         ]
         widgets = {
             'fecha_cirugia': forms.DateInput(attrs={'type': 'date'}),
@@ -537,7 +551,7 @@ class DatoQuirurgicoForm(forms.ModelForm):
 class RegistroClinicoForm(forms.ModelForm):
     class Meta:
         model = HistoriaClinica
-        fields = ['ultima_atencion', 'tratamiento', 'notas', 'paciente'
+        fields = ['ultima_atencion', 'tratamiento', 'notas'
         ]
         widgets = {
             'ultima_atencion': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),  # Solo lectura
@@ -550,7 +564,7 @@ class RegistroClinicoForm(forms.ModelForm):
 class DatoAntropometricoForm(forms.ModelForm):
     class Meta:
         model = DatoAntropometrico
-        fields = ['altura_decimal', 'peso', 'indice_masa_corporal', 'paciente', 'medico'
+        fields = ['altura_decimal', 'peso', 'indice_masa_corporal'
         ]
         widgets = {
             'altura_decimal': forms.NumberInput(attrs={'placeholder': 'Altura en metros'}),

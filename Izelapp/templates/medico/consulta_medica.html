@@ -11,6 +11,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <div class="container">
     <h2>Consulta Médica - Paciente: {{ paciente.first_name }} {{ paciente.last_name }}</h2>
 
@@ -18,6 +19,7 @@
     <form id="csrf-form" style="display: none;">
         {% csrf_token %}
     </form>
+
     <form action="{% url 'listar_consulta' paciente.id %}" method="get">
         <button type="submit" class="btn btn-outline-primary">
             Consultas anteriores del paciente
@@ -48,111 +50,115 @@
 
 <script>
     const pacienteId = "{{ paciente.id }}";
-    const medicoId = "{{ medico.id }}"; 
+    const medicoId = "{{ medico.id }}";
     const citaId = "{{ cita.id }}";
 
-    
-    // Función para obtener el CSRF token del formulario oculto
     function getCSRFToken() {
         return document.querySelector('#csrf-form input[name=csrfmiddlewaretoken]').value;
     }
 
     function loadForm(formName) {
-    const container = document.getElementById('form-display');
+        const container = document.getElementById('form-display');
 
-    // 👉 Guardar el formulario actual antes de cambiar (si existe)
-    const currentForm = container.querySelector('form');
-    if (currentForm) {
-        const currentFormData = new FormData(currentForm);
-        const currentFormName = currentForm.getAttribute('data-form-name');
-        if (currentFormName) {
-            const json = {};
-            currentFormData.forEach((value, key) => {
-                json[key] = value;
-            });
-            sessionStorage.setItem(`form_${currentFormName}`, JSON.stringify(json));
-        }
-    }
-
-    container.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"></div></div>';
-
-    fetch(`/get-form/${formName}/?paciente_id=${pacienteId}`)
-        .then(response => response.text())
-        .then(html => {
-            container.innerHTML = html;
-            let form = container.querySelector("form");
-            if (form) {
-                form.setAttribute('data-form-name', formName);
-
-                $(form).find('.select2').select2({
-                    placeholder: function() {
-                        return $(this).data('placeholder');
-                    },
-                    allowClear: true
+        // Guardar el formulario actual antes de cambiar
+        const currentForm = container.querySelector('form');
+        if (currentForm) {
+            const currentFormData = new FormData(currentForm);
+            const currentFormName = currentForm.getAttribute('data-form-name');
+            if (currentFormName) {
+                const json = {};
+                currentFormData.forEach((value, key) => {
+                    json[key] = value;
                 });
+                sessionStorage.setItem(`form_${currentFormName}`, JSON.stringify(json));
+            }
+        }
 
-                // Agregar ID del paciente al formulario
-                let inputPaciente = document.createElement("input");
-                inputPaciente.type = "hidden";
-                inputPaciente.name = "paciente_id";
-                inputPaciente.value = pacienteId;
-                form.appendChild(inputPaciente);
+        container.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"></div></div>';
 
-                // Agregar ID del médico automáticamente
-                let inputMedico = document.createElement("input");
-                inputMedico.type = "hidden";
-                inputMedico.name = "medico_id";
-                inputMedico.value = medicoId;
-                form.appendChild(inputMedico);
+        fetch(`/get-form/${formName}/?paciente_id=${pacienteId}`)
+            .then(response => response.text())
+            .then(html => {
+                container.innerHTML = html;
+                let form = container.querySelector("form");
+                if (form) {
+                    form.setAttribute('data-form-name', formName);
 
-                // Cargar datos previos si los hay
-                const savedData = sessionStorage.getItem(`form_${formName}`);
-                if (savedData) {
-                    const data = JSON.parse(savedData);
-                    for (let key in data) {
-                        const input = form.querySelector(`[name="${key}"]`);
-                        if (input) input.value = data[key];
+                    // ✅ Inicialización correcta de Select2
+                    setTimeout(() => {
+                        $(form).find('.select2').each(function () {
+                            const $this = $(this);
+                            if (!$this.hasClass("select2-hidden-accessible")) {
+                                $this.select2({
+                                    placeholder: $this.data('placeholder') || 'Seleccione una opción',
+                                    allowClear: true,
+                                    width: '100%'
+                                });
+                            }
+                        });
+                    }, 0);
+
+                    // Agregar ID del paciente
+                    let inputPaciente = document.createElement("input");
+                    inputPaciente.type = "hidden";
+                    inputPaciente.name = "paciente_id";
+                    inputPaciente.value = pacienteId;
+                    form.appendChild(inputPaciente);
+
+                    // Agregar ID del médico
+                    let inputMedico = document.createElement("input");
+                    inputMedico.type = "hidden";
+                    inputMedico.name = "medico_id";
+                    inputMedico.value = medicoId;
+                    form.appendChild(inputMedico);
+
+                    // Cargar datos anteriores
+                    const savedData = sessionStorage.getItem(`form_${formName}`);
+                    if (savedData) {
+                        const data = JSON.parse(savedData);
+                        for (let key in data) {
+                            const input = form.querySelector(`[name="${key}"]`);
+                            if (input) input.value = data[key];
+                        }
                     }
                 }
-            }
-        })
-        .catch(error => {
-            console.error("Error al cargar el formulario:", error);
-            container.innerHTML = '<p class="text-danger">No se pudo cargar el formulario.</p>';
-        });
+            })
+            .catch(error => {
+                console.error("Error al cargar el formulario:", error);
+                container.innerHTML = '<p class="text-danger">No se pudo cargar el formulario.</p>';
+            });
     }
 
-    document.getElementById('submit-button').addEventListener('click', function() {
-        // Confirmación antes de enviar
+    document.getElementById('submit-button').addEventListener('click', function () {
         if (!confirm("¿Estás seguro de que deseas finalizar la consulta? Esta acción no se puede deshacer.")) {
             return;
         }
-    
+
         let forms = document.querySelectorAll('#form-display form');
         if (forms.length === 0) {
             alert("No hay formularios cargados.");
             return;
         }
-    
+
         let formularioData = [];
-    
+
         forms.forEach(form => {
             let formName = form.getAttribute('data-form-name');
             let formData = new FormData(form);
             let data = {};
-            
+
             formData.forEach((value, key) => {
                 data[key] = value;
             });
-    
+
             formularioData.push({
                 form_name: formName,
                 data: data
             });
         });
-    
+
         console.log("Datos enviados al backend:", formularioData);
-    
+
         fetch('/submit-all/', {
             method: 'POST',
             headers: {
@@ -181,7 +187,5 @@
             alert("Ocurrió un error al enviar los formularios.");
         });
     });
-    
-
 </script>
 {% endblock %}
