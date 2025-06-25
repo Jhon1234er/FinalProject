@@ -17,6 +17,7 @@ from django.contrib.auth.hashers import make_password
 from django.urls import reverse
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.deprecation import MiddlewareMixin
 
 Usuario = get_user_model()
 
@@ -37,6 +38,10 @@ def servicios(request):
     return render(request, 'paginas/Servicios.html')
 # endregion
 
+#region sesion expirada
+def sesion_expirada(request):
+    return render(request, 'sesion_expirada.html')
+# endregion
 
 # region login
 def login_usuario(request):
@@ -68,6 +73,26 @@ def login_usuario(request):
     return render(request, 'login.html')
 
 
+
+class SessionExpiredMiddleware(MiddlewareMixin):
+    def process_request(self, request):
+        if request.user.is_authenticated:
+            return  # sesión activa
+
+        if request.path.startswith('/admin/'):
+            return  # ignora admin
+
+        # Guarda última URL visitada antes de expirar
+        if 'sesion_expirada' not in request.path and not request.path.startswith('/static/'):
+            if request.session.get('was_logged_in', False):
+                return redirect('sesion_expirada')
+
+    def process_response(self, request, response):
+        if request.user.is_authenticated:
+            request.session['was_logged_in'] = True
+        else:
+            request.session['was_logged_in'] = False
+        return response
 
 
 def recuperar_contrasena(request):
@@ -197,7 +222,7 @@ def actualizar_usuario(request, id):
             messages.error(request, 'Por favor, revisa los campos del formulario.')
     else:
         formulario = UsuarioForm(instance=usuario)
-    return render(request, 'paciente/actualizar.html', {'formulario': formulario})
+    return render(request, 'usuario/actualizar.html', {'formulario': formulario})
 
 def lista_usuario(request):
     usuarios = Usuario.objects.all().order_by('tipo_doc')  
@@ -266,20 +291,21 @@ def lista_paciente(request):
         'pacientes': pacientes,
         'conteo': conteo
     })
-
+@login_required
 def actualizar_paciente(request, id):
     paciente = get_object_or_404(Paciente, id=id)
     if request.method == 'POST':
-        formulario = PacienteForm(request.POST, instance=paciente)
+        formulario = PacienteUpdateForm(request.POST, instance=paciente)
         if formulario.is_valid():
             formulario.save()
-            messages.success(request, 'Paciente actualizado exitosamente.')
+            messages.success(request, 'Datos actualizados exitosamente.')
             return redirect('detallar_usuario')
         else:
             messages.error(request, 'Por favor, revisa los campos del formulario.')
     else:
-        formulario = PacienteForm(instance=paciente)
-    return render(request, 'paciente/actualizar.html', {'formulario': formulario})
+        formulario = PacienteUpdateForm(instance=paciente)
+    return render(request, 'paciente/actualizar.html', {'formulario': formulario,
+    'usuario': paciente})
 
 def eliminar_paciente(request, id):
     paciente = get_object_or_404(Paciente, id=id)
@@ -318,16 +344,18 @@ def lista_administrador(request):
 def actualizar_administrador(request, id):
     administrador = get_object_or_404(Administrador, id=id)
     if request.method == 'POST':
-        formulario = AdministradorForm(request.POST, instance=administrador)
+        formulario = AdministradorUpdateForm(request.POST, instance=administrador)
         if formulario.is_valid():
             formulario.save()
-            messages.success(request, 'Administrador actualizado exitosamente.')
-            return redirect('listar_administrador')
+            messages.success(request, 'Datos actualizados exitosamente.')
+            return redirect('detallar_usuario')
         else:
             messages.error(request, 'Por favor, revisa los campos.')
     else:
-        formulario = AdministradorForm(instance=administrador)
-    return render(request, 'administrador/actualizar.html', {'formulario': formulario})
+        formulario = AdministradorUpdateForm(instance=administrador)
+    return render(request, 'administrador/actualizar.html', {
+    'formulario': formulario,
+    'usuario': administrador})
 
 def eliminar_administrador(request, id):
     administrador = get_object_or_404(Administrador, id=id)
@@ -379,7 +407,7 @@ def actualizar_medico(request, id):
         formulario = MedicoUpdateForm(request.POST, instance=medico)
         if formulario.is_valid():
             formulario.save()
-            messages.success(request, 'Médico actualizado exitosamente.')
+            messages.success(request, 'Datos actualizados exitosamente.')
             return redirect('detallar_usuario')
         else:
             messages.error(request, 'Por favor, revisa los campos.')

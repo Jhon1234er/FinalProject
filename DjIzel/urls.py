@@ -28,6 +28,10 @@ urlpatterns = [
     path('servicios/', servicios, name='servicios'),
     #endregion
 
+    #region sesion expirada
+    path('sesion-expirada/', sesion_expirada, name='sesion_expirada'),
+    #endregion
+
     #region Inicio Sesion 
     path('login/', login_usuario, name='login'), 
     path('logout/', logout_usuario, name='logout'),

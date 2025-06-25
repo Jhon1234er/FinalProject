@@ -172,6 +172,15 @@ class PacienteForm(forms.ModelForm):
             if edad < 18:
                 raise ValidationError("Debes tener al menos 18 años.")
         return fecha_nacimiento
+    
+class PacienteUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Paciente
+        fields = ['email', 'telefono', 'tipo_poblacion']
+
+    email = forms.EmailField(label='Correo', required=True)
+    telefono = forms.CharField(label='Teléfono', required=False)
+    tipo_poblacion = forms.CharField(label='Tipo de Población', required=False)
 # endregion
 
 # region Administrador
@@ -246,6 +255,14 @@ class AdministradorForm(forms.ModelForm):
                 raise ValidationError("Debes ser mayor de 18 años para registrarte")
         return fecha_nacimiento
         
+
+class AdministradorUpdateForm(forms.ModelForm):
+    class Meta:
+        model= Administrador
+        fields = ['email', 'telefono', 'tipo_poblacion']
+    email = forms.EmailField(label='Correo', required=True)
+    telefono = forms.CharField(label='Teléfono', required=False)
+    tipo_poblacion = forms.CharField(label='Tipo de Población', required=False)
 # endregion
 
 #region Medico

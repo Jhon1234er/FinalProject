@@ -1,0 +1,42 @@
+.expirada-container {
+  text-align: center;
+  margin: 100px auto;
+  max-width: 500px;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(1, 31, 48, 0.2);
+  font-family: 'Poppins', sans-serif;
+}
+
+.expirada-icono {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
+.expirada-titulo {
+  font-size: 24px;
+  color: #013857;
+  margin-bottom: 10px;
+}
+
+.expirada-mensaje {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.expirada-boton {
+  display: inline-block;
+  background-color: #6AC1B8;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.expirada-boton:hover {
+  background-color: #4aa7a0;
+}

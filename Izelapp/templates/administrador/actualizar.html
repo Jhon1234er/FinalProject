@@ -1,15 +1,94 @@
-{% extends 'base.html' %}
+{% extends 'componentes/Base.html' %}
+{% load static %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/usuario/actualizar.css' %}">
 
-  <h2>Actualizar Administrador</h2>
+<h2 class="titulo-actualizar">Actualiza tus datos</h2>
 
-  <form method="POST" enctype="multipart/form-data">
+<div class="formulario-contenedor">
+  <form method="POST" class="formulario-actualizar">
     {% csrf_token %}
-    {{ formulario.as_p }}
-    <button type="submit">Actualizar Administrador</button>
-  </form>
 
-  <p><a href="{% url 'listar_administrador' %}">Volver a la lista de administradores</a></p>
+    <!-- Campos NO editables -->
+    <p>
+      <label>Nombre de usuario</label>
+      <input type="text" value="{{ usuario.username }}" readonly>
+    </p>
+
+    <p>
+      <label>Nombre</label>
+      <input type="text" value="{{ usuario.first_name }}" readonly>
+    </p>
+
+    <p>
+      <label>Apellido</label>
+      <input type="text" value="{{ usuario.last_name }}" readonly>
+    </p>
+
+    <p>
+      <label>Tipo de Documento</label>
+      <input type="text" value="{{ usuario.get_tipo_doc_display }}" readonly>
+    </p>
+
+    <p>
+      <label>Número de Documento</label>
+      <input type="text" value="{{ usuario.num_doc }}" readonly>
+    </p>
+
+    <p>
+      <label>Género</label>
+      <input type="text" value="{{ usuario.get_genero_display }}" readonly>
+    </p>
+
+    <p>
+      <label>RH</label>
+      <input type="text" value="{{ usuario.rh }}" readonly>
+    </p>
+
+    <p>
+      <label>Fecha de Nacimiento</label>
+      <input type="text" value="{{ usuario.fecha_nacimiento }}" readonly>
+    </p>
+
+    <p>
+      <label>Ocupación</label>
+      <input type="text" value="{{ usuario.ocupacion }}" readonly>
+    </p>
+
+    <p>
+      <label>EPS</label>
+      <input type="text" value="{{ usuario.eps }}" readonly>
+    </p>
+
+    <p>
+      <label>Rol de acceso</label>
+      <input type="text" value="{{ usuario.rol_acceso }}" readonly>
+    </p>
+
+    <p>
+      <label>Centro de administracion</label>
+      <input type="text" value="{{ usuario.centro_administracion }}" readonly>
+    </p>
+    
+
+        <!-- Campos EDITABLES -->
+    <p>
+      {{ formulario.email.label_tag }}
+      {{ formulario.email }}
+    </p>
+
+    <p>
+      {{ formulario.telefono.label_tag }}
+      {{ formulario.telefono }}
+    </p>
+
+    <p>
+      {{ formulario.tipo_poblacion.label_tag }}
+      {{ formulario.tipo_poblacion }}
+    </p>
+    <!-- Botón para guardar cambios -->
+    <button type="submit" class="btn-guardar">Guardar Cambios</button>
+
+  </form>
 {% endblock %}
