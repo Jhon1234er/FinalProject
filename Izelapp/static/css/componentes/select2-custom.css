@@ -1,0 +1,68 @@
+/* Asegura que el contenedor ocupe el ancho completo */
+.select2-container {
+  width: 100% !important;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Ajustes visuales para los selects con estilo Bootstrap moderno */
+.select2-container--default .select2-selection--single {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  height: 40px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+}
+
+/* Texto dentro del input */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: #013857;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  padding-left: 2px;
+}
+
+/* Flechita de selección */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 38px;
+  right: 10px;
+  top: 1px;
+}
+
+/* Estado enfocado */
+.select2-container--default.select2-container--focus .select2-selection--single {
+  border-color: #6ac1b8;
+  box-shadow: 0 0 0 0.2rem rgba(106, 193, 184, 0.25);
+}
+
+/* Dropdown */
+.select2-dropdown {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  padding: 4px;
+  font-size: 14px;
+}
+
+/* Resultado de opción */
+.select2-results__option {
+  padding: 8px 12px;
+  color: #013857;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Resultado seleccionado */
+.select2-results__option--highlighted {
+  background-color: #e0e7ff;
+  color: #013857;
+}
+
+/* Oculta los inputs dobles que crea select2 */
+.select2-hidden-accessible {
+  display: none !important;
+}

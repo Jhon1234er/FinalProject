@@ -5,7 +5,15 @@ document.addEventListener("DOMContentLoaded", function () {
     placeholder: 'Selecciona una opción',
     allowClear: true
   });
-
+// ✅ Activar Flatpickr para fechas de nacimiento mayores de 18 años
+flatpickr(".datepicker1", {
+  dateFormat: "Y-m-d",
+  locale: "es",
+  altInput: true,
+  altFormat: "d/m/Y",
+  maxDate: new Date().fp_incr(-18 * 365.25), // Resta 18 años considerando años bisiestos
+  defaultDate: null
+});
   // ✅ Flatpickr para fechas futuras (ej. disponibilidad médica)
   if (typeof flatpickr !== 'undefined') {
     flatpickr(".datepicker", {

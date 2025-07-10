@@ -2,33 +2,138 @@
 {% load static %}
 
 {% block title %}
-  Inicio Médico
+  Dashboard Médico
 {% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/medico/perfil.css' %}">
 
-<div class="dashboard-medico" data-aos="fade-up">
-  <h1 class="bienvenida">¡Bienvenido, Dr. {{ usuario.first_name }} {{ usuario.last_name }}!</h1>
+<div class="contenedor-dashboard">
+  <div class="contenedor-titulo">
+    <h1 class="titulo-dashboard">Bienvenido, Dr. {{ usuario.first_name }} {{ usuario.last_name }}</h1>
+  </div>
 
-  <div class="resumen-contenedor">
-    <div class="card-dashboard">
-      <h3>Citas de Hoy</h3>
-      <p><strong>{{ total_citas_hoy }}</strong> pacientes agendados</p>
-      <a href="{% url 'agenda_citas_medico' %}" class="btn-ver">Ver agenda</a>
+<div class="grid-personalizado">
+
+  <!-- Caja 1 -->
+  <div class="caja caja1">
+    <div class="encabezado-caja">
+      <div class="icono-caja">
+                <!-- Calendario -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+      </div>
+      <h2 class="titulo-caja">Citas de Hoy</h2>
     </div>
+    <p class="texto-caja">
+      Tienes <strong>{{ total_citas_hoy }}</strong> cita{{ total_citas_hoy|pluralize }} agendada{{ total_citas_hoy|pluralize }}.
+    </p>
+    <a href="{% url 'agenda_citas_medico' %}" class="btn-caja">Ver agenda</a>
+  </div>
 
-    <div class="card-dashboard">
-      <h3>Historia Clínica</h3>
-      <p>Consulta los antecedentes y evolución de tus pacientes.</p>
-      <a href='#' class="btn-ver">Acceder</a>
+  <!-- Caja 3 -->
+  <div class="caja caja3">
+    <div class="encabezado-caja">
+      <div class="icono-caja">
+        <!-- Historial -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3h6a2 2 0 012 2v2H7V5a2 2 0 012-2z" />
+          <path d="M7 8h10v13H7z" />
+        </svg>
+      </div>
+      <h2 class="titulo-caja">Consultas ya atendidas Hoy</h2>
     </div>
+    <p class="texto-caja">
+      Total atendidas: <strong>{{ total_consultas_hoy }}</strong>
+    </p>
+    {% if consultas_hoy %}
+      <ul>
+        {% for consulta in consultas_hoy %}
+          <li>
+            <strong>Paciente: {{ consulta.paciente.get_full_name }}</strong><br>
+            <span class="texto-secundario">Especialidad: {{ consulta.especialidad }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="texto-secundario">No hay consultas atendidas hoy.</p>
+    {% endif %}
+  </div>
 
-    <div class="card-dashboard">
-      <h3>Órdenes Médicas</h3>
-      <p>Genera fórmulas, exámenes y órdenes diagnósticas.</p>
-      <a href='#' class="btn-ver">Nueva orden</a>
+  <!-- Caja 2 -->
+  <div class="caja caja2">
+    <div class="encabezado-caja">
+      <div class="icono-caja">
+        <!-- Reloj -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+      </div>
+      <h2 class="titulo-caja">Próxima Consulta</h2>
+    </div>
+      {% if proxima_consulta %}
+        <div class="fila-consulta">
+          <div class="info-paciente">
+            <strong>Paciente: {{ proxima_consulta.paciente.get_full_name }}</strong><br>
+            <span class="texto-secundario">Hora: {{ proxima_consulta.hora_cita }} - Especialidad: {{ proxima_consulta.especialidad }}</span>
+          </div>
+
+          <button class="btn-caja btn-atender" onclick="abrirModal('{{ proxima_consulta.paciente.id }}', '{{ proxima_consulta.id }}')">
+            Atender ahora
+          </button>
+
+        </div>
+      {% else %}
+        <p class="texto-secundario">No hay próximas consultas programadas para hoy.</p>
+      {% endif %}
+
+  </div>
+
+</div>
+<!-- Modal de confirmación -->
+<div id="modalConfirmacion" class="modal">
+  <div class="modal-contenido">
+    <h3>¿Desea iniciar la consulta?</h3>
+    <p>Serás redirigido para atender al paciente.</p>
+    <div class="modal-acciones">
+      <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+      <a id="btnConfirmarAtencion" href="#" class="btn-confirmar">Confirmar</a>
     </div>
   </div>
 </div>
+
+
+</div>
+
+<script>
+  function abrirModal(pacienteId, citaId) {
+    const modal = document.getElementById('modalConfirmacion');
+    const btnConfirmar = document.getElementById('btnConfirmarAtencion');
+    btnConfirmar.href = `/consulta/${pacienteId}/${citaId}/`;
+    modal.style.display = 'block';
+  }
+
+  function cerrarModal() {
+    document.getElementById('modalConfirmacion').style.display = 'none';
+  }
+
+  // Cierra el modal si hacen clic fuera del cuadro
+  window.onclick = function(event) {
+    const modal = document.getElementById('modalConfirmacion');
+    if (event.target === modal) {
+      cerrarModal();
+    }
+  }
+</script>
+
+
 {% endblock %}
+

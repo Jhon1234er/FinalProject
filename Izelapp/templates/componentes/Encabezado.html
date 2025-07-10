@@ -17,6 +17,9 @@
         {# Administrador autenticado #}
         {% if tipo_usuario == 'administrador' %}
           <li class="opcion-menu">
+            <a class="enlace-menu {% if request.resolver_match.url_name == 'perfil_administrador' %}activo{% endif %}" href="{% url 'perfil_administrador' %}">Inicio</a>
+          </li>
+          <li class="opcion-menu">
             <a class="enlace-menu {% if request.resolver_match.url_name == 'gestionar_disponibilidad' %}activo{% endif %}" href="{% url 'gestionar_disponibilidad' %}">Gestionar Agenda</a>
           </li>
           <li class="opcion-menu">
@@ -26,13 +29,10 @@
             <a class="enlace-menu {% if request.resolver_match.url_name == 'registrar_medico' %}activo{% endif %}" href="{% url 'registrar_medico' %}">Crear Cuenta Medico</a>
           </li>
           <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'perfil_administrador' %}activo{% endif %}" href="{% url 'perfil_administrador' %}">Inicio</a>
-          </li>
-          <li class="opcion-menu">
             <a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a>
           </li>
           <li class="opcion-menu">
-            <a class="enlace-menu" href="{% url 'logout' %}">Cerrar Sesión</a>
+            <a class="enlace-menu" onclick="abrirModalCerrarSesion()">Cerrar sesión</a>
           </li>
 
         {# Medico autenticado #}
@@ -44,7 +44,7 @@
             <a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a>
           </li>
           <li class="opcion-menu">
-            <a class="enlace-menu" href="{% url 'logout' %}">Cerrar Sesión</a>
+            <a class="enlace-menu" onclick="abrirModalCerrarSesion()">Cerrar sesión</a>
           </li>
 
         {# Paciente autenticado #}
@@ -65,8 +65,9 @@
             <a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a>
           </li>
           <li class="opcion-menu">
-            <a class="enlace-menu" href="{% url 'logout' %}">Cerrar sesión</a>
+            <a class="enlace-menu" onclick="abrirModalCerrarSesion()">Cerrar sesión</a>
           </li>
+
 
         {# Usuario no autenticado (visitante) #}
         {% elif not tipo_usuario %}

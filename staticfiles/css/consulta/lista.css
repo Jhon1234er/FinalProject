@@ -1,91 +1,81 @@
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f0f4f8;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Título */
-  .atenciones__titulo {
-    text-align: center;
-    color: #003366;
-    font-size: 28px;
-    margin-top: 30px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  
-  /* Tabla */
-  .tabla__atenciones {
-    width: 90%;
-    margin: 30px auto;
-    border-collapse: separate;
-    border-spacing: 0;
-    background-color: #ffffff;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  
-  /* Cabecera */
-  .tabla__atenciones thead {
-    background: linear-gradient(to right, #007bff, #00c6ff);
-    color: white;
-  }
-  
-  .tabla__atenciones th {
-    padding: 15px;
-    font-size: 15px;
-    text-align: left;
-    border-right: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  
-  .tabla__atenciones th:last-child {
-    border-right: none;
-  }
-  
-  /* Celdas */
-  .tabla__atenciones td {
-    padding: 14px 15px;
-    font-size: 14px;
-    border-bottom: 1px solid #e0e6ed;
-    color: #333;
-  }
-  
-  .tabla__atenciones tbody tr:hover {
-    background-color: #eaf6ff;
-    transition: all 0.3s ease;
-  }
-  
-  /* Diagnósticos con estilo */
-  .diagnostico {
-    text-transform: lowercase;
-  }
-  
-  .diagnostico::first-letter {
-    text-transform: uppercase;
-  }
-  
-  /* Botón */
-  .contenedor-boton {
-    display: flex;
-    justify-content: center;
-    margin: 30px 0;
-  }
-  
-  .contenedor__boton--boton {
-    padding: 12px 30px;
-    font-size: 16px;
-    background: linear-gradient(to right, #007bff, #00c6ff);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-    transition: background 0.3s ease;
-  }
-  
-  .contenedor__boton--boton:hover {
-    background: linear-gradient(to right, #0056b3, #0090c5);
-  }
-  
+.atenciones__tabla {
+  max-width: 95%;
+  margin: 40px auto;
+  margin-top: 100px;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.atenciones__titulo {
+  text-align: center;
+  font-size: 28px;
+  color: #013857;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.tabla__atenciones {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+  font-size: 16px;
+}
+
+.tabla__atenciones thead {
+  background-color: #013857;
+  color: white;
+}
+
+.tabla__atenciones--cabecera {
+  padding: 15px;
+  text-align: left;
+  font-weight: 500;
+}
+
+.tabla__atenciones tbody tr {
+  background-color: #f9fcff;
+  transition: background-color 0.3s;
+}
+
+.tabla__atenciones tbody tr:hover {
+  background-color: #e1f0ff;
+}
+
+.tabla__atenciones--celda-1,
+.tabla__atenciones--celda-2,
+.tabla__atenciones--celda-3,
+.tabla__atenciones--celda-4,
+.diagnostico {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  color: #333;
+}
+
+.diagnostico {
+  font-style: italic;
+  color: #555;
+}
+
+.contenedor-boton {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.contenedor__boton--boton {
+  background-color: #013857;
+  color: white;
+  border: none;
+  padding: 14px 30px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+.contenedor__boton--boton:hover {
+  background-color: #045e9c;
+}

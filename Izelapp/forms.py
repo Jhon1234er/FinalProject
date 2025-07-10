@@ -499,6 +499,7 @@ class OrdenMedicaForm(forms.ModelForm):
         model = OrdenMedica
         fields = ['cups', 'medico', 'paciente', 'especialidad_referido', 'cantidad','diagnostico_principal', 'diagnostico_relacionado', 'motivo','fecha_ordenado', 'vigencia', 'estado'
         ]
+
 # endregion
 
 # region Disponibilidad
@@ -530,7 +531,7 @@ class VacunaForm(forms.ModelForm):
         fields = ['nombre_vacuna', 'fecha_aplicacion', 'dosis'
         ]
         widgets = {
-            'fecha_aplicacion': forms.DateInput(attrs={'type': 'date'}),
+            'fecha_aplicacion': forms.DateInput(attrs={'class': 'datepicker1', 'type': 'text'}),
             'dosis': forms.TextInput(attrs={'placeholder': 'Dosis de la vacuna'}),
         }
 # endregion
@@ -542,7 +543,7 @@ class DatoQuirurgicoForm(forms.ModelForm):
         fields = ['tipo_cirugia', 'fecha_cirugia', 'complicaciones'
         ]
         widgets = {
-            'fecha_cirugia': forms.DateInput(attrs={'type': 'date'}),
+            'fecha_cirugia': forms.DateInput(attrs={'class': 'datepicker1', 'type': 'text', 'placeholder': 'Ingrese la fecha de el procedimiento'}),
             'complicaciones': forms.Textarea(attrs={'rows': 4}),
         }
 # endregion
@@ -660,7 +661,7 @@ class OrdenMedicaForm(forms.ModelForm):
             'diagnostico_relacionado': forms.Textarea(attrs={'class': 'form-control','placeholder':'No especificado'}),            
             'motivo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Motivo de la orden'}),
             'fecha_ordenado': forms.DateInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
-            'vigencia': forms.SelectDateWidget(attrs={'class': 'form-control'}, years=range(2025, 2026)),
+            'vigencia':forms.DateInput(attrs={'class': 'datepicker1', 'type': 'text', 'placeholder': 'Ingrese la fecha de vigencia de la orden'}),
         }
 #endregion
 
@@ -697,9 +698,17 @@ class CertificadoIncapacidadForm(forms.ModelForm):
         widgets = {
             'dias_incapacidad': forms.TextInput(attrs={'class': 'form-control'}),
             'motivo_incapacidad': forms.TextInput(attrs={'class': 'form-control'}),
-            'fecha_inicio': forms.SelectDateWidget(attrs={'class': 'form-control'}, years=range(2025, 2026)),
-            'fecha_fin': forms.SelectDateWidget(attrs={'class': 'form-control'}, years=range(2025, 2026)),
+            'fecha_inicio': forms.DateInput(attrs={'class': 'datepicker1', 'type': 'text', 'placeholder': 'Ingrese la fecha de inicio de incapacidad'}),
+            'fecha_fin': forms.DateInput(attrs={
+                'class': 'datepicker1',
+                'type': 'text',
+                'placeholder': 'Fecha fin (calculada automáticamente)',
+                'readonly': 'readonly' 
+                
+            }),
             'observaciones': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Observaciones'})
         }
+
+
 #endregion
 
