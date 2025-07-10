@@ -4,75 +4,136 @@
 {% block title %}Bienvenido a EPS Izel{% endblock %}
 
 {% block content %}
+<!-- Fuente Poppins -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<!-- Estilos personalizados -->
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 <script src="{% static 'js/counter.js' %}"></script>
 <script src="{% static 'js/aos-init.js' %}"></script>
+<script src="{% static 'js/izel-efectos.js' %}"></script>
 
-{% include 'componentes/banner_carrusel.html' with titulo_banner="Tu salud, nuestra prioridad" texto_banner="En EPS Izel cuidamos de ti y tu familia con calidad, calidez y confianza." %}
-
-<!-- 👨‍⚕️ Sobre EPS Izel -->
-<section class="seccion-sobre-nosotros" data-aos="fade-left">
-  <h2 class="titulo-principal">¿Qué es Izel?</h2>
-  <div class="sobre-nosotros-contenido">
-    <div class="imagen-sobre-nosotros">
-      <img src="{% static 'img/P1.jpg' %}" alt="Equipo humano de Izel">
-    </div>
-    <div class="texto-sobre-nosotros">
-      <p>EPS Izel es una institución hospitalaria comprometida con la salud integral de los colombianos. Trabajamos con empatía, tecnología y enfoque humano.</p>
-      <ul>
-        <li>Atención centrada en el paciente</li>
-        <li>Profesionales altamente calificados</li>
-        <li>Equipamiento moderno y seguro</li>
-      </ul>
-      <a href="#" class="btn-conocer-mas">Conocer más</a>
+<!-- Sección HERO con imagen destacada y animación -->
+<section class="hero" data-aos="fade-up">
+  <div class="hero-content">
+    <div class="hero-imagen full-width">
+      <img src="{% static 'img/P2.jpg' %}" alt="Doctora feliz con niño y padre en el hospital">
+      <div class="hero-overlay bottom-left">
+        <div class="hero-texto ajustado">
+          <h1>Bienvenido a EPS Izel</h1>
+          <p>Donde tu bienestar es nuestra prioridad. Cuidamos de ti y de tu familia con amor, profesionalismo y tecnología de vanguardia.</p>
+          <a href="#" class="btn-conocer-mas">Conoce nuestros servicios</a>
+        </div>
+        <div class="deslizar-texto">Desliza para conocer más</div>
+      </div>
     </div>
   </div>
 </section>
+<!-- Sección unificada IZEL -->
+<section class="seccion-izel" data-aos="fade-up">
+  <h2 class="titulo-principal decorado">¿Por qué elegir Izel?</h2>
+  
+  <div class="contenedor-izel">
+    <div class="texto-izel">
+      <p>
+        En <strong>EPS Izel</strong> cuidamos tu salud con amor, tecnología y experiencia. Nuestra red de profesionales te acompaña en cada etapa para garantizar una atención médica humana, rápida y confiable.
+      </p>
+      <a href="#" class="btn-attract">Conocer más</a>
+    </div>
+  </div>
 
-<!-- 💬 Testimonios reales -->
-<section class="seccion-testimonios" data-aos="zoom-in">
-  <h2>Lo que dicen nuestros pacientes</h2>
-  <div class="testimonios-grid">
-    <div class="testimonio-card">
-      <p>"Gracias a Izel logré controlar mi diabetes. Me escucharon, me orientaron y me ayudaron a mejorar mi vida."</p>
-      <span>— María G., 52 años <div class="estrellas">★★★★★</div></span>
+  <!-- Cards estilo flip -->
+  <div class="card-container">
+    <div class="card-flip">
+      <div class="card-inner">
+        <div class="card-front">
+          <h3>Consulta General</h3>
+          <p>Servicios médicos primarios personalizados.</p>
+        </div>
+        <div class="card-back">
+          <p>Atención oportuna y profesional en medicina general.</p>
+          <a href="#" class="btn-conocer-mas">Ver más</a>
+        </div>
+      </div>
     </div>
-    <div class="testimonio-card">
-      <p>"Mi hijo fue atendido de urgencia con mucha rapidez y profesionalismo. ¡Recomiendo totalmente!"</p>
-      <span>— Andrés L., 36 años <div class="estrellas">★★★★★</div></span>
+
+    <div class="card-flip">
+      <div class="card-inner">
+        <div class="card-front">
+          <h3>Odontología</h3>
+          <p>Cuidado bucal para toda la familia.</p>
+        </div>
+        <div class="card-back">
+          <p>Tratamientos dentales seguros y efectivos.</p>
+          <a href="#" class="btn-conocer-mas">Ver más</a>
+        </div>
+      </div>
     </div>
-    <div class="testimonio-card">
-      <p>"Excelente atención en ginecología. El trato fue respetuoso, claro y humano."</p>
-      <span>— Paola R., 29 años <div class="estrellas">★★★★★</div></span>
+
+    <div class="card-flip">
+      <div class="card-inner">
+        <div class="card-front">
+          <h3>Vacunación</h3>
+          <p>Protege tu salud y la de tu familia.</p>
+        </div>
+        <div class="card-back">
+          <p>Amplio portafolio de vacunas para todas las edades.</p>
+          <a href="#" class="btn-conocer-mas">Ver más</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+<!-- Sección combinada: Testimonios + Estadísticas -->
+<section class="seccion-combinada">
+  <div class="fondo-degradado"></div>
 
-<!-- Estadísticas con contador -->
-<section class="seccion-estadisticas" data-aos="fade-up">
-  <div class="estadisticas-flex">
-    <div class="estadistica-item">
-      <h3 class="contador" data-count="12000">+0</h3>
-      <p>Pacientes atendidos</p>
-    </div>
-    <div class="estadistica-item">
-      <h3 class="contador" data-count="98">98%</h3>
-      <p>Satisfacción del usuario</p>
-    </div>
-    <div class="estadistica-item">
-      <h3 class="contador" data-count="15">15</h3>
-      <p>Años de experiencia</p>
-    </div>
-    <div class="estadistica-item">
-      <h3 class="contador" data-count="30">+30</h3>
-      <p>Especialistas disponibles</p>
-    </div>
+  <div class="contenido-combinado">
+    <!-- Testimonios -->
+    <section class="seccion-testimonios" data-aos="fade-up">
+      <h2 class="titulo-principal decorado"><strong>Lo que dicen nuestros pacientes</strong></h2>
+      <div class="testimonios-grid">
+        <div class="testimonio-card">
+          <p><strong>"Gracias a Izel logré controlar mi diabetes. Me escucharon, me orientaron y me ayudaron a mejorar mi vida."</strong></p>
+          <span><strong>María G., 52 años</strong></span>
+          <div class="estrellas">★★★★★</div>
+        </div>
+        <div class="testimonio-card">
+          <p><strong>"Mi hijo fue atendido de urgencia con mucha rapidez y profesionalismo. ¡Recomiendo totalmente!"</strong></p>
+          <span><strong>Andrés L., 36 años</strong></span>
+          <div class="estrellas">★★★★★</div>
+        </div>
+        <div class="testimonio-card">
+          <p><strong>"Excelente atención en ginecología. El trato fue respetuoso, claro y humano."</strong></p>
+          <span><strong>Paola R., 29 años</strong></span>
+          <div class="estrellas">★★★★★</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Estadísticas -->
+    <section class="seccion-estadisticas" data-aos="fade-up">
+      <h2 class="titulo-principal decorado"><strong>Nuestra experiencia</strong></h2>
+      <div class="estadisticas-flex">
+      <div class="estadistica-item">
+        <h3 class="contador" data-count="{{ pacientes_atendidos }}">+0</h3>
+        <p>Pacientes atendidos</p>
+      </div>
+      <div class="estadistica-item">
+        <h3 class="contador" data-count="{{ especialistas_disponibles }}">{{ especialistas_disponibles }}%</h3>
+        <p>Especialistas Disponibles</p>
+      </div>
+        <div class="estadistica-item">
+          <h3 class="contador" data-count="1">1</h3>
+          <p>Años de experiencia</p>
+        </div>
+      </div>
+    </section>
   </div>
 </section>
-<!-- 📞 CTA final -->
-<section class="seccion-contacto-home" data-aos="fade-up">
-  <h2>¿Necesitas ayuda médica o quieres más información?</h2>
-  <p class="texto-parrafo">Contáctanos o agenda tu cita en menos de 3 minutos.</p>
-  <a class="btn-conocer-mas">Contáctanos</a>
-</section>
+
+<!-- Botón flotante Contacto -->
+<a href="#" class="btn-contacto">
+  <img src="{% static 'img/Contactanos.svg' %}" alt="Contáctanos" class="icon">
+  <span class="text">Contáctanos</span>
+</a>
 {% endblock %}

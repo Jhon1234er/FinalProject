@@ -93,3 +93,17 @@ flatpickr(".datepicker1", {
     duracionInput.addEventListener('change', generarBloques);
   }
 });
+
+  flatpickr(".hora-picker", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    time_24hr: true,
+    minuteIncrement: 15,
+    locale: "es"
+  });
+
+  flatpickr(".datepicker", {
+    dateFormat: "Y-m-d",
+    locale: "es"
+  });

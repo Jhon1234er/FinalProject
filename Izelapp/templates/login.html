@@ -4,48 +4,78 @@
 {% block title %}Iniciar sesión - Izel{% endblock %}
 
 {% block content %}
-
 <link rel="stylesheet" href="{% static 'css/login.css' %}">
 
-<div class="Ingresar">
-    <div class="Ingresar__formulario">
-        <h2 class="Ingresar__titulo">Iniciar Sesión</h2>
+<div class="login-container">
+  <div class="login-card">
 
-        {% if mensaje_error %}
-            <div class="error">{{ mensaje_error }}</div>
-        {% endif %}
+    <!-- Título separado -->
+    <h2 class="login-title">Iniciar Sesión</h2>
 
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+    {% if mensaje_error %}
+      <div class="error">{{ mensaje_error }}</div>
+    {% endif %}
 
-        <form action="{% url 'login' %}" method="POST">
-            {% csrf_token %}
-            <div class="Ingresar__campo">
-                <input type="text" id="num_doc" name="username" class="Ingresar__campo-input" placeholder=" " required />
-                <label for="num_doc" class="Ingresar__campo-label">Ingrese su número de documento</label>
-            </div>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="error">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
 
-            <div class="Ingresar__campo">
-                <input type="password" id="password" name="password"
-                    class="Ingresar__campo-input"
-                    placeholder=" " required />
-                <label for="password" class="Ingresar__campo-label">Ingrese su contraseña</label>
-            </div>
+    <form action="{% url 'login' %}" method="POST" class="login-form">
+      {% csrf_token %}
 
-            <div>
-                <button type="submit" class="Ingresar__submit">Iniciar sesión</button>
-            </div>
+      <!-- Campo Documento -->
+      <div class="inputContainer">
+        <input required id="num_doc" name="username" placeholder="Número de documento" type="text">
+        <label class="inputLabel" for="num_doc">Número de documento</label>
+        <img src="{% static 'img/numdoc.svg' %}" class="inputIcon" alt="icono documento">
+      </div>
 
-            <div class="Ingresar__opciones">
-            <a href="{% url 'registrar_paciente' %}" class="Ingresar__registro-enlace">¿No tienes cuenta? Regístrate</a>
-            <a href="{% url 'recuperar_contrasena' %}" class="Ingresar__olvido-enlace">¿Olvidaste tu contraseña?</a>
-            </div>
-        </form>
-    </div>
+      <!-- Campo Contraseña -->
+      <div class="inputContainer password-wrapper">
+        <input required id="password" name="password" placeholder="Contraseña" type="password">
+        <label class="inputLabel" for="password">Contraseña</label>
+        <img src="{% static 'img/password.svg' %}" class="inputIcon" alt="icono contraseña">
+
+        <!-- Ícono de ojo -->
+        <img src="{% static 'img/Mostrar.svg' %}" id="eyeIcon" class="eye-icon" alt="mostrar contraseña" onclick="togglePassword()" />
+      </div>
+
+      <!-- Botón de Iniciar Sesión -->
+      <button type="submit" class="animated-button">
+        <svg xmlns="http://www.w3.org/2000/svg" class="arr-2" viewBox="0 0 24 24">
+          <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z" />
+        </svg>
+        <span class="text">Iniciar sesión</span>
+        <span class="circle"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24">
+          <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z" />
+        </svg>
+      </button>
+
+      <!-- Enlaces -->
+      <div class="login-options">
+        <a href="{% url 'registrar_paciente' %}">Crear Cuenta</a>
+        <a href="{% url 'recuperar_contrasena' %}">¿Olvidaste tu contraseña?</a>
+      </div>
+    </form>
+  </div>
 </div>
+
+<!-- Script para cambiar ícono de mostrar contraseña -->
+<script>
+  function togglePassword() {
+    const pwd = document.getElementById('password');
+    const eye = document.getElementById('eyeIcon');
+    const isHidden = pwd.type === 'password';
+
+    pwd.type = isHidden ? 'text' : 'password';
+    eye.src = isHidden 
+      ? "{% static 'img/Ocultar.svg' %}" 
+      : "{% static 'img/Mostrar.svg' %}";
+  }
+</script>
 {% endblock %}

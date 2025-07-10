@@ -1,0 +1,57 @@
+{% load static %}
+
+{% block title %}Panel de Citas{% endblock %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+<div class="max-w-7xl mx-auto px-6 py-10">
+  <h1 class="text-3xl font-bold text-blue-800 mb-6 text-center">Gestión de Citas</h1>
+
+  <!-- Filtro y búsqueda -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <input type="text" placeholder="Buscar por paciente o fecha..." class="w-full md:w-1/3 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+    <select class="w-full md:w-1/4 p-3 border border-gray-300 rounded-lg shadow-sm">
+      <option value="">Filtrar por estado</option>
+      <option value="agendada">Agendada</option>
+      <option value="completada">Completada</option>
+      <option value="cancelada">Cancelada</option>
+    </select>
+  </div>
+
+  <!-- Tabla -->
+  <div class="bg-white shadow-md rounded-lg overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-blue-100">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Paciente</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Fecha</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Especialidad</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Estado</th>
+          <th class="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200 text-sm text-gray-700">
+        {% for cita in citas %}
+        <tr>
+          <td class="px-6 py-4">{{ cita.paciente.get_full_name }}</td>
+          <td class="px-6 py-4">{{ cita.fecha_cita }}</td>
+          <td class="px-6 py-4">{{ cita.especialidad }}</td>
+          <td class="px-6 py-4">{{ cita.estado_cita }}</td>
+          <td class="px-6 py-4 text-center">
+            <a href="{% url 'ver_cita' cita.id %}" class="text-blue-600 hover:underline">Ver</a> |
+            <a href="{% url 'editar_cita' cita.id %}" class="text-yellow-500 hover:underline">Editar</a> |
+            <a href="{% url 'eliminar_cita' cita.id %}" class="text-red-600 hover:underline">Eliminar</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="text-center text-gray-500 py-6">No hay citas registradas.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

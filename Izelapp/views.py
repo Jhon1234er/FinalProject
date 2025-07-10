@@ -18,6 +18,7 @@ from django.urls import reverse
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.deprecation import MiddlewareMixin
+from django.db.models import Count
 
 Usuario = get_user_model()
 
@@ -28,9 +29,14 @@ except locale.Error:
     pass
 
 # region Home
-def home(request):
-    return render(request, 'home.html')
 
+def home(request):
+    pacientes_atendidos = Usuario.objects.count()
+    especialistas_disponibles = Medico.objects.count()
+    return render(request, 'home.html', {
+        'pacientes_atendidos': pacientes_atendidos,
+        'especialistas_disponibles': especialistas_disponibles,
+    })
 def sobre_nosotros(request):
     return render(request, 'paginas/Sobrenosotros.html')
 
@@ -115,8 +121,8 @@ def restablecer_contrasena(request, id):
     usuario = get_object_or_404(Usuario, id=id)
     
     if request.method == "POST":
-        nueva = request.POST.get("nueva_contrasena")
-        repetir = request.POST.get("repetir_contrasena")
+        nueva = request.POST.get("password")
+        repetir = request.POST.get("confirm_password")
 
         if nueva == repetir:
             usuario.set_password(nueva)
@@ -249,18 +255,39 @@ def eliminar_imagen_usuario(request):
 
 # region Paciente
 
+
 @login_required
 def perfil_paciente(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-
     usuario = request.user
+    try:
+        paciente = usuario.paciente
+    except Paciente.DoesNotExist:
+        paciente = None
+
+    citas = Cita.objects.filter(paciente=paciente).order_by('-fecha_cita')
+
+    # Agrupar por estado_cita
+    estadisticas_queryset = citas.values('estado_cita').annotate(total=Count('id'))
+
+    # Preparar datos para Chart.js
+    labels = [item['estado_cita'].capitalize() for item in estadisticas_queryset]
+    datos = [item['total'] for item in estadisticas_queryset]
+
+    estadisticas = {
+        "labels": labels,
+        "datos": datos
+    }
+
     return render(request, 'paciente/perfil.html', {
         'usuario': usuario,
-        'tipo_usuario': 'paciente'
+        'citas': citas,
+        'estadisticas': estadisticas,
+        'tipo_usuario': 'paciente',
     })
-
-
+@login_required
+def panel_pacientes(request):
+    pacientes = Usuario.objects.filter(rol='paciente')  # Ajusta si tu modelo o campo es diferente
+    return render(request, 'administrador/panel_pacientes.html', {'pacientes': pacientes})
 
 def registrar_paciente(request):
     if request.method == 'POST':
@@ -365,11 +392,18 @@ def cargar_historial_modulo(request, modulo):
 # region Administrador 
 @login_required
 def perfil_administrador(request):
-    return render(request, 'administrador/perfil.html', {
-        'usuario': request.user,
-        'tipo_usuario': 'administrador'
-    })
+    administrador = request.user
 
+    total_usuarios = Usuario.objects.count()
+    total_citas = Cita.objects.count()
+    medicos_activos = Medico.objects.filter(is_active=True).count()
+
+    return render(request, 'administrador/perfil.html', {
+        'usuario': administrador,
+        'total_usuarios': total_usuarios,
+        'total_citas': total_citas,
+        'medicos_activos': medicos_activos
+    })
 def registrar_administrador(request):
     if request.method == 'POST':
         formulario = AdministradorForm(request.POST, request.FILES)
@@ -422,6 +456,20 @@ def perfil_medico(request):
     return render(request, 'medico/perfil.html', {
         'usuario': medico,
         'total_citas_hoy': total_citas_hoy
+    })
+
+@login_required
+def panel_citas(request):
+    citas = Cita.objects.select_related('paciente', 'medico').all()
+    return render(request, 'administrador/panel_citas.html', {
+        'citas': citas
+    })
+
+@login_required
+def panel_medicos(request):
+    medicos = Medico.objects.select_related('usuario').all()
+    return render(request, 'administrador/panel_medicos.html', {
+        'medicos': medicos
     })
 def registrar_medico(request):
     if request.method == 'POST':
@@ -980,61 +1028,77 @@ def generar_disponibilidad(request):
     if not request.user.is_authenticated or not hasattr(request.user, 'administrador'):
         return redirect('login')
 
+    mensaje_exito = None
+
     if request.method == 'POST':
         form = GenerarDisponibilidadForm(request.POST)
+
         if form.is_valid():
-            # Médicos seleccionados visualmente (se reciben por campo oculto)
             medicos_ids = request.POST.get('medicos_seleccionados', '')
-            if not medicos_ids:
-                messages.error(request, "Debes seleccionar al menos un médico.")
-                return render(request, 'cita/generar_disponibilidad.html', {'form': form})
-
-            medicos = Medico.objects.filter(id__in=medicos_ids.split(','))
-
-            fecha_inicio = form.cleaned_data['fecha_inicio']
-            fecha_fin = form.cleaned_data['fecha_fin']
-            dias_seleccionados = [int(d) for d in form.cleaned_data['dias']]
-            hora_inicio = form.cleaned_data['hora_inicio']
-            hora_fin = form.cleaned_data['hora_fin']
+            fechas_str = request.POST.get('dias', '')
+            bloques_enviados = request.POST.getlist('bloques')
             duracion = int(form.cleaned_data['duracion'])
 
-            bloques_enviados = request.POST.getlist('bloques')
+            if not medicos_ids or not fechas_str or not bloques_enviados:
+                messages.error(request, "Debes seleccionar médicos, días y bloques horarios.")
+                return render(request, 'cita/gestionar_disponibilidad.html', {
+                    'form': form
+                })
+
+            medicos = Medico.objects.filter(id__in=medicos_ids.split(','))
+            fechas_seleccionadas = [
+                datetime.strptime(f, "%Y-%m-%d").date() for f in fechas_str.split(',')
+            ]
+
             total_creadas = 0
-            fecha_actual = fecha_inicio
 
-            while fecha_actual <= fecha_fin:
-                if fecha_actual.weekday() in dias_seleccionados:
-                    for bloque in bloques_enviados:
+            for fecha_actual in fechas_seleccionadas:
+                for bloque in bloques_enviados:
+                    try:
                         desde_str, hasta_str = bloque.split('-')
-                        desde = datetime.strptime(desde_str, "%H:%M").time()
-                        hasta = datetime.strptime(hasta_str, "%H:%M").time()
+                        desde = datetime.strptime(desde_str.strip(), "%H:%M").time()
+                        hasta = datetime.strptime(hasta_str.strip(), "%H:%M").time()
+                    except ValueError:
+                        continue  # Ignorar bloques mal formateados
 
-                        for medico in medicos:
+                    for medico in medicos:
+                        hora_actual = datetime.combine(fecha_actual, desde)
+                        hora_final = datetime.combine(fecha_actual, hasta)
+
+                        while hora_actual + timedelta(minutes=duracion) <= hora_final:
+                            inicio = hora_actual.time()
+                            fin = (hora_actual + timedelta(minutes=duracion)).time()
+
                             ya_existe = Disponibilidad.objects.filter(
                                 medico=medico,
                                 fecha=fecha_actual,
-                                hora_inicio=desde,
-                                hora_fin=hasta
+                                hora_inicio=inicio,
+                                hora_fin=fin
                             ).exists()
+
                             if not ya_existe:
                                 Disponibilidad.objects.create(
                                     medico=medico,
                                     fecha=fecha_actual,
-                                    hora_inicio=desde,
-                                    hora_fin=hasta,
+                                    hora_inicio=inicio,
+                                    hora_fin=fin,
                                     tipo_cita='general',
-                                    estado='disponible'
+                                    estado='disponible',
+                                    duracion=duracion
                                 )
                                 total_creadas += 1
-                fecha_actual += timedelta(days=1)
 
-            messages.success(request, f"Se generaron {total_creadas} disponibilidades.")
-            return redirect('perfil_administrador')
+                            hora_actual += timedelta(minutes=duracion)
+
+            mensaje_exito = f"Se generaron {total_creadas} disponibilidades."
+
     else:
         form = GenerarDisponibilidadForm()
 
-    return render(request, 'cita/gestionar_disponibilidad.html', {'form': form})
-@login_required
+    return render(request, 'cita/gestionar_disponibilidad.html', {
+        'form': form,
+        'mensaje_exito': mensaje_exito
+    })
 def agenda_citas_medico(request):
     medico = request.user.medico  
     citas = Cita.objects.filter(

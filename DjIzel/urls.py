@@ -160,4 +160,8 @@ urlpatterns = [
     path('verificar_disponibilidad/', verificar_disponibilidad, name='verificar_disponibilidad'),
     path('confirmar_cita/<int:disponibilidad_id>/', confirmar_cita, name='confirmar_cita'),
     path('gestionar_disponibilidad/', generar_disponibilidad, name='gestionar_disponibilidad'),
+
+    path('panel/pacientes/', panel_pacientes, name='panel_pacientes'),
+    path('panel/citas/', panel_citas, name='panel_citas'),
+    path('panel/medicos/', panel_medicos, name='panel_medicos'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

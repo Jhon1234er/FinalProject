@@ -1,205 +1,310 @@
-/** === LOGIN CSS MEJORADO === */
-
-/* Reset básico */
+/* ===== RESET GENERAL ===== */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+/* ===== CUERPO: SOLO COLOR DE FONDO Y TIPOGRAFÍA ===== */
 body {
-    background-color: #F5F5F5;
-    font-family: 'Poppins', Arial, sans-serif;
-    color: #333;
-    line-height: 1.5;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(120deg, #e0f2fe, #f1f5f9);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* Contenedor principal */
-.Ingresar {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding-top: 0.35rem; /* aumentado para evitar que se pegue al encabezado */
-    padding-bottom: 3rem;
-    margin-top: 5rem; /* agregado para compensar el header fijo */
-    background: #F5F5F5;
+/* ===== CONTENEDOR PRINCIPAL DEL LOGIN ===== */
+.login-container {
+  max-width: 420px;
+  margin: 4rem auto;
+  padding: 2rem;
 }
 
-/* Tarjeta del formulario */
-.Ingresar__formulario {
-    width: 100%;
-    max-width: 420px;
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 4px 24px rgba(1, 31, 48, 0.08);
-    padding: 2.2rem;
-    text-align: center;
-    animation: slideIn 0.7s ease-out;
-    margin-top: 0.10rem; /* adicional para bajar aún más el formulario */
+.login-card {
+  background: white;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  position: relative;
 }
 
-.Ingresar__titulo {
-    font-size: 2rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: #011f30;
-    margin-bottom: 1.5rem;
-    text-transform: uppercase;
+/* ===== TÍTULO ===== */
+.login-title {
+  font-size: 1.6rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #0f172a;
+  font-weight: 700; /* Negrilla */
 }
 
-/* Campos de entrada */
-.Ingresar__campo {
-    position: relative;
-    margin-bottom: 1.5rem;
+/* ===== INPUT ANIMADO ESTILO VINODJANGID07 ===== */
+.inputContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  margin-top: 0.5rem;
 }
 
-.Ingresar__campo-input {
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 12px;
-    background-color: #FAFAFA;
-    color: #333;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
+.inputContainer input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  background-color: transparent;
+  font-size: 1rem;
+  color: #0f172a;
+  font-weight: 500;
+  outline: none;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
-.Ingresar__campo-input:focus {
-    border-color: #A8D8B9;
-    background-color: #ffffff;
-    outline: none;
+.inputContainer input:focus,
+.inputContainer input:valid {
+  background-color: #e2e8f0;
+  border-color: #0284c7;
 }
 
-.Ingresar__campo-label {
-    position: absolute;
-    top: 50%;
-    left: 0.75rem;
-    transform: translateY(-50%);
-    font-size: 0.95rem;
-    color: #607d8b;
-    pointer-events: none;
-    transition: all 0.2s ease;
+.inputLabel {
+  position: absolute;
+  top: -25px;
+  left: 5px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #334155;
+  opacity: 0;
+  transition: transform 0.2s linear, opacity 0.2s linear;
 }
 
-.Ingresar__campo-input:focus + .Ingresar__campo-label,
-.Ingresar__campo-input:not(:placeholder-shown) + .Ingresar__campo-label {
-    top: -0.7rem;
-    left: 0.5rem;
-    font-size: 0.75rem;
-    background-color: #fff;
-    padding: 0 6px;
-    color: #013857;
+.inputIcon {
+  position: absolute;
+  top: -23px;
+  left: -15px;
+  width: 18px;
+  height: 18px;
+  opacity: 0;
+  transition: transform 0.2s linear, opacity 0.2s linear;
 }
 
-/* Botón */
-.Ingresar__submit {
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #ffffff;
-    background-color: #011f30;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+.inputContainer input:focus ~ .inputLabel,
+.inputContainer input:valid ~ .inputLabel {
+  transform: translateX(20px);
+  opacity: 1;
 }
 
-.Ingresar__submit:hover {
-    background-color: #013857;
-    transform: scale(1.02);
+.inputContainer input:focus ~ .inputIcon,
+.inputContainer input:valid ~ .inputIcon {
+  transform: translateX(20px);
+  opacity: 1;
 }
 
-.Ingresar__submit:focus-visible {
-    outline: 3px solid #A8D8B9;
-    outline-offset: 2px;
+/* ===== SWITCH MOSTRAR CONTRASEÑA ===== */
+.switch-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
-/* Enlaces secundarios ajustados visualmente */
-.Ingresar__opciones {
-    display: flex;
-    justify-content: center; /* centrado horizontal */
-    align-items: center;
-    gap: 1.2rem;
-    margin-top: 1.5rem;
-    font-size: 0.85rem;
-    flex-wrap: wrap;
-    flex-direction: row;
+.switch-label {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  gap: 0.5rem;
+  cursor: pointer;
 }
 
-
-.Ingresar__registro-enlace,
-.Ingresar__olvido-enlace {
-    color: #013857;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.8rem;
-    transition: color 0.3s ease;
+.switch-label input {
+  display: none;
 }
 
-.Ingresar__registro-enlace:hover,
-.Ingresar__olvido-enlace:hover {
-    color: #A8D8B9;
-    text-decoration: underline;
+.slider {
+  width: 36px;
+  height: 20px;
+  background-color: #cbd5e1;
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.3s;
 }
 
-.Separador {
-    color: #ccc;
-    font-size: 1rem;
-    font-weight: 400;
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 2px;
+  left: 2px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
 }
-/* Mensajes */
+
+.switch-label input:checked + .slider {
+  background-color: #0284c7;
+}
+
+.switch-label input:checked + .slider::before {
+  transform: translateX(16px);
+}
+
+/* ===== BOTÓN ANIMADO ESTILO ryota1231 MODIFICADO ===== */
+.animated-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 36px;
+  border: 4px solid transparent;
+  font-size: 1rem;
+  background-color: transparent;
+  border-radius: 100px;
+  font-weight: 600;
+  color: #0284c7;
+  box-shadow: 0 0 0 2px #0284c7;
+  cursor: pointer;
+  overflow: hidden;
+  width: 100%;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button svg {
+  position: absolute;
+  width: 24px;
+  fill: #0284c7;
+  z-index: 9;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button .arr-1 {
+  right: 16px;
+}
+
+.animated-button .arr-2 {
+  left: -25%;
+}
+
+.animated-button .circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: #bae6fd;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button .text {
+  position: relative;
+  z-index: 1;
+  transform: translateX(-12px);
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button:hover {
+  box-shadow: 0 0 0 12px transparent;
+  color: #0369a1;
+  border-radius: 12px;
+}
+
+.animated-button:hover .arr-1 {
+  right: -25%;
+}
+
+.animated-button:hover .arr-2 {
+  left: 16px;
+}
+
+.animated-button:hover .text {
+  transform: translateX(12px);
+}
+
+.animated-button:hover svg {
+  fill: #0369a1;
+}
+
+.animated-button:active {
+  scale: 0.97;
+  box-shadow: 0 0 0 4px #22d3ee;
+}
+
+.animated-button:hover .circle {
+  width: 220px;
+  height: 220px;
+  opacity: 1;
+}
+
+/* ===== ENLACES DE OPCIONES ===== */
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.login-options a {
+  color: #0284c7;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.login-options a:hover {
+  text-decoration: underline;
+  color: #0e7490;
+}
+
+/* ===== MENSAJES DE ERROR ===== */
 .error,
-ul.messages li {
-    color: #b00020;
-    background-color: #ffe5e5;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border-left: 4px solid #b00020;
-    border-radius: 6px;
-    text-align: left;
-    font-size: 0.95rem;
+.messages li {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+/* Extra separación entre campos */
+.inputContainer {
+  margin-bottom: 2.5rem;
 }
 
-ul.messages {
-    list-style: none;
-    padding: 0;
+/* Contraseña con ícono de ojo */
+.password-wrapper {
+  position: relative;
 }
 
-/* Cargando texto */
-.Ingresar__cargando {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: #013857;
-    font-weight: 500;
-    display: none;
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 12px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #64748b;
+  user-select: none;
 }
 
-/* Animación */
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Espacio inferior del botón */
+.animated-button {
+  margin-bottom: 2rem;
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-    .Ingresar__formulario {
-        padding: 1.5rem;
-    }
-
-    .Ingresar__titulo {
-        font-size: 1.5rem;
-    }
-
-    .Ingresar__opciones {
-        flex-direction: column;
-        align-items: center;
-    }
+/* Enlaces centrados y separados */
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+}
+/* Ícono del ojo dentro del input de contraseña */
+.eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  opacity: 0.8;
 }

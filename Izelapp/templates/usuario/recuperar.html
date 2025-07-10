@@ -18,28 +18,44 @@
     <form id="recuperar-form">
       {% csrf_token %}
 
-      <div class="Recuperar__campo">
-        <label for="tipo_doc" class="Recuperar__campo-label">Tipo de Documento</label>
-        <select id="tipo_doc" name="tipo_doc" class="Recuperar__campo-input" required>
-          <option value="" disabled selected>Selecciona una opción</option>
-          <option value="CC">Cédula de Ciudadanía</option>
-          <option value="CE">Cédula de Extranjería</option>
-          <option value="PA">Pasaporte</option>
-        </select>
+      <!-- Campo Tipo de Documento -->
+<div class="selectContainer">
+  <label for="tipo_doc" class="selectLabel">
+    <img src="{% static 'img/passport.svg' %}" alt="icono tipo documento">
+    Tipo de Documento
+  </label>
+  <select id="tipo_doc" name="tipo_doc" required>
+    <option value="" disabled selected>Selecciona una opción</option>
+    <option value="CC">Cédula de Ciudadanía</option>
+    <option value="CE">Cédula de Extranjería</option>
+  </select>
+</div>
+
+      <!-- Campo Número de Documento -->
+      <div class="inputContainer">
+        <input required id="num_doc" name="num_doc" placeholder="Número de Documento" type="text">
+        <label class="inputLabel" for="num_doc">Número de Documento</label>
+        <img src="{% static 'img/numdoc.svg' %}" class="inputIcon" alt="icono documento">
       </div>
 
-      <div class="Recuperar__campo">
-        <label for="num_doc" class="Recuperar__campo-label">Número de Documento</label>
-        <input type="text" id="num_doc" name="num_doc" class="Recuperar__campo-input" required>
-      </div>
+      <!-- Botón animado estilo ryota1231 -->
+      <button type="submit" class="animated-button">
+        <svg xmlns="http://www.w3.org/2000/svg" class="arr-2" viewBox="0 0 24 24">
+          <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z" />
+        </svg>
+        <span class="text">Restablecer contraseña</span>
+        <span class="circle"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24">
+          <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z" />
+        </svg>
+      </button>
 
-      <button type="submit" class="restablecer-boton">Restablecer contraseña</button>
-      <p id="mensaje" class="Recuperar__mensaje"></p>
+      <p id="mensaje" class="login-message"></p>
     </form>
   </div>
 </div>
 
+<!-- EmailJS para recuperación -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="{% static 'js/emailjs-recuperar.js' %}"></script>
 {% endblock %}
-  

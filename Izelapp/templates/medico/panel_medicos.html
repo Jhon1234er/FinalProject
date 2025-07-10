@@ -1,0 +1,49 @@
+
+{% load static %}
+
+{% block title %}Panel de Médicos{% endblock %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+<div class="max-w-7xl mx-auto px-6 py-10">
+  <h1 class="text-3xl font-bold text-blue-800 mb-6 text-center">Gestín de Médicos</h1>
+
+  <!-- Filtro y búsqueda -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <input type="text" placeholder="Buscar por nombre o especialidad..." class="w-full md:w-1/3 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+  </div>
+
+  <!-- Tabla -->
+  <div class="bg-white shadow-md rounded-lg overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-blue-100">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Nombre</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Especialidad</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Registro</th>
+          <th class="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200 text-sm text-gray-700">
+        {% for medico in medicos %}
+        <tr>
+          <td class="px-6 py-4">{{ medico.get_full_name }}</td>
+          <td class="px-6 py-4">{{ medico.especialidad }}</td>
+          <td class="px-6 py-4">{{ medico.numero_registro_profesional }}</td>
+          <td class="px-6 py-4 text-center">
+            <a href="{% url 'ver_medico' medico.id %}" class="text-blue-600 hover:underline">Ver</a> |
+            <a href="{% url 'editar_medico' medico.id %}" class="text-yellow-500 hover:underline">Editar</a> |
+            <a href="{% url 'eliminar_medico' medico.id %}" class="text-red-600 hover:underline">Eliminar</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4" class="text-center text-gray-500 py-6">No hay médicos registrados.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -2,85 +2,51 @@
 <header>
   <nav>
     <div class="contenedor-header">
-      <a class="logo" href="{% url 'home' %}">
-        <img src="{% static 'img/Logo.png' %}" alt="Logo de Izel">
-      </a>
+    <img src="{% static 'img/Logo_grande.png' %}" alt="Logo de Izel" class="logo-img">
       <ul class="lista-menu">
 
-        {# Mostrar "Inicio" solo si no estamos en la página home y si no es paciente ni admin #}
         {% if request.resolver_match.url_name != 'home' and not tipo_usuario %}
           <li class="opcion-menu">
             <a class="enlace-menu" href="{% url 'home' %}">Inicio</a>
           </li>
         {% endif %}
 
-        {# Administrador autenticado #}
         {% if tipo_usuario == 'administrador' %}
-          <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'gestionar_disponibilidad' %}activo{% endif %}" href="{% url 'gestionar_disponibilidad' %}">Gestionar Agenda</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'registrar_administrador' %}activo{% endif %}" href="{% url 'registrar_administrador' %}">Crear Cuenta Administrador</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'registrar_medico' %}activo{% endif %}" href="{% url 'registrar_medico' %}">Crear Cuenta Medico</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'perfil_administrador' %}activo{% endif %}" href="{% url 'perfil_administrador' %}">Inicio</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu" href="{% url 'logout' %}">Cerrar Sesión</a>
-          </li>
+          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'gestionar_disponibilidad' %}">Gestionar Agenda</a></li>
+          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'registrar_administrador' %}">Crear Cuenta Administrador</a></li>
+          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'registrar_medico' %}">Crear Cuenta Médico</a></li>
+          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'perfil_administrador' %}">Inicio</a></li>
+          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a></li>
+          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'logout' %}">Cerrar Sesión</a></li>
 
-        {# Medico autenticado #}
         {% elif tipo_usuario == 'medico' %}
-          <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'perfil_medico' %}activo{% endif %}" href="{% url 'perfil_medico' %}">Inicio</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu" href="{% url 'logout' %}">Cerrar Sesión</a>
-          </li>
+          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'perfil_medico' %}">Inicio</a></li>
+          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a></li>
+          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'logout' %}">Cerrar Sesión</a></li>
 
-        {# Paciente autenticado #}
         {% elif tipo_usuario == 'paciente' %}
-          <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'perfil_paciente' %}activo{% endif %}" href="{% url 'perfil_paciente' %}">Inicio</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'calendario' %}activo{% endif %}" href="{% url 'calendario' %}">Agendar cita</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'ver_mi_cita' %}activo{% endif %}" href="{% url 'ver_mi_cita' %}">Mis citas</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu" href="{% url 'historial_clinico' %}">Historial Clinico</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu" href="{% url 'logout' %}">Cerrar sesión</a>
-          </li>
+          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'perfil_paciente' %}">Inicio</a></li>
+          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'calendario' %}">Agendar cita</a></li>
+          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'historial_clinico' %}">Historial Clínico</a></li>
+          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a></li>
+          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'logout' %}">Cerrar sesión</a></li>
 
-        {# Usuario no autenticado (visitante) #}
         {% elif not tipo_usuario %}
-          <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'sobre_nosotros' %}activo{% endif %}" href="{% url 'sobre_nosotros' %}">Sobre Nosotros</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'servicios' %}activo{% endif %}" href="{% url 'servicios' %}">Servicios</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'login' %}activo{% endif %}" href="{% url 'login' %}">Iniciar sesión</a>
-          </li>
+          <li class="opcion-menu"><a class="enlace-menu {% if request.resolver_match.url_name == 'login' %}activo{% endif %}" href="{% url 'login' %}">Iniciar sesión</a></li>
         {% endif %}
+
       </ul>
     </div>
   </nav>
+
+  {% if request.resolver_match.url_name == 'home' %}
+    <link rel="stylesheet" href="{% static 'css/header_buttons_home.css' %}">
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.lista-menu .enlace-menu').forEach(el => {
+          el.classList.add('btn-izel');
+        });
+      });
+    </script>
+  {% endif %}
 </header>

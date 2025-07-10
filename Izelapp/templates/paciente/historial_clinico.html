@@ -2,10 +2,10 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/paciente/historial_clinico.css' %}">
+<link rel="stylesheet" href="{% static 'css/historial_clinico.css' %}">
 
 <div class="historial-wrapper">
-  <!-- Panel lateral -->
+  <!-- Panel lateral izquierdo -->
   <div class="sidebar">
     <h2 class="sidebar-title">Historial Clínico</h2>
     <ul class="sidebar-menu">
@@ -22,7 +22,9 @@
 
   <!-- Contenido dinámico -->
   <div class="content" id="contenido-modulo">
-    <p class="placeholder-text">Selecciona un módulo del historial clínico en el panel izquierdo.</p>
+    <p class="placeholder-text">
+      Selecciona un módulo del historial clínico en el panel izquierdo.
+    </p>
   </div>
 </div>
 

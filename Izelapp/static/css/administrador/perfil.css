@@ -1,122 +1,12 @@
-.dashboard-container {
-  background: #F5F5F5;
-  padding: 100px 20px 40px; /* Top padding para no tapar el header */
-  font-family: 'Poppins', sans-serif;
-  color: #333;
-  min-height: 100vh;
+/* ==== ANIMACIÓN DE ENTRADA ==== */
+.animate-fade {
+  animation: fadeIn 0.6s ease-in-out both;
 }
 
-/* Bienvenida */
-.bienvenida-mensaje {
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-.bienvenida-mensaje p {
-  font-size: 20px;
-  font-weight: 600;
-  color: #013857;
-  margin-bottom: 30px;
-}
-
-/* Estadísticas */
-.stats-grid {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.card {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 16px;
-  padding: 25px;
-  text-align: center;
-  flex: 1 1 200px;
-  max-width: 300px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.card h2 {
-  font-size: 1.1em;
-  margin-bottom: 10px;
-  color: #013857;
-}
-
-.card p {
-  font-size: 24px;
-  font-weight: bold;
-  color: #6AC1B8;
-}
-
-/* Botones de acción */
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 16px;
-  margin: 40px 0;
-}
-
-.btn {
-  display: inline-block;
-  padding: 12px 22px;
-  border: 1px solid transparent;
-  border-radius: 40px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 15px;
-  transition: all 0.3s ease;
-}
-
-.btn-primary {
-  background: #013857;
-  color: #fff;
-  border-color: #013857;
-}
-
-.btn-primary:hover {
-  background: #fff;
-  color: #013857;
-}
-
-.btn-secondary {
-  background: #A8D8B9;
-  color: #fff;
-  border-color: #A8D8B9;
-}
-
-.btn-secondary:hover {
-  background: #6AC1B8;
-  color: #fff;
-}
-
-.disabled {
-  pointer-events: none;
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Contenido dinámico */
-.contenido-dinamico {
-  background: #fff;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
-  max-width: 1000px;
-  margin: auto;
-}
-
-/* Animación al cambiar contenido */
-.animate-slide {
-  animation: slideIn 0.4s ease-in-out;
-}
-
-@keyframes slideIn {
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -124,31 +14,100 @@
   }
 }
 
-/* Ajuste para tablas internas */
-.contenido-dinamico table {
+/* ==== TEXTO Y TIPOGRAFÍA ==== */
+h1, h2, h3 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+p {
+  font-family: 'Poppins', sans-serif;
+  color: #475569;
+}
+
+/* ==== BOTONES PERSONALIZADOS ==== */
+.btn-accion {
+  display: inline-block;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  color: white;
+  background-color: #3b82f6; /* Azul */
+  border-radius: 8px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-accion:hover {
+  background-color: #2563eb;
+}
+
+.btn-accion.secundario {
+  background-color: #6b7280; /* Gris */
+}
+
+.btn-accion.secundario:hover {
+  background-color: #4b5563;
+}
+
+/* ==== TARJETAS DE ESTADÍSTICAS ==== */
+.card-admin {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.card-titulo {
+  font-size: 1rem;
+  color: #1d4ed8;
+  margin-bottom: 0.5rem;
+}
+
+.card-valor {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1e293b;
+}
+
+/* ==== CONTENEDOR PRINCIPAL ==== */
+.perfil-contenedor {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+  background-color: #ffffff;
+  padding: 2rem 2rem;
+  margin-bottom: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
 }
 
-.contenido-dinamico th,
-.contenido-dinamico td {
-  padding: 12px 15px;
-  border: 1px solid #ccc;
-  text-align: left;
-  font-size: 14px;
+/* ==== CONTENIDO DINÁMICO ==== */
+#contenido-dinamico {
+  background-color: #f8fafc;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
 }
 
-.contenido-dinamico th {
-  background-color: #013857;
-  color: #fff;
-}
+/* ==== RESPONSIVE ==== */
+@media (max-width: 768px) {
+  .perfil-contenedor,
+  .card-admin,
+  #contenido-dinamico {
+    padding: 1rem;
+  }
 
-.contenido-dinamico tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
+  .btn-accion {
+    width: 100%;
+    text-align: center;
+  }
 
-.contenido-dinamico h2 {
-  color: #013857;
-  margin-bottom: 20px;
+  .acciones-panel {
+    flex-direction: column;
+    gap: 1rem;
+  }
 }

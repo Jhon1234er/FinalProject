@@ -107,50 +107,6 @@ class Administrador(Usuario):
     ]
     rol_acceso = models.CharField(max_length=100)
     centro_administracion = models.CharField(max_length=255, choices=AREAS_MEDICAS)
-    # permisos = models.JSONField(null=True, blank=True)
-
-    # def save(self, *args, **kwargs):
-    #     if not self.permisos:
-    #         area = self.centro_administracion
-    #         todos_los_permisos = {
-    #             "Odontologia": {
-    #                 "administrador": {
-    #                     "ver_pacientes": True,
-    #                     "editar_pacientes": True,
-    #                     "ver_historia_clinica": True,
-    #                     "gestion_usuarios": True
-    #                 }
-    #             },
-    #             "Cirugia": {
-    #                 "administrador": {
-    #                     "ver_pacientes": True,
-    #                     "realizar_cirugia": True,
-    #                     "ver_historia_clinica": True,
-    #                     "gestion_usuarios": True
-    #                 }
-    #             },
-    #             "General": {
-    #                 "administrador": {
-    #                     "ver_pacientes": True,
-    #                     "ver_historia_clinica": True,
-    #                     "gestion_usuarios": True
-    #                 }
-    #             },
-    #             "Rayos_x": {
-    #                 "administrador": {
-    #                     "ver_pacientes": True,
-    #                     "ver_imagenes": True,
-    #                     "realizar_imagenes": True,
-    #                     "gestion_usuarios": True
-    #                 }
-    #             }
-    #         }
-    #         permisos_area = todos_los_permisos.get(area)
-    #         if permisos_area:
-    #             self.permisos = {area: permisos_area["administrador"]}
-    #         else:
-    #             self.permisos = {}
-    #     super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - Administrador"
@@ -389,7 +345,7 @@ class CertificadoIncapacidad(models.Model):
 
 # endregion
 
-# region RecetaMedica
+
 # region RecetaMedica
 class RecetaMedica(models.Model):
     """
@@ -464,36 +420,29 @@ class OrdenMedica(models.Model):
 
 # region Disponibilidad
 class Disponibilidad(models.Model):
-    """
-    Modelo que representa la disponibilidad de un médico para agendar citas.
-    """
+    TIPO_CITA = [
+        ('general', 'General'),
+        ('especialista', 'Especialista'),
+        ('virtual', 'Virtual'),
+    ]
+
     ESTADOS = [
         ('disponible', 'Disponible'),
         ('ocupado', 'Ocupado'),
         ('cancelado', 'Cancelado'),
-        ('pendiente', 'Pendiente'),  
     ]
-    TIPO_CITA = [
-        ('general', 'General'),
-        ('odontologia', 'Odontología')
-    ]
+
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
     fecha = models.DateField()
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
-    tipo_cita = models.CharField(max_length=50, choices=TIPO_CITA)
+    tipo_cita = models.CharField(max_length=50, choices=TIPO_CITA, default='general')
     estado = models.CharField(max_length=20, choices=ESTADOS, default='disponible')
     max_pacientes = models.PositiveIntegerField(default=1)
-    duracion = models.PositiveIntegerField(default=30)  # minutos
+    duracion = models.PositiveIntegerField(default=15)  # en minutos
 
     def __str__(self):
-        """
-        Devuelve una representación legible de la disponibilidad del médico.
-        """
-        return f"{self.medico} - {self.fecha} de {self.hora_inicio} a {self.hora_fin}"
-
-    class Meta:
-        ordering = ['-fecha', 'hora_inicio']
+        return f"{self.medico} - {self.fecha} ({self.hora_inicio} - {self.hora_fin})"
 
 # endregion
 

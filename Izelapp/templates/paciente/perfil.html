@@ -4,16 +4,108 @@
 {% block title %}Perfil de Paciente{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/paciente/perfil.css' %}">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{% static 'js/perfil-chart.js' %}" defer></script>
 
-<div class="perfil-contenedor">
-    <h1 class="perfil-titulo">Bienvenido, {{ usuario.first_name }} {{ usuario.last_name }}</h1>
-    <p class="perfil-descripcion">Este es tu perfil. Aquí puedes ver tus estadísticas y desempeño en tus citas.</p>
+<!-- Script para estadísticas -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const chartCanvas = document.getElementById('citasChart');
+    if (chartCanvas) {
+      const ctx = chartCanvas.getContext('2d');
 
-    <div class="perfil-grafico-contenedor">
-        <canvas id="citasChart"></canvas>
-    </div>
+      const labels = JSON.parse('{{ estadisticas.labels|safe|escapejs }}');
+      const datos = JSON.parse('{{ estadisticas.datos|safe|escapejs }}');
+
+      if (labels.length && datos.length) {
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Número de citas',
+              data: datos,
+              backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],  // Verde, Amarillo, Rojo
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      } else {
+        chartCanvas.insertAdjacentHTML("afterend", "<p class='text-sm text-gray-400'>No hay estadísticas disponibles.</p>");
+      }
+    }
+  });
+</script>
+
+<!-- Encabezado -->
+<div class="w-full bg-white rounded-xl shadow p-6 mb-6 text-center">
+  <h1 class="text-2xl font-bold text-gray-800">Bienvenido, {{ usuario.first_name }} {{ usuario.last_name }}</h1>
+  <p class="text-gray-500 mt-2">Aquí puedes ver tus estadísticas y desempeño en tus citas.</p>
 </div>
+
+<!-- Secciones -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-6 mb-12">
+
+  <!-- Alertas -->
+  <div class="bg-white border border-blue-200 rounded-lg shadow p-4">
+    <h2 class="text-lg font-semibold text-blue-800 mb-2">Alertas y Comentarios</h2>
+    <ul class="text-sm text-gray-600 space-y-1">
+      <li>- Revisión médica pendiente</li>
+      <li>- Control de exámenes: 15 de julio</li>
+      <li>- Estado: En seguimiento</li>
+    </ul>
+  </div>
+
+  <!-- Información Médica -->
+  <div class="bg-white border border-blue-200 rounded-lg shadow p-4">
+    <h2 class="text-lg font-semibold text-blue-800 mb-2">Información médica</h2>
+    <ul class="text-sm text-gray-600 space-y-1">
+      <li><strong>EPS:</strong> {{ usuario.eps }}</li>
+      <li><strong>Régimen:</strong> {{ usuario.paciente.regimen }}</li>
+      <li><strong>Género:</strong> {{ usuario.genero }}</li>
+      <li><strong>RH:</strong> {{ usuario.rh }}</li>
+      <li><strong>Fecha de nacimiento:</strong> {{ usuario.fecha_nacimiento }}</li>
+    </ul>
+  </div>
+
+  <!-- Citas -->
+  <div class="bg-white border border-blue-200 rounded-lg shadow p-4 md:row-span-2">
+    <h2 class="text-lg font-semibold text-blue-800 mb-3">Citas agendadas</h2>
+    <div class="max-h-64 overflow-y-auto pr-2">
+      {% if citas %}
+        <ul class="text-sm text-gray-600 space-y-3">
+          {% for cita in citas %}
+            <li class="border-b pb-2">
+              <strong>{{ cita.fecha }}</strong><br>
+              Especialidad: {{ cita.especialidad }}<br>
+              Estado: {{ cita.estado }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-sm text-gray-500">No tienes citas próximas.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="bg-white border border-blue-200 rounded-lg shadow p-4 md:col-span-2 h-64">
+    <h2 class="text-lg font-semibold text-blue-800 mb-3">Resumen de tus citas</h2>
+    <canvas id="citasChart" class="w-full h-full"></canvas>
+  </div>
+
+</div>
+
 {% endblock %}

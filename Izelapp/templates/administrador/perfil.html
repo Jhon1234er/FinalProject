@@ -4,40 +4,58 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/administrador/perfil.css' %}">
 
-<div class="dashboard-container">
+<!-- Encabezado con estadísticas -->
+<div class="w-full bg-white rounded-xl shadow p-6 mb-8 text-center">
+  <h1 class="text-2xl font-bold text-gray-800">Bienvenido, {{ request.user.first_name }} {{ request.user.last_name }}</h1>
+  <p class="text-gray-500 mt-2">Desde este panel puedes gestionar pacientes, médicos y citas.</p>
+</div>
 
-  <!-- Bienvenida persistente -->
-  <div id="bienvenida-mensaje" class="bienvenida-mensaje animate-fade">
-    <p>Bienvenido, <strong>{{ request.user.first_name|upper }} {{ request.user.last_name|upper }}</strong></p>
-
-    <div class="stats-grid">
-      <div class="card">
-        <h2>Usuarios Registrados</h2>
-        <p>124</p>
-      </div>
-      <div class="card">
-        <h2>Citas Totales</h2>
-        <p>53</p>
-      </div>
-      <div class="card">
-        <h2>Médicos Activos</h2>
-        <p>12</p>
-      </div>
-    </div>
+<!-- Estadísticas -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-6 mb-8">
+  <div class="bg-white border border-blue-200 rounded-lg shadow p-4 text-center">
+    <h2 class="text-lg font-semibold text-blue-800 mb-1">Usuarios Registrados</h2>
+    <p class="text-2xl font-bold text-gray-700">{{ total_usuarios }}</p>
   </div>
-
-  <!-- Botones de navegación -->
-  <div class="actions">
-    <a href="#" class="btn btn-primary" onclick="mostrarPanel('pacientes')">Gestionar Pacientes</a>
-    <a href="#" class="btn btn-primary" onclick="mostrarPanel('citas')">Gestionar Citas</a>
-    <a href="#" class="btn btn-secondary" onclick="mostrarPanel('medicos')">Gestionar Médicos</a>
+  <div class="bg-white border border-blue-200 rounded-lg shadow p-4 text-center">
+    <h2 class="text-lg font-semibold text-blue-800 mb-1">Citas Totales</h2>
+    <p class="text-2xl font-bold text-gray-700">{{ total_citas }}</p>
   </div>
-
-  <!-- Contenido dinámico -->
-  <div id="contenido-dinamico" class="contenido-dinamico animate-fade">
-    <h3>Selecciona una opción para comenzar</h3>
+  <div class="bg-white border border-blue-200 rounded-lg shadow p-4 text-center">
+    <h2 class="text-lg font-semibold text-blue-800 mb-1">Médicos Activos</h2>
+    <p class="text-2xl font-bold text-gray-700">{{ medicos_activos }}</p>
   </div>
 </div>
 
-<script src="{% static 'js/admin.js' %}"></script>
+<!-- Botones de acción -->
+<div class="flex flex-wrap justify-center gap-4 px-6 mb-8">
+  <button class="btn-accion" onclick="mostrarPanel('pacientes')">Gestionar Pacientes</button>
+  <button class="btn-accion" onclick="mostrarPanel('citas')">Gestionar Citas</button>
+  <button class="btn-accion secundario" onclick="mostrarPanel('medicos')">Gestionar Médicos</button>
+</div>
+
+<!-- Contenido dinámico -->
+<div id="panel-pacientes" class="contenido-dinamico hidden px-6">
+  <h3 class="text-xl font-semibold text-blue-800 mb-3">Lista de Pacientes</h3>
+  {% include 'paciente/panel_pacientes.html' %}
+</div>
+
+<div id="panel-citas" class="contenido-dinamico hidden px-6">
+  <h3 class="text-xl font-semibold text-blue-800 mb-3">Lista de Citas</h3>
+  {% include 'cita/panel_citas.html' %}
+</div>
+
+<div id="panel-medicos" class="contenido-dinamico hidden px-6">
+  <h3 class="text-xl font-semibold text-blue-800 mb-3">Lista de Médicos</h3>
+  {% include 'medico/panel_medicos.html' %}
+</div>
+
+<script>
+  function mostrarPanel(panelId) {
+    const paneles = ['pacientes', 'citas', 'medicos'];
+    paneles.forEach(id => {
+      document.getElementById('panel-' + id).classList.add('hidden');
+    });
+    document.getElementById('panel-' + panelId).classList.remove('hidden');
+  }
+</script>
 {% endblock %}

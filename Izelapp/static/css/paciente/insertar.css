@@ -1,145 +1,170 @@
-/* === GLOBAL === */
+/* ===== Fondo general ===== */
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #F5F5F5;
+  background: linear-gradient(120deg, #e0f2fe, #f1f5f9);
+  min-height: 100vh;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
-/* === TÍTULOS === */
-h2 {
-  text-align: center;
-  color: #013857;
-  margin-top: 20px;
-  font-size: 28px;
-  font-weight: 600;
-}
-
-/* === FORMULARIO CONTENEDOR === */
+/* ===== Contenedor principal ===== */
 form {
-  max-width: 600px;
-  margin: 120px auto 50px auto;
   background-color: #ffffff;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(1, 31, 48, 0.1);
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 3rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* === INPUTS GENERALES === */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="date"],
-select,
-.select2-container--default .select2-selection--single,
-.flatpickr-input,
-input[type="tel"] {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  font-size: 16px;
-  background-color: #fff;
-  box-sizing: border-box;
+/* ===== Título del formulario ===== */
+.form-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #1e293b;
+  text-align: center;
 }
 
-/* === INPUT TEL con intlTelInput === */
-.iti {
-  width: 100% !important;
-}
-
-.iti--separate-dial-code .iti__selected-flag {
-  background-color: #fff;
-  border-right: 1px solid #ccc;
-  padding: 0 10px;
-}
-
-.iti input[type="tel"] {
-  width: 100% !important;
-  padding-left: 100px !important;
-  font-size: 16px;
-  height: 45px;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-
-/* === FILAS DE FORMULARIO === */
+/* ===== Fila del formulario ===== */
 .form-row {
-  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 1.8rem;
+  position: relative;
 }
 
-label {
+/* ===== Etiquetas ===== */
+.form-row label {
   font-weight: 500;
-  color: #013857;
-  margin-bottom: 5px;
+  margin-bottom: 0.5rem;
+  color: #334155;
 }
 
-/* === SELECT2 PERSONALIZADO === */
-.select2-container--default .select2-selection--single {
-  height: 45px !important;
-  padding: 0 12px;
-  font-size: 16px;
-  display: flex !important;
-  align-items: center;
-  justify-content: space-between;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  background-color: white;
-}
-
-.select2-selection__rendered {
-  margin: 0 !important;
-  padding: 0 !important;
-  line-height: normal !important;
-  width: 100% !important;
-  text-align: left;
-  display: flex;
-  align-items: center;
-}
-
-.select2-selection__arrow {
-  height: 100% !important;
-  display: flex;
-  align-items: center;
-}
-
-/* === BOTÓN SUBMIT === */
-button[type="submit"] {
+/* ===== Inputs y Selects ===== */
+.form-row input,
+.form-row select,
+.form-row textarea {
+  padding: 12px 15px;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #0f172a;
+  outline: none;
+  transition: background-color 0.3s, border-color 0.3s;
+  background-color: #ffffff;
   width: 100%;
-  background-color: #013857;
-  color: #ffffff;
-  padding: 14px;
-  font-size: 18px;
-  font-weight: 600;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 12px rgba(1, 31, 48, 0.3);
+  box-sizing: border-box;
 }
 
-button[type="submit"]:hover {
-  background-color: #011f30;
-  box-shadow: 0 6px 18px rgba(1, 31, 48, 0.4);
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+  background-color: #e2e8f0;
+  border-color: #0284c7;
 }
 
-/* === MENSAJES Y ERRORES === */
+/* ===== Textos de ayuda ===== */
+.help-text {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+/* ===== Mensajes de error ===== */
 .error-messages {
-  color: #d9534f;
-  font-size: 14px;
-  margin-top: 5px;
+  margin-top: 0.5rem;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  margin: 0.2rem 0;
+}
+
+/* ===== Botón estilo ryota1231 ===== */
+.btn-submit {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 36px;
+  border: 4px solid transparent;
+  font-size: 1rem;
+  background-color: white;
+  border-radius: 100px;
+  font-weight: 600;
+  color: #1f387e;
+  box-shadow: 0 0 0 2px #ffffff;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  margin: 0 auto;
+}
+
+.btn-submit:hover {
+  box-shadow: 0 0 0 12px transparent;
+  color: #212121;
+  border-radius: 12px;
+  background-color: #e2f0ff;
+}
+
+.btn-submit:active {
+  scale: 0.95;
+  box-shadow: 0 0 0 4px greenyellow;
+}
+
+/* ===== Mensajes generales (Django) ===== */
+.messages {
+  max-width: 700px;
+  margin: 1rem auto;
+  padding: 1rem;
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  border-radius: 8px;
+  font-size: 0.95rem;
 }
 
 .message {
-  color: green;
+  margin: 0;
+}
+/* ==== Botón Registrar estilo Uiverse - btn-1 ==== */
+.custom-btn {
+  width: 100%;
+  height: 45px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 25px;
+  font-family: 'Poppins', sans-serif;
   font-weight: 600;
+  font-size: 1rem;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  box-shadow:
+    inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+    7px 7px 20px 0px rgba(0, 0, 0, .1),
+    4px 4px 5px 0px rgba(0, 0, 0, .1);
+  outline: none;
+  margin-top: 10px;
 }
 
-.help-text {
-  font-size: 12px;
-  color: #888;
-  margin-top: 4px;
+.btn-1 {
+  background: rgb(2, 132, 199);
+  background: linear-gradient(0deg, rgba(2, 132, 199, 1) 0%, rgba(3, 105, 161, 1) 100%);
+  border: none;
+}
+
+.btn-1:hover {
+  box-shadow:
+    4px 4px 6px 0 rgba(255, 255, 255, .5),
+    -4px -4px 6px 0 rgba(116, 125, 136, .5),
+    inset -4px -4px 6px 0 rgba(255, 255, 255, .2),
+    inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
 }

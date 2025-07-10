@@ -82,11 +82,8 @@ class ImagenUserForm(forms.ModelForm):
 # endregion
 
 # region Paciente
-class PacienteForm(forms.ModelForm):
-    regimen = forms.ChoiceField(
-        choices=[('', 'Selecciona una opción')] + Paciente.OPCIONES_REGIMEN
-    )
 
+class PacienteForm(forms.ModelForm):
     tipo_doc = forms.ChoiceField(
         label='Tipo de documento',
         choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_TIPODOC,
@@ -105,63 +102,77 @@ class PacienteForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'select2'})
     )
 
-    num_doc = forms.CharField(label='Número de documento')
-    tipo_poblacion = forms.CharField(label='Tipo de población')
+    regimen = forms.ChoiceField(
+        label='Régimen de afiliación',
+        choices=[('', 'Selecciona una opción')] + Paciente.OPCIONES_REGIMEN,
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    tipo_poblacion = forms.ChoiceField(
+        label='Tipo de población',
+        choices=[
+            ('', 'Selecciona una opción'),
+            ('general', 'General'),
+            ('desplazado', 'Desplazado'),
+            ('vulnerable', 'Población vulnerable'),
+            ('ninguno', 'Ninguno')
+        ],
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    ocupacion = forms.ChoiceField(
+        label='Ocupación',
+        choices=[
+            ('', 'Selecciona una opción'),
+            ('estudiante', 'Estudiante'),
+            ('empleado', 'Empleado'),
+            ('desempleado', 'Desempleado'),
+            ('independiente', 'Independiente')
+        ],
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    eps = forms.ChoiceField(
+        label='EPS',
+        choices=[
+            ('', 'Selecciona una opción'),
+            ('nueva_eps', 'Nueva EPS'),
+            ('cafam', 'Cafam')
+        ],
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
     username = forms.CharField(label='Nombre de Usuario')
-    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
+    num_doc = forms.CharField(label='Número de documento')
     first_name = forms.CharField(label='Nombres')
     last_name = forms.CharField(label='Apellidos')
-    email = forms.EmailField(label='Correo')
+    email = forms.EmailField(label='Correo', widget=forms.EmailInput(attrs={'placeholder': 'ejemplo@correo.com'}))
+    telefono = forms.CharField(label='Teléfono', widget=forms.TextInput(attrs={'id': 'id_telefono'}))
+    fecha_nacimiento = forms.DateField(
+        label='Fecha de nacimiento',
+        widget=forms.DateInput(attrs={
+            'class': 'datepicker1',
+            'type': 'text',
+            'placeholder': 'Selecciona tu fecha de nacimiento'
+        })
+    )
+    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
 
     class Meta:
         model = Paciente
         fields = [
-            'username', 'password', 'first_name', 'last_name', 'email',
+            'username', 'first_name', 'last_name', 'email',
             'tipo_doc', 'num_doc', 'genero', 'rh', 'telefono',
             'fecha_nacimiento', 'tipo_poblacion', 'ocupacion', 'eps',
-            'regimen'
+            'regimen', 'password'
         ]
-        widgets = {
-            'fecha_nacimiento': forms.DateInput(attrs={
-                'class': 'datepicker1', 'type': 'text', 'placeholder': 'Selecciona tu fecha de nacimiento'
-            }),
-            'telefono': forms.TextInput(attrs={
-                'placeholder': 'Ej. 3001234567',
-                'id': 'id_telefono',
-                'class': 'form-control'
-            }),
-            'password': forms.PasswordInput(),
-            'email': forms.EmailInput(attrs={'placeholder': 'Ingrese su correo electrónico'}),
-            'tipo_doc': forms.Select(attrs={'class': 'select2'}),
-            'genero': forms.Select(attrs={'class': 'select2'}),
-            'rh': forms.Select(attrs={'class': 'select2'}),
-        }
-        labels = {
-            'num_doc': 'Número de documento',
-            'username': 'Nombre de Usuario',
-            'password': 'Contraseña',
-            'first_name': 'Nombres',
-            'last_name': 'Apellidos',
-            'email': 'Correo',
-            'telefono': 'Teléfono',
-            'fecha_nacimiento': 'Fecha de nacimiento',
-            'tipo_poblacion': 'Tipo de población',
-            'ocupacion': 'Ocupación',
-            'eps': 'EPS',
-            'regimen': 'Régimen de afiliación',
-            'tipo_doc': 'Tipo de documento',
-            'genero': 'Género',
-            'rh': 'RH'
-        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field_name, field in self.fields.items():
-            if isinstance(field.widget, forms.Select):
-                field.widget.attrs.update({'class': 'select2'})
+        self.order_fields([f for f in self.fields if f != 'password'] + ['password'])
 
     def clean_fecha_nacimiento(self):
-        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        fecha_nacimiento = self.cleaned_data.get('fecha_nacimiento')
         hoy = timezone.now().date()
         if fecha_nacimiento:
             if fecha_nacimiento > hoy:
@@ -172,89 +183,128 @@ class PacienteForm(forms.ModelForm):
             if edad < 18:
                 raise ValidationError("Debes tener al menos 18 años.")
         return fecha_nacimiento
-    
-class PacienteUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Paciente
-        fields = ['email', 'telefono', 'tipo_poblacion']
-
-    email = forms.EmailField(label='Correo', required=True)
-    telefono = forms.CharField(label='Teléfono', required=False)
-    tipo_poblacion = forms.CharField(label='Tipo de Población', required=False)
 # endregion
 
+
 # region Administrador
+
 class AdministradorForm(forms.ModelForm):
+    tipo_doc = forms.ChoiceField(
+        label='Tipo de documento',
+        choices=[('', 'Selecciona una opción')] + Administrador.OPCIONES_TIPODOC,
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    genero = forms.ChoiceField(
+        label='Género',
+        choices=[('', 'Selecciona una opción')] + Administrador.GENERO_OPCIONES,
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    rh = forms.ChoiceField(
+        label='RH',
+        choices=[('', 'Selecciona una opción')] + Administrador.RH_OPCIONES,
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    tipo_poblacion = forms.ChoiceField(
+        label='Tipo de población',
+        choices=[
+            ('', 'Selecciona una opción'),
+            ('general', 'General'),
+            ('desplazado', 'Desplazado'),
+            ('vulnerable', 'Población vulnerable'),
+            ('ninguno', 'Ninguno')
+        ],
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    ocupacion = forms.ChoiceField(
+        label='Ocupación',
+        choices=[
+            ('', 'Selecciona una opción'),
+            ('estudiante', 'Estudiante'),
+            ('empleado', 'Empleado'),
+            ('desempleado', 'Desempleado'),
+            ('independiente', 'Independiente')
+        ],
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    eps = forms.ChoiceField(
+        label='EPS',
+        choices=[
+            ('', 'Selecciona una opción'),
+            ('nueva_eps', 'Nueva EPS'),
+            ('cafam', 'Cafam')
+        ],
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
     centro_administracion = forms.ChoiceField(
-        choices=[('', 'Selecciona una opción')] + Administrador.AREAS_MEDICAS
+        label='Centro de Administración',
+        choices=[('', 'Selecciona una opción')] + Administrador.AREAS_MEDICAS,
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    username = forms.CharField(label='Nombre de Usuario')
+    num_doc = forms.CharField(label='Número de documento')
+    first_name = forms.CharField(label='Nombre')
+    last_name = forms.CharField(label='Apellido')
+    email = forms.EmailField(label='Correo', widget=forms.EmailInput(attrs={'placeholder': 'ejemplo@correo.com'}))
+    telefono = forms.CharField(label='Teléfono', widget=forms.TextInput(attrs={
+        'placeholder': 'Ej. 3001234567',
+        'id': 'telefono-input',
+        'class': 'form-control'
+    }))
+    rol_acceso = forms.CharField(label='Rol de acceso', widget=forms.TextInput(attrs={'placeholder': 'Rol asignado'}))
+
+    fecha_nacimiento = forms.DateField(
+        label='Fecha de nacimiento',
+        widget=forms.DateInput(attrs={
+            'class': 'datepicker1',
+            'type': 'text',
+            'placeholder': 'Seleccione la fecha de nacimiento'
+        })
+    )
+
+    password = forms.CharField(
+        label='Contraseña',
+        widget=forms.PasswordInput()
     )
 
     class Meta:
         model = Administrador
         fields = [
-            'username', 'password', 'first_name', 'last_name', 'email',
+            'username', 'first_name', 'last_name', 'email',
             'tipo_doc', 'num_doc', 'genero', 'rh', 'telefono',
             'fecha_nacimiento', 'tipo_poblacion', 'ocupacion', 'eps',
-            'rol_acceso', 'centro_administracion'
+            'rol_acceso', 'centro_administracion', 'password'
         ]
-        widgets = {
-            'fecha_nacimiento': forms.DateInput(attrs={
-                'class': 'datepicker1',
-                'type': 'text',
-                'placeholder': 'Seleccione la fecha de nacimiento'
-            }),
-            'telefono': forms.TextInput(attrs={
-                'placeholder': 'Ej. 3001234567',
-                'id': 'telefono-input',
-                'class': 'form-control'
-            }),
-            'password': forms.PasswordInput(),
-            'email': forms.EmailInput(attrs={'placeholder': 'Ingrese su correo electrónico'}),
-            'rol_acceso': forms.TextInput(attrs={'placeholder': 'Rol de acceso del administrador'}),
-            'tipo_doc': forms.Select(attrs={'class': 'select2'}),
-            'genero': forms.Select(attrs={'class': 'select2'}),
-            'rh': forms.Select(attrs={'class': 'select2'}),
-            'centro_administracion': forms.Select(attrs={'class': 'select2'}),
-        }
-        labels = {
-            'username': 'Nombre de Usuario',
-            'password': 'Contraseña',
-            'first_name': 'Nombre',
-            'last_name': 'Apellido',
-            'email': 'Correo',
-            'tipo_doc': 'Tipo de documento',
-            'num_doc': 'Número de documento',
-            'genero': 'Género',
-            'rh': 'RH',
-            'telefono': 'Teléfono',
-            'fecha_nacimiento': 'Fecha de nacimiento',
-            'tipo_poblacion': 'Tipo de población',
-            'ocupacion': 'Ocupación',
-            'eps': 'EPS',
-            'rol_acceso': 'Rol de Acceso',
-            'centro_administracion': 'Centro de Administración',
-        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # Aplicar select2 dinámicamente a todos los selects
         for field_name, field in self.fields.items():
             if isinstance(field.widget, forms.Select):
                 field.widget.attrs.update({'class': 'select2'})
 
+        # Asegurar que la contraseña aparezca al final
+        self.order_fields([f for f in self.fields if f != 'password'] + ['password'])
+
     def clean_fecha_nacimiento(self):
-        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        fecha_nacimiento = self.cleaned_data.get('fecha_nacimiento')
+        hoy = timezone.now().date()
         if fecha_nacimiento:
-            hoy = timezone.now().date()
             if fecha_nacimiento > hoy:
                 raise ValidationError("No es permitido ingresar una fecha futura")
-
             edad = hoy.year - fecha_nacimiento.year
             if (hoy.month, hoy.day) < (fecha_nacimiento.month, fecha_nacimiento.day):
                 edad -= 1
             if edad < 18:
                 raise ValidationError("Debes ser mayor de 18 años para registrarte")
         return fecha_nacimiento
-        
 
 class AdministradorUpdateForm(forms.ModelForm):
     class Meta:
@@ -268,65 +318,138 @@ class AdministradorUpdateForm(forms.ModelForm):
 #region Medico
 
 class MedicoForm(forms.ModelForm):
+    tipo_doc = forms.ChoiceField(
+        label='Tipo de documento',
+        choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_TIPODOC,
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    genero = forms.ChoiceField(
+        label='Género',
+        choices=[('', 'Selecciona una opción')] + Usuario.GENERO_OPCIONES,
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    rh = forms.ChoiceField(
+        label='RH',
+        choices=[('', 'Selecciona una opción')] + Usuario.RH_OPCIONES,
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    tipo_poblacion = forms.ChoiceField(
+        label='Tipo de población',
+        choices=[
+            ('', 'Selecciona una opción'),
+            ('general', 'General'),
+            ('desplazado', 'Desplazado'),
+            ('vulnerable', 'Población vulnerable'),
+            ('ninguno', 'Ninguno')
+        ],
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    ocupacion = forms.ChoiceField(
+        label='Ocupación',
+        choices=[
+            ('', 'Selecciona una opción'),
+            ('estudiante', 'Estudiante'),
+            ('empleado', 'Empleado'),
+            ('desempleado', 'Desempleado'),
+            ('independiente', 'Independiente')
+        ],
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    eps = forms.ChoiceField(
+        label='EPS',
+        choices=[
+            ('', 'Selecciona una opción'),
+            ('nueva_eps', 'Nueva EPS'),
+            ('cafam', 'Cafam')
+        ],
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
     especialidad = forms.ChoiceField(
-        choices=[('', 'Selecciona una opción')] + Medico.ESPECIALIDADES
+        label='Especialidad médica',
+        choices=[('', 'Selecciona una opción')] + Medico.ESPECIALIDADES,
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
+    username = forms.CharField(label='Nombre de Usuario')
+    first_name = forms.CharField(label='Nombre')
+    last_name = forms.CharField(label='Apellido')
+    num_doc = forms.CharField(label='Número de documento')
+    email = forms.EmailField(label='Correo', widget=forms.EmailInput(attrs={'placeholder': 'ejemplo@correo.com'}))
+
+    telefono = forms.CharField(
+        label='Teléfono',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Ej. 3001234567',
+            'id': 'telefono-input',
+            'class': 'form-control'
+        })
+    )
+
+    fecha_nacimiento = forms.DateField(
+        label='Fecha de nacimiento',
+        widget=forms.DateInput(attrs={
+            'class': 'datepicker1',
+            'type': 'text',
+            'placeholder': 'Selecciona la fecha de nacimiento'
+        })
+    )
+
+    fecha_contratacion = forms.DateField(
+        label='Fecha de contratación',
+        widget=forms.DateInput(attrs={
+            'class': 'datepicker',
+            'type': 'text',
+            'placeholder': 'Fecha de contratación'
+        })
+    )
+
+    numero_registro_profesional = forms.CharField(label='Registro profesional')
+    licencia_certificacion = forms.CharField(label='Licencia o Certificación')
+    
+    password = forms.CharField(
+        label='Contraseña',
+        widget=forms.PasswordInput()
     )
 
     class Meta:
         model = Medico
         fields = [
-            'username', 'password', 'first_name', 'last_name', 'email',
+            'username', 'first_name', 'last_name', 'email',
             'tipo_doc', 'num_doc', 'genero', 'rh', 'telefono', 'fecha_nacimiento',
             'tipo_poblacion', 'eps', 'ocupacion', 'especialidad',
             'numero_registro_profesional', 'licencia_certificacion',
-            'fecha_contratacion'
+            'fecha_contratacion', 'password'
         ]
-        widgets = {
-            'fecha_contratacion': forms.DateInput(attrs={
-                'class': 'datepicker', 'placeholder': 'Fecha de contratación'
-            }),
-            'fecha_nacimiento': forms.DateInput(attrs={
-                'class': 'datepicker1', 'placeholder': 'Fecha de nacimiento'
-            }),
-            'telefono': forms.TextInput(attrs={
-                'placeholder': 'Ej. 3001234567',
-                'id': 'telefono-input',
-                'class': 'form-control'
-            }),
-        }
-    num_doc = forms.CharField(label='Número de documento')
-    tipo_doc = forms.ChoiceField(label='Tipo de documento',
-        choices=[('', 'Selecciona una opción')] + Usuario.OPCIONES_TIPODOC,
-        widget=forms.Select(attrs={'class': 'select2'})
-    )
-    eps = forms.CharField(label='EPS')
-    genero = forms.ChoiceField(
-        choices=[('', 'Selecciona una opción')] + Usuario.GENERO_OPCIONES,
-        widget=forms.Select(attrs={'class': 'select2'})
-    )
-    rh = forms.ChoiceField(label='RH',
-        choices=[('', 'Selecciona una opción')] + Usuario.RH_OPCIONES,
-        widget=forms.Select(attrs={'class': 'select2'})
-    )
-    password = forms.CharField(label='Contraseña',widget=forms.PasswordInput())
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Agrega clase select2 a los Selects
         for field in self.fields.values():
             if isinstance(field.widget, forms.Select):
                 field.widget.attrs.update({'class': 'select2'})
 
+        # Mueve el campo contraseña al final
+        self.order_fields([f for f in self.fields if f != 'password'] + ['password'])
+
     def clean_fecha_nacimiento(self):
-        fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+        fecha_nacimiento = self.cleaned_data.get('fecha_nacimiento')
+        hoy = timezone.now().date()
         if fecha_nacimiento:
-            hoy = timezone.now().date()
+            if fecha_nacimiento > hoy:
+                raise ValidationError("No es permitido ingresar una fecha futura")
             edad = hoy.year - fecha_nacimiento.year
             if (hoy.month, hoy.day) < (fecha_nacimiento.month, fecha_nacimiento.day):
                 edad -= 1
             if edad < 18:
                 raise ValidationError("Debes tener al menos 18 años.")
         return fecha_nacimiento
-
+    
     def clean_fecha_contratacion(self):
         fecha_contratacion = self.cleaned_data.get('fecha_contratacion')
         hoy = timezone.now().date()
@@ -503,13 +626,18 @@ class OrdenMedicaForm(forms.ModelForm):
 
 # region Disponibilidad
 class DisponibilidadForm(forms.ModelForm):
-    tipo_cita = forms.ChoiceField(choices=[('', 'Selecciona una opción')] + Disponibilidad.TIPO_CITA)
-    estado = forms.ChoiceField(choices=[('', 'Selecciona una opción')] + Disponibilidad.ESTADOS)
+    tipo_cita = forms.ChoiceField(
+        choices=[('', 'Selecciona una opción')] + Disponibilidad.TIPO_CITA,
+        required=True
+    )
+    estado = forms.ChoiceField(
+        choices=[('', 'Selecciona una opción')] + Disponibilidad.ESTADOS,
+        required=True
+    )
 
     class Meta:
         model = Disponibilidad
-        fields = ['medico', 'fecha', 'hora_inicio', 'hora_fin', 'tipo_cita', 'estado', 'max_pacientes', 'duracion'
-        ]
+        fields = ['medico', 'fecha', 'hora_inicio', 'hora_fin', 'tipo_cita', 'estado', 'max_pacientes', 'duracion']
 # endregion
 
 # region Antecedente
@@ -601,29 +729,22 @@ class CitaForm(forms.ModelForm):
         }
 #endregion
 
-#region Disponibilidad
-
 class GenerarDisponibilidadForm(forms.Form):
+    # Este campo no lo usamos directamente, pero es útil si quieres validarlo
     medicos = forms.ModelMultipleChoiceField(
         queryset=Medico.objects.all(),
-        widget=forms.MultipleHiddenInput(),  # Lo manejamos por JavaScript
+        widget=forms.MultipleHiddenInput(),
         required=False
     )
-    fecha_inicio = forms.DateField(widget=forms.DateInput(attrs={'class': 'datepicker form-control'}))
-    fecha_fin = forms.DateField(widget=forms.DateInput(attrs={'class': 'datepicker form-control'}))
-    dias = forms.MultipleChoiceField(
-        choices=DIAS_SEMANA,
-        widget=forms.CheckboxSelectMultiple,
-        label='Días de la semana'
-    )
-    hora_inicio = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}))
-    hora_fin = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}))
+
+    dias = forms.CharField(widget=forms.HiddenInput())
+    bloques = forms.CharField(widget=forms.HiddenInput())  # ← clave si los envías manualmente
+
     duracion = forms.ChoiceField(
         choices=DURACIONES,
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=True
     )
-
-#endregion
 
 
 #region OrdeneMedica

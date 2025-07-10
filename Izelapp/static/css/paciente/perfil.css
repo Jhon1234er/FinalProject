@@ -1,57 +1,102 @@
-/* Estilos generales del contenedor */
+/* ==== RESET BÁSICO ==== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f0f4f8;
+  color: #1e293b;
+}
+
+/* ==== CONTENEDOR GENERAL EXPANDIDO ==== */
 .perfil-contenedor {
-    max-width: 960px;
-    margin: 100px auto 60px;
-    padding: 2rem;
-    background-color: #ffffff;
-    border-radius: 18px;
-    box-shadow: 0 4px 16px rgba(1, 31, 48, 0.1);
-    text-align: center;
-    animation: fadeIn 0.6s ease;
+  width: 100%;
+  padding: 2rem 3rem;
+  background-color: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  margin-bottom: 2rem;
 }
 
-/* Título principal */
+/* ==== TÍTULOS ==== */
 .perfil-titulo {
-    font-size: 2rem;
-    color: #011f30;
-    font-weight: 600;
-    margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.5rem;
 }
 
-/* Descripción debajo del título */
 .perfil-descripcion {
-    font-size: 1rem;
-    color: #444;
-    margin-bottom: 2rem;
+  text-align: center;
+  font-size: 1rem;
+  color: #475569;
+  margin-bottom: 2rem;
 }
 
-/* Contenedor de la gráfica */
-.perfil-grafico-contenedor {
-    max-width: 400px;
-    margin: 0 auto;
+/* ==== CUADROS (1, 2, 3, 4) ==== */
+.cuadro {
+  background-color: #e0f2fe;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+/* ==== ESPACIOS === */
+
+/* Espacio 1 (derecha, ocupa alto completo) */
+.cuadro1 {
+  position: absolute;
+  top: 120px;
+  right: 3rem;
+  width: 300px;
+  height: calc(100% - 180px);
+}
+
+/* Espacio 2 (centro inferior) */
+.cuadro2 {
+  position: absolute;
+  bottom: 2rem;
+  left: 25%;
+  width: 45%;
+  height: 200px;
+}
+
+/* Espacio 3 (arriba centro) */
+.cuadro3 {
+  position: absolute;
+  top: 120px;
+  left: 25%;
+  width: 45%;
+  height: 200px;
+}
+
+/* Espacio 4 (esquina derecha inferior de cuadro3) */
+.cuadro4 {
+  position: absolute;
+  bottom: 2rem;
+  right: 3rem;
+  width: 200px;
+  height: 200px;
+}
+
+/* ==== RESPONSIVE ==== */
+@media (max-width: 1024px) {
+  .cuadro,
+  .cuadro1,
+  .cuadro2,
+  .cuadro3,
+  .cuadro4 {
+    position: static;
+    width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+  }
+
+  .perfil-contenedor {
     padding: 1rem;
-}
-
-/* Animación */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-    .perfil-contenedor {
-        margin: 80px 1rem;
-        padding: 1.5rem;
-    }
-
-    .perfil-titulo {
-        font-size: 1.5rem;
-    }
+  }
 }

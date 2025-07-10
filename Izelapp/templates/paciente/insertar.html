@@ -44,11 +44,12 @@
   {% csrf_token %}
 <h2 class="form-title">Registro de Paciente</h2>
   
-  {% for field in formulario %}
+{% for field in formulario %}
+  {% if field.name != 'password' %}
     <div class="form-row">
       <label for="{{ field.id_for_label }}">{{ field.label }}</label>
       {{ field }}
-      
+
       {% if field.errors %}
         <div class="error-messages">
           {% for error in field.errors %}
@@ -61,11 +62,32 @@
         <span class="help-text">{{ field.help_text }}</span>
       {% endif %}
     </div>
-  {% endfor %}
+  {% endif %}
+{% endfor %}
 
-  <button type="submit">Registrar</button>
-</form>
+<!-- Campo de contraseña al final -->
+{% if formulario.password %}
+  <div class="form-row">
+    <label for="{{ formulario.password.id_for_label }}">{{ formulario.password.label }}</label>
+    {{ formulario.password }}
 
+    {% if formulario.password.errors %}
+      <div class="error-messages">
+        {% for error in formulario.password.errors %}
+          <p class="error">{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if formulario.password.help_text %}
+      <span class="help-text">{{ formulario.password.help_text }}</span>
+    {% endif %}
+  </div>
+  <div class="form-row">
+<button type="submit" class="custom-btn btn-1">Registrar</button>
+</div>
+
+{% endif %}
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
