@@ -7,7 +7,7 @@
 <h2 class="titulo-actualizar">Actualiza tus datos</h2>
 
 <div class="formulario-contenedor">
-  <form method="POST" class="formulario-actualizar">
+  <form id="formActualizarDatos" method="POST" class="formulario-actualizar">
     {% csrf_token %}
 
     <!-- Campos NO editables -->
@@ -97,11 +97,41 @@
       {{ formulario.tipo_poblacion.label_tag }}
       {{ formulario.tipo_poblacion }}
     </p>
-
-    <!-- Botón de envío -->
-    <button type="submit" class="btn-guardar">Actualizar mis datos</button>
+ <!-- Botón que abre el modal -->
+    <button type="button" class="btn-guardar" onclick="abrirModalActualizar()">Actualizar</button>
   </form>
 </div>
 
+<!-- Modal de confirmación -->
+<div id="modalActualizar" class="modal">
+  <div class="modal-contenido">
+    <p>¿Estás seguro de que deseas actualizar tus datos?</p>
+    <div class="modal-acciones">
+      <button class="btn-cancelar" onclick="cerrarModalActualizar()">Cancelar</button>
+      <button class="btn-confirmar" onclick="confirmarActualizacion()">Confirmar</button>
+    </div>
+  </div>
+</div>
 
+<script>
+  function abrirModalActualizar() {
+    document.getElementById("modalActualizar").style.display = "block";
+  }
+
+  function cerrarModalActualizar() {
+    document.getElementById("modalActualizar").style.display = "none";
+  }
+
+  function confirmarActualizacion() {
+    document.getElementById("formActualizarDatos").submit();
+  }
+
+  // Cerrar modal al hacer clic fuera del contenido
+  window.onclick = function (event) {
+    const modal = document.getElementById("modalActualizar");
+    if (event.target === modal) {
+      cerrarModalActualizar();
+    }
+  };
+</script>
 {% endblock %}

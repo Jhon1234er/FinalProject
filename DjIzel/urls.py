@@ -61,6 +61,8 @@ urlpatterns = [
     path('consulta/<int:paciente_id>/<int:cita_id>/',consulta_medica, name='consulta_medica'),
     path('get-form/<str:form_name>/', get_form, name='get_form'),
     path('submit-all/', submit_all, name='submit_all'),
+    path('medico/consultas/historial/', historial_consultas, name='historial_consultas'),
+
     # endregion
 
     # region Administrador 

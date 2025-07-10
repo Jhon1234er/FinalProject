@@ -73,7 +73,7 @@ def login_usuario(request):
                 return redirect('perfil_administrador')
         else:
             return render(request, 'login.html', {
-                'mensaje_error': 'Credenciales incorrectas, intente de nuevo o consulte con el administrador.'
+                'mensaje_error': 'Credenciales incorrectas, intente de nuevo.'
             })
 
     return render(request, 'login.html')
@@ -197,7 +197,6 @@ def citas_perdidas(request):
 
 def logout_usuario(request):
     logout(request)
-    messages.success(request, 'Has cerrado sesión exitosamente.')
     return redirect('home')
 # endregion
 
@@ -447,15 +446,36 @@ def eliminar_administrador(request, id):
 # endregion
 
 # region  Medicos 
+
 @login_required
 def perfil_medico(request):
     medico = request.user.medico
     hoy = timezone.now().date()
-    citas_hoy = Cita.objects.filter(medico=medico, fecha_cita=hoy, estado_cita='agendada')
+
+    # Citas agendadas para hoy, ordenadas por hora
+    citas_hoy = Cita.objects.filter(
+        medico=medico,
+        fecha_cita=hoy,
+        estado_cita='agendada'
+    ).order_by('hora_cita')
     total_citas_hoy = citas_hoy.count()
+
+    # Consultas realizadas hoy
+    consultas_hoy = Consulta.objects.filter(
+        medico=medico,
+        fecha_consulta=hoy
+    ).select_related('paciente')
+    total_consultas_hoy = consultas_hoy.count()
+
+    # Próxima consulta del día (la primera cita del día ordenada por hora)
+    proxima_consulta = citas_hoy.first()
+
     return render(request, 'medico/perfil.html', {
         'usuario': medico,
-        'total_citas_hoy': total_citas_hoy
+        'total_citas_hoy': total_citas_hoy,
+        'consultas_hoy': consultas_hoy,
+        'total_consultas_hoy': total_consultas_hoy,
+        'proxima_consulta': proxima_consulta,
     })
 
 @login_required
@@ -518,6 +538,20 @@ def eliminar_medico(request, id):
     medico.delete()
     messages.success(request, 'Médico eliminado exitosamente.')
     return redirect('listar_medico')
+
+
+@login_required
+def historial_consultas(request):
+    medico = request.user
+    consultas = ConsultaForm.objects.filter(medico=medico).order_by('-fecha', '-hora')
+
+    context = {
+        'consultas': consultas
+    }
+    return render(request, 'medico/historial_consultas.html', context)
+
+
+
 # endregion
 
 # region Consulta 
@@ -1082,7 +1116,7 @@ def generar_disponibilidad(request):
                                     fecha=fecha_actual,
                                     hora_inicio=inicio,
                                     hora_fin=fin,
-                                    tipo_cita='general',
+                                    tipo_cita='Medicina general',
                                     estado='disponible',
                                     duracion=duracion
                                 )
@@ -1100,12 +1134,38 @@ def generar_disponibilidad(request):
         'mensaje_exito': mensaje_exito
     })
 def agenda_citas_medico(request):
-    medico = request.user.medico  
+    medico = request.user.medico
+    fecha_str = request.GET.get('fecha')
+
+    if fecha_str:
+        try:
+            fecha = datetime.strptime(fecha_str, '%Y-%m-%d').date()
+        except ValueError:
+            fecha = timezone.now().date()
+    else:
+        fecha = timezone.now().date()
+
+    # Mostrar solo citas que no han sido atendidas aún
     citas = Cita.objects.filter(
         medico=medico,
-        estado_cita='agendada'
-    ).order_by('fecha_cita', 'hora_cita')
-    return render(request, 'medico/agenda.html', {'citas': citas})
+        fecha_cita=fecha,
+        estado_cita='agendada'  # Asegúrate de que este valor exista en tu modelo
+    ).order_by('hora_cita')
+
+    fecha_anterior = (fecha - timedelta(days=1)).isoformat() if fecha > timezone.now().date() else None
+    fecha_siguiente = (fecha + timedelta(days=1)).isoformat()
+    es_hoy = fecha == timezone.now().date()
+
+
+    return render(request, 'medico/agenda.html', {
+        'citas': citas,
+        'fecha_actual': fecha,
+        'fecha_anterior': fecha_anterior,
+        'fecha_siguiente': fecha_siguiente,
+        'es_hoy': es_hoy, 
+
+    })
+
 # endregion
 
 @login_required

@@ -1,67 +1,186 @@
-/* Estilos generales */
-.dashboard-medico {
-  max-width: 1200px;
-  margin: 120px auto 60px auto;
-  padding: 20px;
-  font-family: 'Poppins', sans-serif;
-  min-height: 70vh; /* asegura altura mínima para que el footer no suba */
+.contenedor-titulo{
+  margin-top: 100px;
 }
-
-.bienvenida {
+.titulo-dashboard {
   text-align: center;
-  font-size: 30px;
+  font-size: 2rem;
+  font-weight: bold;
   color: #013857;
-  font-weight: 700;
-  margin-bottom: 40px;
+  margin-bottom: 2rem;
 }
 
-/* Contenedor de tarjetas */
-.resumen-contenedor {
+/* Grid layout */
+.grid-personalizado {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 20px;
+  height: 80vh;
+}
+
+.caja1 {
+  grid-column: 1 / span 3;
+  grid-row: 1 / span 1;
+}
+
+.caja2 {
+  grid-column: 1 / span 3;
+  grid-row: 2 / span 4;
+}
+
+.caja3 {
+  grid-column: 4 / span 2;
+  grid-row: 1 / span 5;
+}
+
+/* Estilo general de las cajas */
+.caja {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 30px;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
-/* Tarjetas */
-.card-dashboard {
-  background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(1, 31, 48, 0.1);
-  padding: 30px 25px;
-  width: 300px;
-  text-align: center;
-  transition: transform 0.2s ease;
+/* Encabezado con ícono y título */
+.encabezado-caja {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
-.card-dashboard:hover {
-  transform: translateY(-5px);
+.icono-caja {
+  width: 28px;
+  height: 28px;
+  color: #013857;
 }
 
-.card-dashboard h3 {
-  color: #011f30;
-  font-size: 22px;
-  margin-bottom: 10px;
+.icono-caja svg {
+  width: 100%;
+  height: 100%;
 }
 
-.card-dashboard p {
-  font-size: 15px;
-  color: #555;
-  margin-bottom: 15px;
+/* Título de cada caja */
+.titulo-caja {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #1e293b;
+}
+
+/* Texto general */
+.texto-caja {
+  font-size: 1rem;
+  color: #444;
+}
+
+.texto-secundario {
+  font-size: 0.9rem;
+  color: #666;
 }
 
 /* Botón */
-.btn-ver {
-  background-color: #6AC1B8;
-  color: white;
-  padding: 10px 18px;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 600;
+.btn-caja {
+  margin-top: auto;
   display: inline-block;
-  transition: background-color 0.3s ease;
+  padding: 0.5rem 1rem;
+  background-color: #013857;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
 }
 
-.btn-ver:hover {
-  background-color: #52a9a1;
+.btn-caja:hover {
+  background-color: #045e9c;
+}
+
+/* Lista de pacientes */
+ul {
+  padding: 0;
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+li {
+  margin-bottom: 0.6rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.4rem;
+}
+
+
+.fila-consulta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.info-paciente {
+  flex-grow: 1;
+}
+
+.btn-atender {
+  background-color: #013857; 
+  white-space: nowrap;
+  border: none;            /* <--- quita cualquier borde */
+  outline: none;   
+}
+
+.btn-atender:hover {
+  background-color: #045e9c;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-contenido {
+  background-color: white;
+  margin: 10% auto;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+.modal-acciones {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn-cancelar {
+  background-color: #e5e7eb;
+  color: #374151;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-confirmar {
+  background-color: #013857;
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+}
+
+.btn-cancelar:hover {
+  background-color: #d1d5db;
+}
+
+.btn-confirmar:hover {
+  background-color: #045e9c;
 }

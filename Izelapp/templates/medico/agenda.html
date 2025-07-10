@@ -6,8 +6,19 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/medico/agenda.css' %}">
 
-<div class="container">
-  <h2>Citas Agendadas</h2>
+<div class="container agenda-container">
+  <!-- Navegación entre días -->
+  <div class="navegacion-fechas">
+    <div class="fecha-actual">
+      <h3 class="agenda-title">Agenda para el día {{ fecha_actual|date:"d M Y" }}</h3>
+    </div>
+    <div class="botones-navegacion">
+      {% if fecha_anterior %}
+        <a href="?fecha={{ fecha_anterior }}" class="btn-fecha">&larr; Día anterior</a>
+      {% endif %}
+      <a href="?fecha={{ fecha_siguiente }}" class="btn-fecha">Día siguiente &rarr;</a>
+    </div>
+  </div>
 
   {% if citas %}
     <div class="table-responsive">
@@ -18,28 +29,75 @@
             <th>Fecha</th>
             <th>Hora</th>
             <th>Especialidad</th>
-            <th>Comenzar Cita</th>
+            <th>Acción</th>
           </tr>
         </thead>
         <tbody>
           {% for cita in citas %}
             <tr>
-              <td>{{ cita.paciente }}</td>
+              <td>{{ cita.paciente.get_full_name }}</td>
               <td>{{ cita.fecha_cita }}</td>
               <td>{{ cita.hora_cita }}</td>
               <td>{{ cita.especialidad }}</td>
               <td>
-                <a href="{% url 'consulta_medica' cita.paciente.id cita.id %}">Comenzar</a>
+                {% if es_hoy %}
+                  <button class="btn-cita" onclick="abrirModal('{{ cita.paciente.id }}', '{{ cita.id }}')">
+                    Comenzar consulta
+                  </button>
+                {% else %}
+                  <span class="texto-no-disponible">Consulta no habilitada</span>
+                {% endif %}
               </td>
+
             </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
   {% else %}
-    <div class="alert alert-info">
-      No hay citas agendadas.
-    </div>
+    <div class="alert alert-info">No hay citas para este día.</div>
   {% endif %}
 </div>
+
+<!-- Modal de confirmación -->
+<div id="modalConfirmacion" class="modal">
+  <div class="modal-contenido">
+    <h3>¿Desea iniciar la consulta?</h3>
+    <p>Serás redirigido para atender al paciente.</p>
+    <div class="modal-acciones">
+      <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+      <a id="btnConfirmarAtencion" href="#" class="btn-confirmar">Confirmar</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function abrirModal(pacienteId, citaId) {
+    const modal = document.getElementById('modalConfirmacion');
+    const btnConfirmar = document.getElementById('btnConfirmarAtencion');
+    btnConfirmar.href = `/consulta/${pacienteId}/${citaId}/`;
+    modal.style.display = 'block';
+  }
+
+  function cerrarModal() {
+    document.getElementById('modalConfirmacion').style.display = 'none';
+  }
+
+  // Cierra el modal si hacen clic fuera del cuadro
+  window.onclick = function(event) {
+    const modal = document.getElementById('modalConfirmacion');
+    if (event.target === modal) {
+      cerrarModal();
+    }
+  }
+</script>
+
+<style>
+  .estado-no-disponible {
+    color: #9ca3af;
+    font-style: italic;
+    font-weight: 500;
+  }
+</style>
+
 {% endblock %}
