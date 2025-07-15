@@ -32,9 +32,7 @@
                 <td class="px-4 py-2">{{ paciente.eps }}</td>
                 <td class="px-4 py-2">{{ paciente.telefono }}</td>
                 <td class="px-4 py-2 text-center space-x-2">
-                  <a href="{% url 'detalle_paciente' paciente.id %}" class="text-blue-600 hover:underline">Ver</a>
-                  <a href="{% url 'editar_paciente' paciente.id %}" class="text-yellow-500 hover:underline">Editar</a>
-                  <a href="{% url 'eliminar_paciente' paciente.id %}" class="text-red-600 hover:underline">Eliminar</a>
+
                 </td>
               </tr>
             {% endfor %}

@@ -88,9 +88,11 @@
         <ul class="text-sm text-gray-600 space-y-3">
           {% for cita in citas %}
             <li class="border-b pb-2">
-              <strong>{{ cita.fecha }}</strong><br>
-              Especialidad: {{ cita.especialidad }}<br>
-              Estado: {{ cita.estado }}
+              <strong>Especialidad:</strong> {{ cita.especialidad }}<br>
+              <strong>Fecha:</strong> {{ cita.fecha_cita }}<br>
+              <strong>Hora:</strong> {{ cita.hora_cita }}<br>
+              <strong>Médico:</strong> {{ cita.medico }}<br>
+              <strong>Estado:</strong> {{ cita.estado_cita }}
             </li>
           {% endfor %}
         </ul>

@@ -10,11 +10,10 @@
     <div class="tarjetas-contenedor">
       {% for dato in datos_quirurgicos %}
         <div class="tarjeta">
-          <h3>{{ dato.nombre_procedimiento }}</h3>
-          <p><strong>Fecha:</strong> {{ dato.fecha }}</p>
-          <p><strong>Tipo de procedimiento:</strong> {{ dato.tipo_procedimiento }}</p>
-          <p><strong>Institución:</strong> {{ dato.institucion }}</p>
-          <p><strong>Observaciones:</strong> {{ dato.observaciones }}</p>
+          <h3>{{ dato.tipo_cirugia }}</h3>
+          <p><strong>Fecha:</strong> {{ dato.fecha_cirugia }}</p>
+          <p><strong>Complicaciones:</strong> {{ dato.complicaciones }}</p>
+
         </div>
       {% endfor %}
     </div>

@@ -5,11 +5,10 @@
     <div class="tarjetas-contenedor">
       {% for vacuna in vacunas %}
         <div class="tarjeta">
-          <h3>{{ vacuna.nombre }}</h3>
+          <h3>Nombre de la vacuna: {{ vacuna.nombre_vacuna }}</h3>
           <p><strong>Fecha de aplicación:</strong> {{ vacuna.fecha_aplicacion }}</p>
           <p><strong>Dosis:</strong> {{ vacuna.dosis }}</p>
-          <p><strong>Lugar de aplicación:</strong> {{ vacuna.lugar }}</p>
-          <p><strong>Observaciones:</strong> {{ vacuna.observaciones }}</p>
+
         </div>
       {% endfor %}
     </div>

@@ -161,33 +161,32 @@ def detallar_usuario(request):
 def ver_mi_cita(request):
     paciente = request.user.paciente
     ahora = timezone.now()
-    modo = request.GET.get('modo', 'activas')  # Puede ser 'activas' o 'perdidas'
 
-    # Marcar como perdidas las que ya pasaron y estaban agendadas
+    # Marcar como perdidas las que ya pasaron y estaban agendadas (solo por fecha)
     citas_vencidas = Cita.objects.filter(
         paciente=paciente,
         estado_cita='agendada',
         fecha_cita__lt=ahora.date()
-    ) | Cita.objects.filter(
-        paciente=paciente,
-        estado_cita='agendada',
-        fecha_cita=ahora.date(),
-        hora_cita__lt=ahora.time()
     )
 
     for cita in citas_vencidas:
         cita.estado_cita = 'perdida'
         cita.save()
 
-    # Filtrar según lo que se desea ver
-    if modo == 'perdidas':
-        citas = Cita.objects.filter(paciente=paciente, estado_cita='perdida').order_by('-fecha_cita', '-hora_cita')
-    else:
-        citas = Cita.objects.filter(paciente=paciente, estado_cita='agendada').order_by('-fecha_cita', '-hora_cita')
+    citas_activas = Cita.objects.filter(
+        paciente=paciente,
+        estado_cita__in=['agendada', 'confirmada']
+    ).order_by('fecha_cita', 'hora_cita')
+
+    citas_perdidas = Cita.objects.filter(
+        paciente=paciente,
+        estado_cita='perdida'
+    ).order_by('-fecha_cita')
 
     return render(request, 'paciente/ver_cita.html', {
-        'citas': citas,
-        'modo': modo,
+        'citas_activas': citas_activas,
+        'citas_perdidas': citas_perdidas,
+        'usuario': paciente
     })
 @login_required
 def citas_perdidas(request):
@@ -285,9 +284,10 @@ def perfil_paciente(request):
     })
 @login_required
 def panel_pacientes(request):
-    pacientes = Usuario.objects.filter(rol='paciente')  # Ajusta si tu modelo o campo es diferente
-    return render(request, 'administrador/panel_pacientes.html', {'pacientes': pacientes})
-
+    pacientes = Paciente.objects.all()
+    return render(request, 'paciente/panel_pacientes.html', {
+        'pacientes': pacientes
+    })
 def registrar_paciente(request):
     if request.method == 'POST':
         formulario = PacienteForm(request.POST, request.FILES)
@@ -308,12 +308,7 @@ def lista_paciente(request):
     pacientes = Paciente.objects.all()
     conteo = pacientes.count()
 
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return render(request, 'paciente/lista.html', {
-            'pacientes': pacientes,
-            'conteo': conteo
-        })
-    return render(request, 'paciente/lista.html', {
+    return render(request, 'paciente/tabla.html', {
         'pacientes': pacientes,
         'conteo': conteo
     })
@@ -352,7 +347,7 @@ def cargar_historial_modulo(request, modulo):
     template = ''
 
     if modulo == 'citas':
-        contexto['citas'] = Cita.objects.filter(paciente=paciente)
+        contexto['citas'] = Consulta.objects.filter(paciente=paciente)
         template = 'cita/historial.html'
 
     elif modulo == 'antecedentes':
@@ -397,11 +392,19 @@ def perfil_administrador(request):
     total_citas = Cita.objects.count()
     medicos_activos = Medico.objects.filter(is_active=True).count()
 
+    # 🔽 Agregar las listas necesarias
+    pacientes = Paciente.objects.all()
+    citas = Cita.objects.all()
+    medicos = Medico.objects.all()
+
     return render(request, 'administrador/perfil.html', {
         'usuario': administrador,
         'total_usuarios': total_usuarios,
         'total_citas': total_citas,
-        'medicos_activos': medicos_activos
+        'medicos_activos': medicos_activos,
+        'pacientes': pacientes,
+        'citas': citas,
+        'medicos': medicos,
     })
 def registrar_administrador(request):
     if request.method == 'POST':
@@ -480,14 +483,14 @@ def perfil_medico(request):
 
 @login_required
 def panel_citas(request):
-    citas = Cita.objects.select_related('paciente', 'medico').all()
+    citas = Cita.objects.select_related('medico', 'paciente').all()
     return render(request, 'administrador/panel_citas.html', {
         'citas': citas
     })
 
 @login_required
 def panel_medicos(request):
-    medicos = Medico.objects.select_related('usuario').all()
+    medicos = Medico.objects.all()
     return render(request, 'administrador/panel_medicos.html', {
         'medicos': medicos
     })
@@ -1049,7 +1052,6 @@ def confirmar_cita(request, disponibilidad_id):
         # Cambiar estado de la disponibilidad a "pendiente"
         disponibilidad.estado = 'pendiente'
         disponibilidad.save()
-        messages.success(request, "Cita confirmada exitosamente.")
         return render(request, 'paciente/perfil.html')
 
     return render(request, 'cita/confirmar_cita.html', {

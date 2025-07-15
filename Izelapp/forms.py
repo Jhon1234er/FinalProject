@@ -410,8 +410,11 @@ class MedicoForm(forms.ModelForm):
     )
 
     numero_registro_profesional = forms.CharField(label='Registro profesional')
-    licencia_certificacion = forms.CharField(label='Licencia o Certificación')
-    
+    licencia_certificacion = forms.BooleanField(
+        label='Licencia o Certificación',
+        required=False,  # si no es obligatorio
+        widget=forms.CheckboxInput()
+    )    
     password = forms.CharField(
         label='Contraseña',
         widget=forms.PasswordInput()

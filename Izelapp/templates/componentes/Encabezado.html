@@ -30,12 +30,6 @@
           <li class="opcion-menu">
             <a class="enlace-menu" onclick="abrirModalCerrarSesion()">Cerrar sesión</a>
           </li>
-          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'gestionar_disponibilidad' %}">Gestionar Agenda</a></li>
-          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'registrar_administrador' %}">Crear Cuenta Administrador</a></li>
-          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'registrar_medico' %}">Crear Cuenta Médico</a></li>
-          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'perfil_administrador' %}">Inicio</a></li>
-          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a></li>
-          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'logout' %}">Cerrar Sesión</a></li>
 
         {% elif tipo_usuario == 'medico' %}
           <li class="opcion-menu">
@@ -47,9 +41,6 @@
           <li class="opcion-menu">
             <a class="enlace-menu" onclick="abrirModalCerrarSesion()">Cerrar sesión</a>
           </li>
-          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'perfil_medico' %}">Inicio</a></li>
-          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a></li>
-          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'logout' %}">Cerrar Sesión</a></li>
 
         {% elif tipo_usuario == 'paciente' %}
           <li class="opcion-menu">
@@ -57,9 +48,6 @@
           </li>
           <li class="opcion-menu">
             <a class="enlace-menu {% if request.resolver_match.url_name == 'calendario' %}activo{% endif %}" href="{% url 'calendario' %}">Agendar cita</a>
-          </li>
-          <li class="opcion-menu">
-            <a class="enlace-menu {% if request.resolver_match.url_name == 'ver_mi_cita' %}activo{% endif %}" href="{% url 'ver_mi_cita' %}">Mis citas</a>
           </li>
           <li class="opcion-menu">
             <a class="enlace-menu" href="{% url 'historial_clinico' %}">Historial Clinico</a>
@@ -70,12 +58,6 @@
           <li class="opcion-menu">
             <a class="enlace-menu" onclick="abrirModalCerrarSesion()">Cerrar sesión</a>
           </li>
-          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'perfil_paciente' %}">Inicio</a></li>
-          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'calendario' %}">Agendar cita</a></li>
-          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'historial_clinico' %}">Historial Clínico</a></li>
-          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'detallar_usuario' %}">Perfil</a></li>
-          <li class="opcion-menu"><a class="enlace-menu" href="{% url 'logout' %}">Cerrar sesión</a></li>
-
 
         {# Usuario no autenticado (visitante) #}
         {% elif not tipo_usuario %}

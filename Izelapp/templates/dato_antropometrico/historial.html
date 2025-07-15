@@ -10,11 +10,9 @@
     <div class="tarjetas-contenedor">
       {% for dato in datos_antropometricos %}
         <div class="tarjeta">
-          <h3>Registro del {{ dato.fecha }}</h3>
           <p><strong>Peso:</strong> {{ dato.peso }} kg</p>
           <p><strong>Estatura:</strong> {{ dato.estatura }} cm</p>
-          <p><strong>IMC:</strong> {{ dato.imc }}</p>
-          <p><strong>Observaciones:</strong> {{ dato.observaciones }}</p>
+          <p><strong>IMC:</strong> {{ dato.indice_masa_corporal }}</p>
         </div>
       {% endfor %}
     </div>
